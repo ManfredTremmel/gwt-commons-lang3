@@ -46,7 +46,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @since 2.0
  * @version $Id: DateUtils.java 1583482 2014-03-31 22:54:57Z niallp $
  */
-@GwtIncompatible("incompatible class")
 public class DateUtils {
 
     /**
@@ -267,6 +266,7 @@ public class DateUtils {
      * @throws IllegalArgumentException if the date string or pattern array is null
      * @throws ParseException if none of the date patterns were suitable (or there were none)
      */
+    @GwtIncompatible("incompatible method")
     public static Date parseDate(final String str, final String... parsePatterns) throws ParseException {
         return parseDate(str, null, parsePatterns);
     }
@@ -290,6 +290,7 @@ public class DateUtils {
      * @throws ParseException if none of the date patterns were suitable (or there were none)
      * @since 3.2
      */
+    @GwtIncompatible("incompatible method")
     public static Date parseDate(final String str, final Locale locale, final String... parsePatterns) throws ParseException {
         return parseDateWithLeniency(str, locale, parsePatterns, true);
     }    
@@ -310,6 +311,7 @@ public class DateUtils {
      * @throws ParseException if none of the date patterns were suitable
      * @since 2.5
      */
+    @GwtIncompatible("incompatible method")
     public static Date parseDateStrictly(final String str, final String... parsePatterns) throws ParseException {
         return parseDateStrictly(str, null, parsePatterns);
     }
@@ -332,6 +334,7 @@ public class DateUtils {
      * @throws ParseException if none of the date patterns were suitable
      * @since 3.2
      */
+    @GwtIncompatible("incompatible method")
     public static Date parseDateStrictly(final String str, final Locale locale, final String... parsePatterns) throws ParseException {
         return parseDateWithLeniency(str, null, parsePatterns, false);
     }    
@@ -353,6 +356,7 @@ public class DateUtils {
      * @throws ParseException if none of the date patterns were suitable
      * @see java.util.Calendar#isLenient()
      */
+    @GwtIncompatible("incompatible method")
     private static Date parseDateWithLeniency(
             final String str, final Locale locale, final String[] parsePatterns, final boolean lenient) throws ParseException {
         if (str == null || parsePatterns == null) {
@@ -1289,6 +1293,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInMilliseconds(final Date date, final int fragment) {
         return getFragment(date, fragment, TimeUnit.MILLISECONDS);    
     }
@@ -1327,6 +1332,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInSeconds(final Date date, final int fragment) {
         return getFragment(date, fragment, TimeUnit.SECONDS);
     }
@@ -1365,6 +1371,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInMinutes(final Date date, final int fragment) {
         return getFragment(date, fragment, TimeUnit.MINUTES);
     }
@@ -1403,6 +1410,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInHours(final Date date, final int fragment) {
         return getFragment(date, fragment, TimeUnit.HOURS);
     }
@@ -1441,6 +1449,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInDays(final Date date, final int fragment) {
         return getFragment(date, fragment, TimeUnit.DAYS);
     }
@@ -1479,6 +1488,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
   public static long getFragmentInMilliseconds(final Calendar calendar, final int fragment) {
     return getFragment(calendar, fragment, TimeUnit.MILLISECONDS);
   }
@@ -1516,6 +1526,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInSeconds(final Calendar calendar, final int fragment) {
         return getFragment(calendar, fragment, TimeUnit.SECONDS);
     }
@@ -1554,6 +1565,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInMinutes(final Calendar calendar, final int fragment) {
         return getFragment(calendar, fragment, TimeUnit.MINUTES);
     }
@@ -1592,6 +1604,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInHours(final Calendar calendar, final int fragment) {
         return getFragment(calendar, fragment, TimeUnit.HOURS);
     }
@@ -1632,6 +1645,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     public static long getFragmentInDays(final Calendar calendar, final int fragment) {
         return getFragment(calendar, fragment, TimeUnit.DAYS);
     }
@@ -1647,6 +1661,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     private static long getFragment(final Date date, final int fragment, final TimeUnit unit) {
         if(date == null) {
             throw  new IllegalArgumentException("The date must not be null");
@@ -1667,6 +1682,7 @@ public class DateUtils {
      * fragment is not supported
      * @since 2.4
      */
+    @GwtIncompatible("incompatible method")
     private static long getFragment(final Calendar calendar, final int fragment, final TimeUnit unit) {
         if(calendar == null) {
             throw  new IllegalArgumentException("The date must not be null"); 
