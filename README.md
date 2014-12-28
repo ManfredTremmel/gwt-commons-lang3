@@ -36,3 +36,12 @@ The Package itself has to be includes as binary and source package. I've done it
       <scope>provided</scope>
     </dependency>
 ```
+
+GWT Integration
+---------------
+
+Add this inherit command into your project .gwt.xml file:
+
+```
+<inherits name="org.apache.commons.GWTCommonsLang3" />
+```
