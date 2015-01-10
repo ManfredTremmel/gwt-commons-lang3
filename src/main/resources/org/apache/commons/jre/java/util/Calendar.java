@@ -586,12 +586,10 @@ public abstract class Calendar implements Cloneable {
   }
 
 	public int getActualMaximum(int field) {
-		// dummy
-		return 0;
+	    throw new UnsupportedOperationException("GWT Calendar does not support getActualMaximum()");
 	}
 
 	public int getActualMinimum(int field) {
-		// dummy
-		return 0;
+	    throw new UnsupportedOperationException("GWT Calendar does not support getActualMinimum()");
 	}
 }
