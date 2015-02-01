@@ -27,6 +27,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import com.google.gwt.core.shared.GwtIncompatible;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 
 /**
  * <p>Operations on {@link java.lang.String} that are
@@ -4443,9 +4445,19 @@ public class StringUtils {
      * @see Pattern#DOTALL
      * @since 3.2
      */
-    @GwtIncompatible("incompatible method")
     public static String replacePattern(final String source, final String regex, final String replacement) {
-        return Pattern.compile(regex, Pattern.DOTALL).matcher(source).replaceAll(replacement);
+    	if (source == null) {
+    		return null;
+    	}
+    	RegExp compile = RegExp.compile(regex);
+    	String resultString = source.replace('\n', (char) 0x2675);
+    	MatchResult result = compile.exec(resultString);
+    	if (result != null) {
+    		for (int i = 0; i < result.getGroupCount(); i++) {
+    			resultString = resultString.replace(result.getGroup(i), replacement);
+    		}
+    	}
+    	return resultString.replace((char) 0x2675, '\n');
     }
 
     /**
@@ -4460,7 +4472,6 @@ public class StringUtils {
      * @see Pattern#DOTALL
      * @since 3.2
      */
-    @GwtIncompatible("incompatible method")
     public static String removePattern(final String source, final String regex) {
         return replacePattern(source, regex, StringUtils.EMPTY);
     }
