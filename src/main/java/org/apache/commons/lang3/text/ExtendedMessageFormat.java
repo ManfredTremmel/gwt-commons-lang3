@@ -67,7 +67,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </ul>
  *
  * @since 2.4
- * @version $Id: ExtendedMessageFormat.java 1585282 2014-04-06 10:43:47Z britter $
+ * @version $Id: ExtendedMessageFormat.java 1669787 2015-03-28 15:12:47Z britter $
  */
 @GwtIncompatible("incompatible class")
 public class ExtendedMessageFormat extends MessageFormat {
@@ -75,7 +75,6 @@ public class ExtendedMessageFormat extends MessageFormat {
     private static final int HASH_SEED = 31;
 
     private static final String DUMMY_PATTERN = "";
-    private static final String ESCAPED_QUOTE = "''";
     private static final char START_FMT = ',';
     private static final char END_FE = '}';
     private static final char START_FE = '{';
@@ -161,7 +160,7 @@ public class ExtendedMessageFormat extends MessageFormat {
         while (pos.getIndex() < pattern.length()) {
             switch (c[pos.getIndex()]) {
             case QUOTE:
-                appendQuotedString(pattern, pos, stripCustom, true);
+                appendQuotedString(pattern, pos, stripCustom);
                 break;
             case START_FE:
                 fmtCount++;
@@ -388,7 +387,7 @@ public class ExtendedMessageFormat extends MessageFormat {
                 }
                 break;
             case QUOTE:
-                getQuotedString(pattern, pos, false);
+                getQuotedString(pattern, pos);
                 break;
             default:
                 break;
@@ -417,7 +416,7 @@ public class ExtendedMessageFormat extends MessageFormat {
             final char c = pattern.charAt(pos.getIndex());
             switch (c) {
             case QUOTE:
-                appendQuotedString(pattern, pos, sb, false);
+                appendQuotedString(pattern, pos, sb);
                 break;
             case START_FE:
                 depth++;
@@ -475,26 +474,23 @@ public class ExtendedMessageFormat extends MessageFormat {
      * @param pattern pattern to parse
      * @param pos current parse position
      * @param appendTo optional StringBuilder to append
-     * @param escapingOn whether to process escaped quotes
      * @return <code>appendTo</code>
      */
     private StringBuilder appendQuotedString(final String pattern, final ParsePosition pos,
-            final StringBuilder appendTo, final boolean escapingOn) {
+            final StringBuilder appendTo) {
+        assert pattern.toCharArray()[pos.getIndex()] == QUOTE : 
+            "Quoted string must start with quote character";
+
+        // handle quote character at the beginning of the string
+        if(appendTo != null) {
+            appendTo.append(QUOTE);
+        }
+        next(pos);
+
         final int start = pos.getIndex();
         final char[] c = pattern.toCharArray();
-        if (escapingOn && c[start] == QUOTE) {
-            next(pos);
-            return appendTo == null ? null : appendTo.append(QUOTE);
-        }
         int lastHold = start;
         for (int i = pos.getIndex(); i < pattern.length(); i++) {
-            if (escapingOn && pattern.substring(i).startsWith(ESCAPED_QUOTE)) {
-                appendTo.append(c, lastHold, pos.getIndex() - lastHold).append(
-                        QUOTE);
-                pos.setIndex(i + ESCAPED_QUOTE.length());
-                lastHold = pos.getIndex();
-                continue;
-            }
             switch (c[pos.getIndex()]) {
             case QUOTE:
                 next(pos);
@@ -513,11 +509,9 @@ public class ExtendedMessageFormat extends MessageFormat {
      *
      * @param pattern pattern to parse
      * @param pos current parse position
-     * @param escapingOn whether to process escaped quotes
      */
-    private void getQuotedString(final String pattern, final ParsePosition pos,
-            final boolean escapingOn) {
-        appendQuotedString(pattern, pos, null, escapingOn);
+    private void getQuotedString(final String pattern, final ParsePosition pos) {
+        appendQuotedString(pattern, pos, null);
     }
 
     /**

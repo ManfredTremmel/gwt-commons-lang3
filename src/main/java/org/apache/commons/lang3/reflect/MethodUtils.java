@@ -16,14 +16,17 @@
  */
 package org.apache.commons.lang3.reflect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,7 +56,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * If this call fails then the method may fail.</p>
  *
  * @since 2.5
- * @version $Id: MethodUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: MethodUtils.java 1630277 2014-10-09 04:37:38Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class MethodUtils {
@@ -68,6 +71,30 @@ public class MethodUtils {
      */
     public MethodUtils() {
         super();
+    }
+
+    /**
+     * <p>Invokes a named method without parameters.</p>
+     *
+     * <p>This method delegates the method search to {@link #getMatchingAccessibleMethod(Class, String, Class[])}.</p>
+     *
+     * <p>This is a convenient wrapper for
+     * {@link #invokeMethod(Object object,String methodName, Object[] args, Class[] parameterTypes)}.
+     * </p>
+     *
+     * @param object invoke method on this object
+     * @param methodName get method with this name
+     * @return The value returned by the invoked method
+     *
+     * @throws NoSuchMethodException if there is no such accessible method
+     * @throws InvocationTargetException wraps an exception thrown by the method invoked
+     * @throws IllegalAccessException if the requested method is not accessible via reflection
+     *  
+     *  @since 3.4
+     */
+    public static Object invokeMethod(final Object object, final String methodName) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException {
+        return invokeMethod(object, methodName, ArrayUtils.EMPTY_OBJECT_ARRAY, null);
     }
 
     /**
@@ -144,7 +171,30 @@ public class MethodUtils {
      *
      * @param object invoke method on this object
      * @param methodName get method with this name
-     * @param args use these arguments - treat {@code null} as empty array
+     * @return The value returned by the invoked method
+     *
+     * @throws NoSuchMethodException if there is no such accessible method
+     * @throws InvocationTargetException wraps an exception thrown by the
+     *  method invoked
+     * @throws IllegalAccessException if the requested method is not accessible
+     *  via reflection
+     *  
+     *  @since 3.4
+     */
+    public static Object invokeExactMethod(final Object object, final String methodName) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException {
+        return invokeExactMethod(object, methodName, ArrayUtils.EMPTY_OBJECT_ARRAY, null);
+    }
+
+    /**
+     * <p>Invokes a method with no parameters.</p>
+     *
+     * <p>This uses reflection to invoke the method obtained from a call to
+     * {@link #getAccessibleMethod}(Class,String,Class[])}.</p>
+     *
+     * @param object invoke method on this object
+     * @param methodName get method with this name
+     * @param args use these arguments - treat null as empty array
      * @return The value returned by the invoked method
      *
      * @throws NoSuchMethodException if there is no such accessible method
@@ -442,7 +492,7 @@ public class MethodUtils {
                      */
                 }
                 // Recursively check our parent interfaces
-                Method method = getAccessibleMethodFromInterfaceNest(interfaces[i],
+                final Method method = getAccessibleMethodFromInterfaceNest(interfaces[i],
                         methodName, parameterTypes);
                 if (method != null) {
                     return method;
@@ -512,7 +562,7 @@ public class MethodUtils {
      * @throws NullPointerException if the specified method is {@code null}
      * @since 3.2
      */
-    public static Set<Method> getOverrideHierarchy(final Method method, Interfaces interfacesBehavior) {
+    public static Set<Method> getOverrideHierarchy(final Method method, final Interfaces interfacesBehavior) {
         Validate.notNull(method);
         final Set<Method> result = new LinkedHashSet<Method>();
         result.add(method);
@@ -547,6 +597,46 @@ public class MethodUtils {
             result.add(m);
         }
         return result;
+    }
+
+    /**
+     * Gets all methods of the given class that are annotated with the given annotation.
+     * @param cls
+     *            the {@link Class} to query
+     * @param annotationCls
+     *            the {@link java.lang.annotation.Annotation} that must be present on a method to be matched
+     * @return an array of Methods (possibly empty).
+     * @throws IllegalArgumentException
+     *            if the class or annotation are {@code null}
+     * @since 3.4
+     */
+    public static Method[] getMethodsWithAnnotation(final Class<?> cls, final Class<? extends Annotation> annotationCls) {
+        final List<Method> annotatedMethodsList = getMethodsListWithAnnotation(cls, annotationCls);
+        return annotatedMethodsList.toArray(new Method[annotatedMethodsList.size()]);
+    }
+
+    /**
+     * Gets all methods of the given class that are annotated with the given annotation.
+     * @param cls
+     *            the {@link Class} to query
+     * @param annotationCls
+     *            the {@link Annotation} that must be present on a method to be matched
+     * @return a list of Methods (possibly empty).
+     * @throws IllegalArgumentException
+     *            if the class or annotation are {@code null}
+     * @since 3.4
+     */
+    public static List<Method> getMethodsListWithAnnotation(final Class<?> cls, final Class<? extends Annotation> annotationCls) {
+        Validate.isTrue(cls != null, "The class must not be null");
+        Validate.isTrue(annotationCls != null, "The annotation class must not be null");
+        final Method[] allMethods = cls.getMethods();
+        final List<Method> annotatedMethods = new ArrayList<Method>();
+        for (final Method method : allMethods) {
+            if (method.getAnnotation(annotationCls) != null) {
+                annotatedMethods.add(method);
+            }
+        }
+        return annotatedMethods;
     }
 
 }

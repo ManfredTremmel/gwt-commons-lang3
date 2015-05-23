@@ -51,7 +51,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <code>Person@7f54[name=Stephen,age=29,smoker=false,job=Job@43cd2[title=Manager]]</code></p>
  * 
  * @since 3.2
- * @version $Id: RecursiveToStringStyle.java 1572875 2014-02-28 08:34:55Z britter $
+ * @version $Id: RecursiveToStringStyle.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class RecursiveToStringStyle extends ToStringStyle {
 
@@ -71,7 +71,7 @@ public class RecursiveToStringStyle extends ToStringStyle {
 
     @Override
     @GwtIncompatible("incompatible method")
-    public void appendDetail(StringBuffer buffer, String fieldName, Object value) {
+    public void appendDetail(final StringBuffer buffer, final String fieldName, final Object value) {
         if (!ClassUtils.isPrimitiveWrapper(value.getClass()) &&
             !String.class.equals(value.getClass()) &&
             accept(value.getClass())) {
@@ -83,7 +83,7 @@ public class RecursiveToStringStyle extends ToStringStyle {
 
     @Override
     @GwtIncompatible("incompatible method")
-    protected void appendDetail(StringBuffer buffer, String fieldName, Collection<?> coll) {
+    protected void appendDetail(final StringBuffer buffer, final String fieldName, final Collection<?> coll) {
         appendClassName(buffer, coll);
         appendIdentityHashCode(buffer, coll);
         appendDetail(buffer, fieldName, coll.toArray());

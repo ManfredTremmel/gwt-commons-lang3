@@ -27,9 +27,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -46,7 +46,7 @@ import org.junit.Test;
  * @see <a href="https://issues.apache.org/jira/browse/LANG-762">[LANG-762] Handle or document ReflectionToStringBuilder
  *      and ToStringBuilder for collections that are not thread safe</a>
  * @since 3.1
- * @version $Id: ReflectionToStringBuilderConcurrencyTest.java 1437526 2013-01-23 16:05:20Z ggregory $
+ * @version $Id: ReflectionToStringBuilderConcurrencyTest.java 1669310 2015-03-26 10:21:24Z britter $
  */
 public class ReflectionToStringBuilderConcurrencyTest {
 
@@ -116,5 +116,7 @@ public class ReflectionToStringBuilderConcurrencyTest {
         for (final Future<Integer> future : futures) {
             Assert.assertEquals(REPEAT, future.get().intValue());
         }
+        threadPool.shutdown();
+        threadPool.awaitTermination(1, TimeUnit.SECONDS);
     }
 }

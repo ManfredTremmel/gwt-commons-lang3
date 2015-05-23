@@ -29,9 +29,11 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * is completely contextual, the API does not present two separate signatures.
  * 
  * @since 3.0
- * @version $Id: CharSequenceTranslator.java 1568612 2014-02-15 10:35:35Z britter $
+ * @version $Id: CharSequenceTranslator.java 1666535 2015-03-13 18:18:59Z britter $
  */
 public abstract class CharSequenceTranslator {
+
+    static final char[] HEX_DIGITS = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
     /**
      * Translate a set of codepoints, represented by an int index into a CharSequence, 
@@ -89,9 +91,18 @@ public abstract class CharSequenceTranslator {
         while (pos < len) {
             final int consumed = translate(input, pos, out);
             if (consumed == 0) {
-                final char[] c = Character.toChars(Character.codePointAt(input, pos));
-                out.write(c);
-                pos+= c.length;
+                // inlined implementation of Character.toChars(Character.codePointAt(input, pos))
+                // avoids allocating temp char arrays and duplicate checks
+                char c1 = input.charAt(pos);
+                out.write(c1);
+                pos++;
+                if (Character.isHighSurrogate(c1) && pos < len) {
+                    char c2 = input.charAt(pos);
+                    if (Character.isLowSurrogate(c2)) {
+                      out.write(c2);
+                      pos++;
+                    }
+                }
                 continue;
             }
             // contract with translators is that they have to understand codepoints

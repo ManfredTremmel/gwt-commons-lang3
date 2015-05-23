@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.StringUtils} - Substring methods
  *
- * @version $Id: StringUtilsSubstringTest.java 1387361 2012-09-18 21:07:42Z mbenson $
+ * @version $Id: StringUtilsSubstringTest.java 1616372 2014-08-06 23:46:30Z ggregory $
  */
 public class StringUtilsSubstringTest  {
     private static final String FOO = "foo";
@@ -320,6 +320,14 @@ public class StringUtilsSubstringTest  {
              StringUtils.countMatches("one long someone sentence of one", "two"));
         assertEquals(4, 
              StringUtils.countMatches("oooooooooooo", "ooo"));
+    }
+
+    @Test
+    public void testCountMatches_char() {
+        assertEquals(0, StringUtils.countMatches(null, 'D'));
+        assertEquals(5, StringUtils.countMatches("one long someone sentence of one", ' '));
+        assertEquals(6, StringUtils.countMatches("one long someone sentence of one", 'o'));
+        assertEquals(4, StringUtils.countMatches("oooooooooooo", "ooo"));
     }
 
 }

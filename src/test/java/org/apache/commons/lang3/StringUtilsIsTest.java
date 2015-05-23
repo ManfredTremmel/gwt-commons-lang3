@@ -24,7 +24,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.StringUtils} - Substring methods
  *
- * @version $Id: StringUtilsIsTest.java 1387424 2012-09-19 01:29:22Z sebb $
+ * @version $Id: StringUtilsIsTest.java 1599322 2014-06-02 19:31:36Z britter $
  */
 public class StringUtilsIsTest  {
 
@@ -143,6 +143,8 @@ public class StringUtilsIsTest  {
         assertFalse(StringUtils.isNumeric("ham kso"));
         assertTrue(StringUtils.isNumeric("1"));
         assertTrue(StringUtils.isNumeric("1000"));
+        assertTrue(StringUtils.isNumeric("\u0967\u0968\u0969"));
+        assertFalse(StringUtils.isNumeric("\u0967\u0968 \u0969"));
         assertFalse(StringUtils.isNumeric("2.3"));
         assertFalse(StringUtils.isNumeric("10 00"));
         assertFalse(StringUtils.isNumeric("hkHKHik6iUGHKJgU7tUJgKJGI87GIkug"));
@@ -165,6 +167,8 @@ public class StringUtilsIsTest  {
         assertTrue(StringUtils.isNumericSpace("1000"));
         assertFalse(StringUtils.isNumericSpace("2.3"));
         assertTrue(StringUtils.isNumericSpace("10 00"));
+        assertTrue(StringUtils.isNumericSpace("\u0967\u0968\u0969"));
+        assertTrue(StringUtils.isNumericSpace("\u0967\u0968 \u0969"));
         assertFalse(StringUtils.isNumericSpace("hkHKHik6iUGHKJgU7tUJgKJGI87GIkug"));
         assertFalse(StringUtils.isNumericSpace("_"));
         assertFalse(StringUtils.isNumericSpace("hkHKHik*khbkuh"));

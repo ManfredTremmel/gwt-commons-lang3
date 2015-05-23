@@ -121,7 +121,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * {@link #setEnableSubstitutionInVariables(boolean) enableSubstitutionInVariables}
  * property to <b>true</b>.
  *
- * @version $Id: StrSubstitutor.java 1552654 2013-12-20 13:25:37Z britter $
+ * @version $Id: StrSubstitutor.java 1606063 2014-06-27 12:34:37Z ggregory $
  * @since 2.2
  */
 @GwtIncompatible("incompatible class")
@@ -513,7 +513,7 @@ public class StrSubstitutor {
      * @return the result of the replace operation
      * @since 3.2
      */
-    public String replace(CharSequence source) {
+    public String replace(final CharSequence source) {
         if (source == null) {
             return null;
         }
@@ -534,11 +534,11 @@ public class StrSubstitutor {
      * @return the result of the replace operation
      * @since 3.2
      */
-    public String replace(CharSequence source, int offset, int length) {
+    public String replace(final CharSequence source, final int offset, final int length) {
         if (source == null) {
             return null;
         }
-        StrBuilder buf = new StrBuilder(length).append(source, offset, length);
+        final StrBuilder buf = new StrBuilder(length).append(source, offset, length);
         substitute(buf, 0, length);
         return buf.toString();
     }
@@ -652,7 +652,7 @@ public class StrSubstitutor {
      * @return true if altered
      * @since 3.2
      */
-    public boolean replaceIn(StringBuilder source) {
+    public boolean replaceIn(final StringBuilder source) {
         if (source == null) {
             return false;
         }
@@ -673,11 +673,11 @@ public class StrSubstitutor {
      * @return true if altered
      * @since 3.2
      */
-    public boolean replaceIn(StringBuilder source, int offset, int length) {
+    public boolean replaceIn(final StringBuilder source, final int offset, final int length) {
         if (source == null) {
             return false;
         }
-        StrBuilder buf = new StrBuilder(length).append(source, offset, length);
+        final StrBuilder buf = new StrBuilder(length).append(source, offset, length);
         if (substitute(buf, 0, length) == false) {
             return false;
         }
@@ -868,10 +868,9 @@ public class StrSubstitutor {
                                 priorVariables
                                         .remove(priorVariables.size() - 1);
                                 break;
-                            } else {
-                                nestedVarCount--;
-                                pos += endMatchLen;
                             }
+                            nestedVarCount--;
+                            pos += endMatchLen;
                         }
                     }
                 }

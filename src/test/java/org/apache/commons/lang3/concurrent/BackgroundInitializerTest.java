@@ -17,7 +17,9 @@
 package org.apache.commons.lang3.concurrent;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -66,7 +68,7 @@ public class BackgroundInitializerTest {
      * Tests whether an external executor is correctly detected.
      */
     @Test
-    public void testGetActiveExecutorExternal() {
+    public void testGetActiveExecutorExternal() throws InterruptedException {
         final ExecutorService exec = Executors.newSingleThreadExecutor();
         try {
             final BackgroundInitializerTestImpl init = new BackgroundInitializerTestImpl(
@@ -76,6 +78,7 @@ public class BackgroundInitializerTest {
             checkInitialize(init);
         } finally {
             exec.shutdown();
+            exec.awaitTermination(1, TimeUnit.SECONDS);
         }
     }
 
@@ -108,7 +111,7 @@ public class BackgroundInitializerTest {
      * setExternalExecutor() method.
      */
     @Test
-    public void testSetExternalExecutor() throws Exception {
+    public void testSetExternalExecutor() {
         final ExecutorService exec = Executors.newCachedThreadPool();
         try {
             final BackgroundInitializerTestImpl init = new BackgroundInitializerTestImpl();
@@ -126,16 +129,22 @@ public class BackgroundInitializerTest {
 
     /**
      * Tests that setting an executor after start() causes an exception.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException because the test implementation may throw it
      */
     @Test
-    public void testSetExternalExecutorAfterStart() throws ConcurrentException {
+    public void testSetExternalExecutorAfterStart() throws ConcurrentException, InterruptedException {
         final BackgroundInitializerTestImpl init = new BackgroundInitializerTestImpl();
         init.start();
+        ExecutorService exec = Executors.newSingleThreadExecutor();
         try {
-            init.setExternalExecutor(Executors.newSingleThreadExecutor());
+            init.setExternalExecutor(exec);
             fail("Could set executor after start()!");
         } catch (final IllegalStateException istex) {
             init.get();
+        } finally {
+            exec.shutdown();
+            exec.awaitTermination(1, TimeUnit.SECONDS);
         }
     }
 
@@ -155,6 +164,8 @@ public class BackgroundInitializerTest {
 
     /**
      * Tests calling get() before start(). This should cause an exception.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException because the test implementation may throw it
      */
     @Test(expected=IllegalStateException.class)
     public void testGetBeforeStart() throws ConcurrentException {
@@ -167,7 +178,7 @@ public class BackgroundInitializerTest {
      * exception.
      */
     @Test
-    public void testGetRuntimeException() throws Exception {
+    public void testGetRuntimeException() {
         final BackgroundInitializerTestImpl init = new BackgroundInitializerTestImpl();
         final RuntimeException rex = new RuntimeException();
         init.ex = rex;
@@ -185,7 +196,7 @@ public class BackgroundInitializerTest {
      * exception.
      */
     @Test
-    public void testGetCheckedException() throws Exception {
+    public void testGetCheckedException() {
         final BackgroundInitializerTestImpl init = new BackgroundInitializerTestImpl();
         final Exception ex = new Exception();
         init.ex = ex;
@@ -200,9 +211,11 @@ public class BackgroundInitializerTest {
 
     /**
      * Tests the get() method if waiting for the initialization is interrupted.
+     *
+     * @throws java.lang.InterruptedException because we're making use of Java's concurrent API
      */
     @Test
-    public void testGetInterruptedException() throws Exception {
+    public void testGetInterruptedException() throws InterruptedException {
         final ExecutorService exec = Executors.newSingleThreadExecutor();
         final BackgroundInitializerTestImpl init = new BackgroundInitializerTestImpl(
                 exec);
@@ -229,7 +242,7 @@ public class BackgroundInitializerTest {
         getThread.interrupt();
         latch1.await();
         exec.shutdownNow();
-        exec.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+        exec.awaitTermination(1, TimeUnit.SECONDS);
         assertNotNull("No interrupted exception", iex.get());
     }
 
@@ -289,6 +302,8 @@ public class BackgroundInitializerTest {
         /**
          * Records this invocation. Optionally throws an exception or sleeps a
          * while.
+         *
+         * @throws Exception in case of an error
          */
         @Override
         protected Integer initialize() throws Exception {

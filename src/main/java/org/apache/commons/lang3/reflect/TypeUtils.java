@@ -44,7 +44,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * generics. </p>
  *
  * @since 3.0
- * @version $Id: TypeUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: TypeUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class TypeUtils {
@@ -68,7 +68,7 @@ public class TypeUtils {
          * @param bounds to set
          * @return {@code this}
          */
-        public WildcardTypeBuilder withUpperBounds(Type... bounds) {
+        public WildcardTypeBuilder withUpperBounds(final Type... bounds) {
             this.upperBounds = bounds;
             return this;
         }
@@ -78,7 +78,7 @@ public class TypeUtils {
          * @param bounds to set
          * @return {@code this}
          */
-        public WildcardTypeBuilder withLowerBounds(Type... bounds) {
+        public WildcardTypeBuilder withLowerBounds(final Type... bounds) {
             this.lowerBounds = bounds;
             return this;
         }
@@ -103,7 +103,7 @@ public class TypeUtils {
          * Constructor
          * @param componentType of this array type
          */
-        private GenericArrayTypeImpl(Type componentType) {
+        private GenericArrayTypeImpl(final Type componentType) {
             this.componentType = componentType;
         }
 
@@ -127,7 +127,7 @@ public class TypeUtils {
          * {@inheritDoc}
          */
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             return obj == this || obj instanceof GenericArrayType && TypeUtils.equals(this, (GenericArrayType) obj);
         }
 
@@ -157,7 +157,7 @@ public class TypeUtils {
          * @param useOwner owner type to use, if any
          * @param typeArguments formal type arguments
          */
-        private ParameterizedTypeImpl(Class<?> raw, Type useOwner, Type[] typeArguments) {
+        private ParameterizedTypeImpl(final Class<?> raw, final Type useOwner, final Type[] typeArguments) {
             this.raw = raw;
             this.useOwner = useOwner;
             this.typeArguments = typeArguments;
@@ -199,7 +199,7 @@ public class TypeUtils {
          * {@inheritDoc}
          */
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             return obj == this || obj instanceof ParameterizedType && TypeUtils.equals(this, ((ParameterizedType) obj));
         }
 
@@ -234,7 +234,7 @@ public class TypeUtils {
          * @param upperBounds of this type
          * @param lowerBounds of this type
          */
-        private WildcardTypeImpl(Type[] upperBounds, Type[] lowerBounds) {
+        private WildcardTypeImpl(final Type[] upperBounds, final Type[] lowerBounds) {
             this.upperBounds = ObjectUtils.defaultIfNull(upperBounds, EMPTY_BOUNDS);
             this.lowerBounds = ObjectUtils.defaultIfNull(lowerBounds, EMPTY_BOUNDS);
         }
@@ -267,7 +267,7 @@ public class TypeUtils {
          * {@inheritDoc}
          */
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(final Object obj) {
             return obj == this || obj instanceof WildcardType && TypeUtils.equals(this, (WildcardType) obj);
         }
 
@@ -1427,7 +1427,7 @@ public class TypeUtils {
      * @return boolean
      * @since 3.2
      */
-    public static boolean containsTypeVariables(Type type) {
+    public static boolean containsTypeVariables(final Type type) {
         if (type instanceof TypeVariable<?>) {
             return true;
         }
@@ -1435,7 +1435,7 @@ public class TypeUtils {
             return ((Class<?>) type).getTypeParameters().length > 0;
         }
         if (type instanceof ParameterizedType) {
-            for (Type arg : ((ParameterizedType) type).getActualTypeArguments()) {
+            for (final Type arg : ((ParameterizedType) type).getActualTypeArguments()) {
                 if (containsTypeVariables(arg)) {
                     return true;
                 }
@@ -1443,7 +1443,7 @@ public class TypeUtils {
             return false;
         }
         if (type instanceof WildcardType) {
-            WildcardType wild = (WildcardType) type;
+            final WildcardType wild = (WildcardType) type;
             return containsTypeVariables(TypeUtils.getImplicitLowerBounds(wild)[0])
                 || containsTypeVariables(TypeUtils.getImplicitUpperBounds(wild)[0]);
         }
@@ -1531,10 +1531,10 @@ public class TypeUtils {
      * @param variables expected map keys
      * @return array of map values corresponding to specified keys
      */
-    private static Type[] extractTypeArgumentsFrom(Map<TypeVariable<?>, Type> mappings, TypeVariable<?>[] variables) {
+    private static Type[] extractTypeArgumentsFrom(final Map<TypeVariable<?>, Type> mappings, final TypeVariable<?>[] variables) {
         final Type[] result = new Type[variables.length];
         int index = 0;
-        for (TypeVariable<?> var : variables) {
+        for (final TypeVariable<?> var : variables) {
             Validate.isTrue(mappings.containsKey(var), "missing argument mapping for %s", toString(var));
             result[index++] = mappings.get(var);
         }
@@ -1571,7 +1571,7 @@ public class TypeUtils {
      * @since 3.2
      */
     @SuppressWarnings( "deprecation" )  // ObjectUtils.equals(Object, Object) has been deprecated in 3.2
-    public static boolean equals(Type t1, Type t2) {
+    public static boolean equals(final Type t1, final Type t2) {
         if (ObjectUtils.equals(t1, t2)) {
             return true;
         }
@@ -1594,7 +1594,7 @@ public class TypeUtils {
      * @return boolean
      * @since 3.2
      */
-    private static boolean equals(ParameterizedType p, Type t) {
+    private static boolean equals(final ParameterizedType p, final Type t) {
         if (t instanceof ParameterizedType) {
             final ParameterizedType other = (ParameterizedType) t;
             if (equals(p.getRawType(), other.getRawType()) && equals(p.getOwnerType(), other.getOwnerType())) {
@@ -1611,7 +1611,7 @@ public class TypeUtils {
      * @return boolean
      * @since 3.2
      */
-    private static boolean equals(GenericArrayType a, Type t) {
+    private static boolean equals(final GenericArrayType a, final Type t) {
         return t instanceof GenericArrayType
             && equals(a.getGenericComponentType(), ((GenericArrayType) t).getGenericComponentType());
     }
@@ -1623,11 +1623,11 @@ public class TypeUtils {
      * @return boolean
      * @since 3.2
      */
-    private static boolean equals(WildcardType w, Type t) {
+    private static boolean equals(final WildcardType w, final Type t) {
         if (t instanceof WildcardType) {
             final WildcardType other = (WildcardType) t;
-            return equals(w.getLowerBounds(), other.getLowerBounds())
-                && equals(TypeUtils.getImplicitUpperBounds(w), TypeUtils.getImplicitUpperBounds(other));
+            return equals(getImplicitLowerBounds(w), getImplicitLowerBounds(other))
+                && equals(getImplicitUpperBounds(w), getImplicitUpperBounds(other));
         }
         return true;
     }
@@ -1639,7 +1639,7 @@ public class TypeUtils {
      * @return boolean
      * @since 3.2
      */
-    private static boolean equals(Type[] t1, Type[] t2) {
+    private static boolean equals(final Type[] t1, final Type[] t2) {
         if (t1.length == t2.length) {
             for (int i = 0; i < t1.length; i++) {
                 if (!equals(t1[i], t2[i])) {
@@ -1658,7 +1658,7 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    public static String toString(Type type) {
+    public static String toString(final Type type) {
         Validate.notNull(type);
         if (type instanceof Class<?>) {
             return classToString((Class<?>) type);
@@ -1685,7 +1685,7 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    public static String toLongString(TypeVariable<?> var) {
+    public static String toLongString(final TypeVariable<?> var) {
         Validate.notNull(var, "var is null");
         final StringBuilder buf = new StringBuilder();
         final GenericDeclaration d = ((TypeVariable<?>) var).getGenericDeclaration();
@@ -1742,7 +1742,7 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    private static String classToString(Class<?> c) {
+    private static String classToString(final Class<?> c) {
         final StringBuilder buf = new StringBuilder();
 
         if (c.getEnclosingClass() != null) {
@@ -1764,7 +1764,7 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    private static String typeVariableToString(TypeVariable<?> v) {
+    private static String typeVariableToString(final TypeVariable<?> v) {
         final StringBuilder buf = new StringBuilder(v.getName());
         final Type[] bounds = v.getBounds();
         if (bounds.length > 0 && !(bounds.length == 1 && Object.class.equals(bounds[0]))) {
@@ -1780,7 +1780,7 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    private static String parameterizedTypeToString(ParameterizedType p) {
+    private static String parameterizedTypeToString(final ParameterizedType p) {
         final StringBuilder buf = new StringBuilder();
 
         final Type useOwner = p.getOwnerType();
@@ -1807,13 +1807,13 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    private static String wildcardTypeToString(WildcardType w) {
+    private static String wildcardTypeToString(final WildcardType w) {
         final StringBuilder buf = new StringBuilder().append('?');
         final Type[] lowerBounds = w.getLowerBounds();
         final Type[] upperBounds = w.getUpperBounds();
-        if (lowerBounds.length > 0) {
+        if (lowerBounds.length > 1 || lowerBounds.length == 1 && lowerBounds[0] != null) {
             appendAllTo(buf.append(" super "), " & ", lowerBounds);
-        } else if (!(upperBounds.length == 1 && Object.class.equals(upperBounds[0]))) {
+        } else if (upperBounds.length > 1 || upperBounds.length == 1 && !Object.class.equals(upperBounds[0])) {
             appendAllTo(buf.append(" extends "), " & ", upperBounds);
         }
         return buf.toString();
@@ -1825,7 +1825,7 @@ public class TypeUtils {
      * @return String
      * @since 3.2
      */
-    private static String genericArrayTypeToString(GenericArrayType g) {
+    private static String genericArrayTypeToString(final GenericArrayType g) {
         return String.format("%s[]", toString(g.getGenericComponentType()));
     }
 
@@ -1837,7 +1837,7 @@ public class TypeUtils {
      * @return {@code buf}
      * @since 3.2
      */
-    private static StringBuilder appendAllTo(StringBuilder buf, String sep, Type... types) {
+    private static StringBuilder appendAllTo(final StringBuilder buf, final String sep, final Type... types) {
         Validate.notEmpty(Validate.noNullElements(types));
         if (types.length > 0) {
             buf.append(toString(types[0]));

@@ -34,11 +34,13 @@ import org.junit.Test;
  * tests are executed.
  * </p>
  *
- * @version $Id: AbstractConcurrentInitializerTest.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: AbstractConcurrentInitializerTest.java 1662379 2015-02-26 08:13:58Z britter $
  */
 public abstract class AbstractConcurrentInitializerTest {
     /**
      * Tests a simple invocation of the get() method.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException because the object under test may throw it
      */
     @Test
     public void testGet() throws ConcurrentException {
@@ -48,6 +50,8 @@ public abstract class AbstractConcurrentInitializerTest {
     /**
      * Tests whether sequential get() invocations always return the same
      * instance.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException because the object under test may throw it
      */
     @Test
     public void testGetMultipleTimes() throws ConcurrentException {
@@ -61,6 +65,9 @@ public abstract class AbstractConcurrentInitializerTest {
     /**
      * Tests whether get() can be invoked from multiple threads concurrently.
      * Always the same object should be returned.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException because the object under test may throw it
+     * @throws java.lang.InterruptedException because the threading API my throw it
      */
     @Test
     public void testGetConcurrent() throws ConcurrentException,

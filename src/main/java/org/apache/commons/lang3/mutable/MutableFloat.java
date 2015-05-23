@@ -23,7 +23,7 @@ package org.apache.commons.lang3.mutable;
  * 
  * @see Float
  * @since 2.1
- * @version $Id: MutableFloat.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: MutableFloat.java 1669791 2015-03-28 15:22:59Z britter $
  */
 public class MutableFloat extends Number implements Comparable<MutableFloat>, Mutable<Number> {
 
@@ -298,8 +298,7 @@ public class MutableFloat extends Number implements Comparable<MutableFloat>, Mu
      */
     @Override
     public int compareTo(final MutableFloat other) {
-        final float anotherVal = other.value;
-        return Float.compare(value, anotherVal);
+        return Float.compare(this.value, other.value);
     }
 
     //-----------------------------------------------------------------------

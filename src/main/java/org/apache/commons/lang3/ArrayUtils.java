@@ -19,6 +19,7 @@ package org.apache.commons.lang3;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.google.gwt.core.shared.GwtIncompatible;
@@ -41,7 +43,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *
  * <p>#ThreadSafe#</p>
  * @since 2.0
- * @version $Id: ArrayUtils.java 1578214 2014-03-17 02:44:58Z ggregory $
+ * @version $Id: ArrayUtils.java 1645483 2014-12-14 18:22:06Z kinow $
  */
 public class ArrayUtils {
 
@@ -491,7 +493,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Object[] nullToEmpty(final Object[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_OBJECT_ARRAY;
         }
         return array;
@@ -511,7 +513,7 @@ public class ArrayUtils {
      * @since 3.2
      */
     public static Class<?>[] nullToEmpty(final Class<?>[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_CLASS_ARRAY;
         }
         return array;
@@ -531,7 +533,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static String[] nullToEmpty(final String[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_STRING_ARRAY;
         }
         return array;
@@ -551,7 +553,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static long[] nullToEmpty(final long[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_LONG_ARRAY;
         }
         return array;
@@ -571,7 +573,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static int[] nullToEmpty(final int[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_INT_ARRAY;
         }
         return array;
@@ -591,7 +593,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static short[] nullToEmpty(final short[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_SHORT_ARRAY;
         }
         return array;
@@ -611,7 +613,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static char[] nullToEmpty(final char[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_CHAR_ARRAY;
         }
         return array;
@@ -631,7 +633,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static byte[] nullToEmpty(final byte[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_BYTE_ARRAY;
         }
         return array;
@@ -651,7 +653,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static double[] nullToEmpty(final double[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_DOUBLE_ARRAY;
         }
         return array;
@@ -671,7 +673,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static float[] nullToEmpty(final float[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_FLOAT_ARRAY;
         }
         return array;
@@ -691,7 +693,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static boolean[] nullToEmpty(final boolean[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_BOOLEAN_ARRAY;
         }
         return array;
@@ -711,7 +713,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Long[] nullToEmpty(final Long[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_LONG_OBJECT_ARRAY;
         }
         return array;
@@ -731,7 +733,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Integer[] nullToEmpty(final Integer[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_INTEGER_OBJECT_ARRAY;
         }
         return array;
@@ -751,7 +753,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Short[] nullToEmpty(final Short[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_SHORT_OBJECT_ARRAY;
         }
         return array;
@@ -771,7 +773,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Character[] nullToEmpty(final Character[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_CHARACTER_OBJECT_ARRAY;
         }
         return array;
@@ -791,7 +793,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Byte[] nullToEmpty(final Byte[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_BYTE_OBJECT_ARRAY;
         }
         return array;
@@ -811,7 +813,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Double[] nullToEmpty(final Double[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_DOUBLE_OBJECT_ARRAY;
         }
         return array;
@@ -831,7 +833,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Float[] nullToEmpty(final Float[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_FLOAT_OBJECT_ARRAY;
         }
         return array;
@@ -851,7 +853,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Boolean[] nullToEmpty(final Boolean[] array) {
-        if (array == null || array.length == 0) {
+        if (isEmpty(array)) {
             return EMPTY_BOOLEAN_OBJECT_ARRAY;
         }
         return array;
@@ -1593,7 +1595,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final boolean[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final boolean[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1628,7 +1630,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final byte[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final byte[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1663,7 +1665,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final char[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final char[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1698,7 +1700,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final double[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final double[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1733,7 +1735,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final float[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final float[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1768,7 +1770,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final int[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final int[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1803,7 +1805,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final long[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final long[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1838,7 +1840,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final Object[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final Object[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -1873,7 +1875,7 @@ public class ArrayUtils {
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final short[] array, int startIndexInclusive, int endIndexExclusive) {
+    public static void reverse(final short[] array, final int startIndexInclusive, final int endIndexExclusive) {
         if (array == null) {
             return;
         }
@@ -4036,7 +4038,7 @@ public class ArrayUtils {
     public static <T> T[] add(final T[] array, final T element) {
         Class<?> type;
         if (array != null){
-            type = array.getClass();
+            type = array.getClass().getComponentType();
         } else if (element != null) {
             type = element.getClass();
         } else {
@@ -5428,7 +5430,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Byte, MutableInt> occurrences = new HashMap<Byte, MutableInt>(values.length);
+        final Map<Byte, MutableInt> occurrences = new HashMap<Byte, MutableInt>(values.length);
         for (final byte v : values) {
             final Byte boxed = Byte.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -6174,5 +6176,256 @@ public class ArrayUtils {
             System.arraycopy(array, srcIndex, result, destIndex, count);            
         }
         return result;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to the class's 
+     * {@code compareTo} method.</p>
+     *
+     * @param array the array to check
+     * @param <T> the datatype of the array to check, it must implement {@code Comparable}
+     * @return whether the array is sorted
+     * @since 3.4
+     */
+    public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
+        return isSorted(array, new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                return o1.compareTo(o2);
+            }
+        });
+    }
+   
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to the provided {@code Comparator}.</p>
+     *
+     * @param array the array to check
+     * @param comparator the {@code Comparator} to compare over
+     * @param <T> the datatype of the array
+     * @return whether the array is sorted
+     * @since 3.4
+     */
+    public static <T> boolean isSorted(final T[] array, final Comparator<T> comparator) {
+        if (comparator == null) {
+            throw new IllegalArgumentException("Comparator should not be null.");
+        }
+        
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        T previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final T current = array[i];
+            if (comparator.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(int[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        int previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final int current = array[i];
+            if(NumberUtils.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(long[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        long previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final long current = array[i];
+            if(NumberUtils.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(short[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        short previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final short current = array[i];
+            if(NumberUtils.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(final double[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        double previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final double current = array[i];
+            if(Double.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(final float[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        float previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final float current = array[i];
+            if(Float.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(byte[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        byte previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final byte current = array[i];
+            if(NumberUtils.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering.</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(char[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        char previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final char current = array[i];
+            if(CharUtils.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
+    }
+
+    /**
+     * <p>This method checks whether the provided array is sorted according to natural ordering
+     * ({@code false} before {@code true}).</p>
+     *
+     * @param array the array to check
+     * @return whether the array is sorted according to natural ordering
+     * @since 3.4
+     */
+    public static boolean isSorted(boolean[] array) {
+        if(array == null || array.length < 2) {
+            return true;
+        }
+
+        boolean previous = array[0];
+        final int n = array.length;
+        for(int i = 1; i < n; i++) {
+            final boolean current = array[i];
+            if(BooleanUtils.compare(previous, current) > 0) {
+                return false;
+            }
+
+            previous = current;
+        }
+        return true;
     }
 }

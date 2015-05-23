@@ -24,7 +24,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.builder.HashCodeBuilder}.
  * 
- * @version $Id: HashCodeBuilderTest.java 1526817 2013-09-27 07:49:02Z britter $
+ * @version $Id: HashCodeBuilderTest.java 1593622 2014-05-09 21:13:01Z djones $
  */
 public class HashCodeBuilderTest {
 
@@ -60,8 +60,13 @@ public class HashCodeBuilderTest {
     }
 
     @Test(expected=IllegalArgumentException.class)
-    public void testConstructorExEven() {
-        new HashCodeBuilder(2, 2);
+    public void testConstructorExEvenFirst() {
+        new HashCodeBuilder(2, 3);
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testConstructorExEvenSecond() {
+        new HashCodeBuilder(3, 2);
     }
 
     @Test(expected=IllegalArgumentException.class)

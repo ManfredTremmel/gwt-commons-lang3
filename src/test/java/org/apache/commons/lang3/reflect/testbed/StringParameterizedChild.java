@@ -18,11 +18,11 @@ package org.apache.commons.lang3.reflect.testbed;
 
 /**
  * {@link GenericParent} subclass that explicitly specifies &lt;T&gt; as {@link String}.
- * @version $Id: StringParameterizedChild.java 1585287 2014-04-06 11:24:03Z britter $
+ * @version $Id: StringParameterizedChild.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class StringParameterizedChild extends GenericParent<String> {
     @Override
-    public void consume(String t) {
+    public void consume(final String t) {
         super.consume(t);
     }
 }

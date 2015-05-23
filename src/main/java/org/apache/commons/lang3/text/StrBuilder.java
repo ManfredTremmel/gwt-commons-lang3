@@ -16,9 +16,11 @@
  */
 package org.apache.commons.lang3.text;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
+import java.nio.CharBuffer;
 import java.util.Iterator;
 import java.util.List;
 
@@ -71,7 +73,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * the interface. 
  *
  * @since 2.2
- * @version $Id: StrBuilder.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: StrBuilder.java 1666669 2015-03-14 12:25:06Z britter $
  */
 public class StrBuilder implements CharSequence, Appendable, Serializable, Builder<String> {
 
@@ -424,6 +426,49 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
 
     //-----------------------------------------------------------------------
     /**
+     * If possible, reads chars from the provided {@link Readable} directly into underlying
+     * character buffer without making extra copies.
+     *
+     * @param readable  object to read from
+     * @return the number of characters read
+     * @throws IOException if an I/O error occurs
+     *
+     * @since 3.4
+     * @see #appendTo(Appendable)
+     */
+    @GwtIncompatible("incompatible method")
+    public int readFrom(final Readable readable) throws IOException {
+        final int oldSize = size;
+        if (readable instanceof Reader) {
+            final Reader r = (Reader) readable;
+            ensureCapacity(size + 1);
+            int read;
+            while ((read = r.read(buffer, size, buffer.length - size)) != -1) {
+                size += read;
+                ensureCapacity(size + 1);
+            }
+        } else if (readable instanceof CharBuffer) {
+            final CharBuffer cb = (CharBuffer) readable;
+            final int remaining = cb.remaining();
+            ensureCapacity(size + remaining);
+            cb.get(buffer, size, remaining);
+            size += remaining;
+        } else {
+            while (true) {
+                ensureCapacity(size + 1);
+                final CharBuffer buf = CharBuffer.wrap(buffer, size, buffer.length - size);
+                final int read = readable.read(buf);
+                if (read == -1) {
+                    break;
+                }
+                size += read;
+            }
+        }
+        return size - oldSize;
+    }
+
+    //-----------------------------------------------------------------------
+    /**
      * Appends the new line string to this string builder.
      * <p>
      * The new line string can be altered using {@link #setNewLineText(String)}.
@@ -462,7 +507,10 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder append(final Object obj) {
         if (obj == null) {
             return appendNull();
-        } 
+        }
+        if (obj instanceof CharSequence) {
+            return append((CharSequence) obj);
+        }
         return append(obj.toString());        
     }
 
@@ -478,7 +526,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder append(final CharSequence seq) {
         if (seq == null) {
             return appendNull();
-        } 
+        }
         return append(seq.toString());        
     }
 
@@ -562,6 +610,64 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     @GwtIncompatible("incompatible method")
     public StrBuilder append(final String format, final Object... objs) {
         return append(String.format(format, objs));
+    }
+
+    /**
+     * Appends the contents of a char buffer to this string builder.
+     * Appending null will call {@link #appendNull()}.
+     *
+     * @param buf  the char buffer to append
+     * @return this, to enable chaining
+     * @since 3.4
+     */
+    @GwtIncompatible("incompatible method")
+    public StrBuilder append(final CharBuffer buf) {
+        if (buf == null) {
+            return appendNull();
+        }
+        if (buf.hasArray()) {
+            final int length = buf.remaining();
+            final int len = length();
+            ensureCapacity(len + length);
+            System.arraycopy(buf.array(), buf.arrayOffset() + buf.position(), buffer, len, length);
+            size += length;
+        } else {
+            append(buf.toString());
+        }
+        return this;
+    }
+
+    /**
+     * Appends the contents of a char buffer to this string builder.
+     * Appending null will call {@link #appendNull()}.
+     *
+     * @param buf  the char buffer to append
+     * @param startIndex  the start index, inclusive, must be valid
+     * @param length  the length to append, must be valid
+     * @return this, to enable chaining
+     * @since 3.4
+     */
+    @GwtIncompatible("incompatible method")
+    public StrBuilder append(final CharBuffer buf, final int startIndex, final int length) {
+        if (buf == null) {
+            return appendNull();
+        }
+        if (buf.hasArray()) {
+            final int totalLength = buf.remaining();
+            if (startIndex < 0 || startIndex > totalLength) {
+                throw new StringIndexOutOfBoundsException("startIndex must be valid");
+            }
+            if (length < 0 || (startIndex + length) > totalLength) {
+                throw new StringIndexOutOfBoundsException("length must be valid");
+            }
+            final int len = length();
+            ensureCapacity(len + length);
+            System.arraycopy(buf.array(), buf.arrayOffset() + buf.position() + startIndex, buffer, len, length);
+            size += length;
+        } else {
+            append(buf.toString(), startIndex, length);
+        }
+        return this;
     }
 
     /**
@@ -2613,6 +2719,33 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     @GwtIncompatible("incompatible method")
     public Writer asWriter() {
         return new StrBuilderWriter();
+    }
+
+    /**
+     * Appends current contents of this <code>StrBuilder</code> to the
+     * provided {@link Appendable}.
+     * <p>
+     * This method tries to avoid doing any extra copies of contents.
+     *
+     * @param appendable  the appendable to append data to
+     * @throws IOException  if an I/O error occurs
+     *
+     * @since 3.4
+     * @see #readFrom(Readable)
+     */
+    @GwtIncompatible("incompatible method")
+    public void appendTo(final Appendable appendable) throws IOException {
+        if (appendable instanceof Writer) {
+            ((Writer) appendable).write(buffer, 0, size);
+        } else if (appendable instanceof StringBuilder) {
+            ((StringBuilder) appendable).append(buffer, 0, size);
+        } else if (appendable instanceof StringBuffer) {
+            ((StringBuffer) appendable).append(buffer, 0, size);
+        } else if (appendable instanceof CharBuffer) {
+            ((CharBuffer) appendable).put(buffer, 0, size);
+        } else {
+            appendable.append(this);
+        }
     }
 
     //-----------------------------------------------------------------------

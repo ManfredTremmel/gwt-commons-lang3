@@ -40,7 +40,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.Validate}.
  *
- * @version $Id: ValidateTest.java 1562017 2014-01-28 09:31:53Z djones $
+ * @version $Id: ValidateTest.java 1600868 2014-06-06 12:33:44Z ggregory $
  */
 public class ValidateTest  {
     
@@ -1042,6 +1042,30 @@ public class ValidateTest  {
             fail("Expecting IllegalArgumentException");
         } catch(final IllegalArgumentException e) {
             assertEquals("Error", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testIsInstanceOf_withMessageArgs() {
+        Validate.isInstanceOf(String.class, "hi", "Error %s=%s", "Name", "Value");
+        Validate.isInstanceOf(Integer.class, 1, "Error %s=%s", "Name", "Value");
+        try {
+            Validate.isInstanceOf(List.class, "hi", "Error %s=%s", "Name", "Value");
+            fail("Expecting IllegalArgumentException");
+        } catch(final IllegalArgumentException e) {
+            assertEquals("Error Name=Value", e.getMessage());
+        }
+        try {
+            Validate.isInstanceOf(List.class, "hi", "Error %s=%s", List.class, "Value");
+            fail("Expecting IllegalArgumentException");
+        } catch(final IllegalArgumentException e) {
+            assertEquals("Error interface java.util.List=Value", e.getMessage());
+        }
+        try {
+            Validate.isInstanceOf(List.class, "hi", "Error %s=%s", List.class, null);
+            fail("Expecting IllegalArgumentException");
+        } catch(final IllegalArgumentException e) {
+            assertEquals("Error interface java.util.List=null", e.getMessage());
         }
     }
     

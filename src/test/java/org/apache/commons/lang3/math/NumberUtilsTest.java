@@ -32,7 +32,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.math.NumberUtils}.
  *
- * @version $Id: NumberUtilsTest.java 1582585 2014-03-28 03:10:27Z niallp $
+ * @version $Id: NumberUtilsTest.java 1663129 2015-03-01 16:48:22Z britter $
  */
 public class NumberUtilsTest {
 
@@ -121,9 +121,9 @@ public class NumberUtilsTest {
      */
     @Test
     public void testStringCreateNumberEnsureNoPrecisionLoss(){
-        String shouldBeFloat = "1.23";
-        String shouldBeDouble = "3.40282354e+38";
-        String shouldBeBigDecimal = "1.797693134862315759e+308";
+        final String shouldBeFloat = "1.23";
+        final String shouldBeDouble = "3.40282354e+38";
+        final String shouldBeBigDecimal = "1.797693134862315759e+308";
         
         assertTrue(NumberUtils.createNumber(shouldBeFloat) instanceof Float);
         assertTrue(NumberUtils.createNumber(shouldBeDouble) instanceof Double);
@@ -244,6 +244,19 @@ public class NumberUtilsTest {
         final Number bigNum = NumberUtils.createNumber("-1.1E-700F");
         assertNotNull(bigNum);
         assertEquals(BigDecimal.class, bigNum.getClass());
+    }
+    
+    @Test
+    public void testLang1087(){
+        // no sign cases
+        assertEquals(Float.class, NumberUtils.createNumber("0.0").getClass());
+        assertEquals(Float.valueOf("0.0"), NumberUtils.createNumber("0.0"));
+        // explicit positive sign cases
+        assertEquals(Float.class, NumberUtils.createNumber("+0.0").getClass());
+        assertEquals(Float.valueOf("+0.0"), NumberUtils.createNumber("+0.0"));
+        // negative sign cases
+        assertEquals(Float.class, NumberUtils.createNumber("-0.0").getClass());
+        assertEquals(Float.valueOf("-0.0"), NumberUtils.createNumber("-0.0"));
     }
 
     @Test
@@ -427,6 +440,7 @@ public class NumberUtilsTest {
         // Funky whitespaces
         this.testCreateBigIntegerFailure("\u00A0\uFEFF\u000B\u000C\u001C\u001D\u001E\u001F");
         assertEquals("createBigInteger(String) failed", new BigInteger("255"), NumberUtils.createBigInteger("0xff"));
+        assertEquals("createBigInteger(String) failed", new BigInteger("255"), NumberUtils.createBigInteger("0Xff"));
         assertEquals("createBigInteger(String) failed", new BigInteger("255"), NumberUtils.createBigInteger("#ff"));
         assertEquals("createBigInteger(String) failed", new BigInteger("-255"), NumberUtils.createBigInteger("-0xff"));
         assertEquals("createBigInteger(String) failed", new BigInteger("255"), NumberUtils.createBigInteger("0377"));
@@ -1198,6 +1212,8 @@ public class NumberUtilsTest {
 
         compareIsNumberWithCreateNumber(null, false);
         compareIsNumberWithCreateNumber("", false);
+        compareIsNumberWithCreateNumber(" ", false);
+        compareIsNumberWithCreateNumber("\r\n\t", false);
         compareIsNumberWithCreateNumber("--2.3", false);
         compareIsNumberWithCreateNumber(".12.3", false);
         compareIsNumberWithCreateNumber("-123E", false);
@@ -1253,6 +1269,27 @@ public class NumberUtilsTest {
             return;
         }
         fail("Expecting "+ expected + " for isNumber/createNumber using \"" + val + "\" but got " + isValid + " and " + canCreate);
+    }
+    
+    @Test
+    public void testIsParsable() {
+        assertFalse( NumberUtils.isParsable(null) );
+        assertFalse( NumberUtils.isParsable("") );
+        assertFalse( NumberUtils.isParsable("0xC1AB") );
+        assertFalse( NumberUtils.isParsable("65CBA2") );
+        assertFalse( NumberUtils.isParsable("pendro") );
+        assertFalse( NumberUtils.isParsable("64,2") );
+        assertFalse( NumberUtils.isParsable("64.2.2") );
+        assertFalse( NumberUtils.isParsable("64.") );
+        assertFalse( NumberUtils.isParsable("64L") );
+        assertTrue( NumberUtils.isParsable("64.2") );
+        assertTrue( NumberUtils.isParsable("64") );
+        assertTrue( NumberUtils.isParsable("018") );
+        assertTrue( NumberUtils.isParsable(".18") );
+        assertTrue( NumberUtils.isParsable("-65") );
+        assertTrue( NumberUtils.isParsable("-018") );
+        assertTrue( NumberUtils.isParsable("-018.2") );
+        assertTrue( NumberUtils.isParsable("-.236") );
     }
 
     private boolean checkCreateNumber(final String val) {
@@ -1338,4 +1375,31 @@ public class NumberUtilsTest {
         assertTrue(Float.isNaN(NumberUtils.max(bF)));
     }
 
+    @Test
+    public void compareInt() {
+        assertTrue(NumberUtils.compare(-3, 0) < 0);
+        assertTrue(NumberUtils.compare(113, 113)==0);
+        assertTrue(NumberUtils.compare(213, 32) > 0);
+    }
+
+    @Test
+    public void compareLong() {
+        assertTrue(NumberUtils.compare(-3L, 0L) < 0);
+        assertTrue(NumberUtils.compare(113L, 113L)==0);
+        assertTrue(NumberUtils.compare(213L, 32L) > 0);
+    }
+
+    @Test
+    public void compareShort() {
+        assertTrue(NumberUtils.compare((short)-3, (short)0) < 0);
+        assertTrue(NumberUtils.compare((short)113, (short)113)==0);
+        assertTrue(NumberUtils.compare((short)213, (short)32) > 0);
+    }
+
+    @Test
+    public void compareByte() {
+        assertTrue(NumberUtils.compare((byte)-3, (byte)0) < 0);
+        assertTrue(NumberUtils.compare((byte)113, (byte)113)==0);
+        assertTrue(NumberUtils.compare((byte)123, (byte)32) > 0);
+    }
 }

@@ -38,7 +38,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *
  * <p>#ThreadSafe#</p>
  * @since 2.0
- * @version $Id: StringEscapeUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: StringEscapeUtils.java 1630076 2014-10-08 11:49:54Z djones $
  */
 @GwtIncompatible("incompatible class")
 public class StringEscapeUtils {
@@ -614,12 +614,12 @@ public class StringEscapeUtils {
      * containing the actual Unicode characters corresponding to the
      * escapes. Supports HTML 4.0 entities.</p>
      *
-     * <p>For example, the string "&amp;lt;Fran&amp;ccedil;ais&amp;gt;"
-     * will become "&lt;Fran&ccedil;ais&gt;"</p>
+     * <p>For example, the string {@code "&lt;Fran&ccedil;ais&gt;"}
+     * will become {@code "<Français>"}</p>
      *
      * <p>If an entity is unrecognized, it is left alone, and inserted
-     * verbatim into the result string. e.g. "&amp;gt;&amp;zzzz;x" will
-     * become "&gt;&amp;zzzz;x".</p>
+     * verbatim into the result string. e.g. {@code "&gt;&zzzz;x"} will
+     * become {@code ">&zzzz;x"}.</p>
      *
      * @param input  the {@code String} to unescape, may be null
      * @return a new unescaped {@code String}, {@code null} if null string input
@@ -648,8 +648,8 @@ public class StringEscapeUtils {
     /**
      * <p>Escapes the characters in a {@code String} using XML entities.</p>
      *
-     * <p>For example: <tt>"bread" &amp; "butter"</tt> =&gt;
-     * <tt>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</tt>.
+     * <p>For example: {@code "bread" & "butter"} =&gt;
+     * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
      * </p>
      *
      * <p>Supports only the five basic XML entities (gt, lt, quot, amp, apos).
@@ -673,8 +673,8 @@ public class StringEscapeUtils {
     /**
      * <p>Escapes the characters in a {@code String} using XML entities.</p>
      *
-     * <p>For example: <tt>"bread" &amp; "butter"</tt> =&gt;
-     * <tt>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</tt>.
+     * <p>For example: {@code "bread" & "butter"} =&gt;
+     * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
      * </p>
      *
      * <p>Note that XML 1.0 is a text-only format: it cannot represent control
@@ -705,8 +705,8 @@ public class StringEscapeUtils {
     /**
      * <p>Escapes the characters in a {@code String} using XML entities.</p>
      *
-     * <p>For example: <tt>"bread" &amp; "butter"</tt> =&gt;
-     * <tt>&amp;quot;bread&amp;quot; &amp;amp; &amp;quot;butter&amp;quot;</tt>.
+     * <p>For example: {@code "bread" & "butter"} =&gt;
+     * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
      * </p>
      *
      * <p>XML 1.1 can represent certain control characters, but it cannot represent

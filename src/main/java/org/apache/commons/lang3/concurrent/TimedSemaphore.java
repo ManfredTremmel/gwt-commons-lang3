@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * <p>
  * A specialized <em>semaphore</em> implementation that provides a number of
@@ -127,7 +129,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 3.0
- * @version $Id: TimedSemaphore.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: TimedSemaphore.java 1593668 2014-05-10 05:58:17Z djones $
  */
 @GwtIncompatible("incompatible class")
 public class TimedSemaphore {
@@ -204,9 +206,7 @@ public class TimedSemaphore {
      */
     public TimedSemaphore(final ScheduledExecutorService service, final long timePeriod,
             final TimeUnit timeUnit, final int limit) {
-        if (timePeriod <= 0) {
-            throw new IllegalArgumentException("Time period must be greater 0!");
-        }
+        Validate.inclusiveBetween(1, Long.MAX_VALUE, timePeriod, "Time period must be greater than 0!");
 
         period = timePeriod;
         unit = timeUnit;

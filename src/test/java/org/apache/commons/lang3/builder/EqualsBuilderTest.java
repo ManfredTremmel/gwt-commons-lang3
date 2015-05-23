@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.builder.EqualsBuilder}.
  *
- * @version $Id: EqualsBuilderTest.java 1535653 2013-10-25 08:19:29Z bayard $
+ * @version $Id: EqualsBuilderTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class EqualsBuilderTest {
 
@@ -1133,17 +1133,17 @@ public class EqualsBuilderTest {
         final TestObject one = new TestObject(1);
         final TestObject two = new TestObject(2);
 
-        Object[] o1 = new Object[] { one };
-        Object[] o2 = new Object[] { two };
-        Object[] o3 = new Object[] { one };
+        final Object[] o1 = new Object[] { one };
+        final Object[] o2 = new Object[] { two };
+        final Object[] o3 = new Object[] { one };
 
         assertTrue(!EqualsBuilder.reflectionEquals(o1, o2));
         assertTrue(EqualsBuilder.reflectionEquals(o1, o1));
         assertTrue(EqualsBuilder.reflectionEquals(o1, o3));
         
-        double[] d1 = { 0, 1 };
-        double[] d2 = { 2, 3 };
-        double[] d3 = { 0, 1 };
+        final double[] d1 = { 0, 1 };
+        final double[] d2 = { 2, 3 };
+        final double[] d3 = { 0, 1 };
         
         assertTrue(!EqualsBuilder.reflectionEquals(d1, d2));
         assertTrue(EqualsBuilder.reflectionEquals(d1, d1));

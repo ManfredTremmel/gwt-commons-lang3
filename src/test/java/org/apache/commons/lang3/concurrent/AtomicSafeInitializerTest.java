@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * Test class for {@code AtomicSafeInitializer}.
  *
- * @version $Id: AtomicSafeInitializerTest.java 1088899 2011-04-05 05:31:27Z bayard $
+ * @version $Id: AtomicSafeInitializerTest.java 1662379 2015-02-26 08:13:58Z britter $
  */
 public class AtomicSafeInitializerTest extends
         AbstractConcurrentInitializerTest {
@@ -50,6 +50,9 @@ public class AtomicSafeInitializerTest extends
 
     /**
      * Tests that initialize() is called only once.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException because {@link #testGetConcurrent()} may throw it
+     * @throws java.lang.InterruptedException because {@link #testGetConcurrent()} may throw it
      */
     @Test
     public void testNumberOfInitializeInvocations() throws ConcurrentException,

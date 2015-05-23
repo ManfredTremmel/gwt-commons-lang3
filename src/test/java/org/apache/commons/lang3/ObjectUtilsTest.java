@@ -43,7 +43,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.ObjectUtils}.
  *
- * @version $Id: ObjectUtilsTest.java 1562018 2014-01-28 09:35:29Z djones $
+ * @version $Id: ObjectUtilsTest.java 1609902 2014-07-12 11:01:37Z britter $
  */
 @SuppressWarnings("deprecation") // deliberate use of deprecated code
 public class ObjectUtilsTest {
@@ -264,7 +264,7 @@ public class ObjectUtilsTest {
             final Appendable appendable = new StringBuilder();
             ObjectUtils.identityToString(appendable, i);
             assertEquals(expected, appendable.toString());
-        } catch(IOException ex) {
+        } catch(final IOException ex) {
             fail("IOException unexpected");
         }
         
@@ -272,14 +272,14 @@ public class ObjectUtilsTest {
             ObjectUtils.identityToString((Appendable)null, "tmp");
             fail("NullPointerException expected");
         } catch(final NullPointerException npe) {
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
         }
         
         try {
             ObjectUtils.identityToString((Appendable)(new StringBuilder()), null);
             fail("NullPointerException expected");
         } catch(final NullPointerException npe) {
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
         }
     }
 
@@ -468,6 +468,8 @@ public class ObjectUtilsTest {
 
     /**
      * Tests {@link ObjectUtils#clone(Object)} with an uncloneable object.
+     *
+     * @throws java.lang.Throwable because we expect this to fail
      */
     @Test(expected = NoSuchMethodException.class)
     public void testCloneOfUncloneable() throws Throwable {
@@ -518,6 +520,8 @@ public class ObjectUtilsTest {
 
     /**
      * Tests {@link ObjectUtils#cloneIfPossible(Object)} with an uncloneable object.
+     *
+     * @throws java.lang.Throwable because we expect this to fail
      */
     @Test(expected = NoSuchMethodException.class)
     public void testPossibleCloneOfUncloneable() throws Throwable {

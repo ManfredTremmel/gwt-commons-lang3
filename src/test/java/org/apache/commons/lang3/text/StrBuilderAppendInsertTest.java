@@ -31,7 +31,7 @@ import org.apache.commons.lang3.SystemUtils;
 /**
  * Unit tests for {@link org.apache.commons.lang3.text.StrBuilder}.
  *
- * @version $Id: StrBuilderAppendInsertTest.java 1582699 2014-03-28 11:15:32Z sebb $
+ * @version $Id: StrBuilderAppendInsertTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class StrBuilderAppendInsertTest {
 
@@ -1049,8 +1049,8 @@ public class StrBuilderAppendInsertTest {
         sb = new StrBuilder();
         sb.append("Hi %s %,d", "Alice", 5000);
         // group separator depends on system locale
-        char groupingSeparator = DecimalFormatSymbols.getInstance().getGroupingSeparator();
-        String expected = "Hi Alice 5" + groupingSeparator + "000";
+        final char groupingSeparator = DecimalFormatSymbols.getInstance().getGroupingSeparator();
+        final String expected = "Hi Alice 5" + groupingSeparator + "000";
         assertEquals(expected, sb.toString());
     }
 

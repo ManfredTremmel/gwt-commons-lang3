@@ -42,7 +42,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *
  * <p>#ThreadSafe#</p>
  * @since 1.0
- * @version $Id: ObjectUtils.java 1583781 2014-04-01 20:54:53Z niallp $
+ * @version $Id: ObjectUtils.java 1669786 2015-03-28 15:09:29Z britter $
  */
 //@Immutable
 public class ObjectUtils {
@@ -209,11 +209,6 @@ public class ObjectUtils {
         return obj == null ? 0 : obj.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     /**
      * <p>Gets the hash code for multiple objects.</p>
      * 
@@ -233,7 +228,7 @@ public class ObjectUtils {
      * @param objects  the objects to obtain the hash code of, may be {@code null}
      * @return the hash code of the objects, or zero if null
      * @since 3.0
-     * @deprecated this method has been replaced by {@code java.util.Objects.hash(Object...)} in Java 7 an will be
+     * @deprecated this method has been replaced by {@code java.util.Objects.hash(Object...)} in Java 7 and will be
      * removed in future releases.
      */
     @Deprecated
@@ -241,7 +236,7 @@ public class ObjectUtils {
         int hash = 1;
         if (objects != null) {
             for (final Object object : objects) {
-                int tmpHash = ObjectUtils.hashCode(object);
+                final int tmpHash = ObjectUtils.hashCode(object);
                 hash = hash * 31 + tmpHash;
             }
         }

@@ -26,12 +26,12 @@ The Package itself has to be includes as binary and source package. I've done it
     <dependency>
       <groupId>gwt-commons-lang3</groupId>
       <artifactId>gwt-commons-lang3</artifactId>
-      <version>3.3.2-SNAPSHOT</version>
+      <version>3.4-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>gwt-commons-lang3</groupId>
       <artifactId>gwt-commons-lang3</artifactId>
-      <version>3.3.2-SNAPSHOT</version>
+      <version>3.4-SNAPSHOT</version>
       <classifier>sources</classifier>
       <scope>provided</scope>
     </dependency>

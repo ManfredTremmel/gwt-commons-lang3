@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * Test class for StrLookup.
  *
- * @version $Id: StrLookupTest.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: StrLookupTest.java 1663177 2015-03-01 23:18:33Z sebb $
  */
 public class StrLookupTest  {
 
@@ -51,6 +51,22 @@ public class StrLookupTest  {
         } catch (final NullPointerException ex) {
             // expected
         }
+    }
+
+    @Test
+    public void testSystemPropertiesLookupNotSingleton() {
+        final String osName = "os.name";
+        final String originalOsName = System.getProperty(osName);
+
+        StrLookup<String> properties1 = StrLookup.systemPropertiesLookup();
+        assertEquals(originalOsName, properties1.lookup(osName));
+
+        final String differentOsName = "HAL-9000";
+        System.setProperty(osName, differentOsName);
+        StrLookup<String> properties2 = StrLookup.systemPropertiesLookup();
+
+        assertEquals(originalOsName, properties1.lookup(osName));
+        assertEquals(differentOsName, properties2.lookup(osName));
     }
 
     @Test

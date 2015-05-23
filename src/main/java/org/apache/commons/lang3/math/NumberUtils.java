@@ -20,12 +20,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * <p>Provides extra functionality for Java Number classes.</p>
  *
  * @since 2.0
- * @version $Id: NumberUtils.java 1582585 2014-03-28 03:10:27Z niallp $
+ * @version $Id: NumberUtils.java 1663129 2015-03-01 16:48:22Z britter $
  */
 public class NumberUtils {
     
@@ -501,16 +502,16 @@ public class NumberUtils {
             } else {
                 dec = str.substring(decPos + 1);
             }
-            mant = str.substring(0, decPos);
+            mant = getMantissa(str, decPos);
             numDecimals = dec.length(); // gets number of digits past the decimal to ensure no loss of precision for floating point numbers.
         } else {
             if (expPos > -1) {
                 if (expPos > str.length()) { // prevents double exponent causing IOOBE
                     throw new NumberFormatException(str + " is not a valid number.");
                 }
-                mant = str.substring(0, expPos);
+                mant = getMantissa(str, expPos);
             } else {
-                mant = str;
+                mant = getMantissa(str);
             }
             dec = null;
         }
@@ -624,6 +625,34 @@ public class NumberUtils {
     /**
      * <p>Utility method for {@link #createNumber(java.lang.String)}.</p>
      *
+     * <p>Returns mantissa of the given number.</p>
+     * 
+     * @param str the string representation of the number
+     * @return mantissa of the given number
+     */
+    private static String getMantissa(final String str) {
+        return getMantissa(str, str.length());
+    }
+
+    /**
+     * <p>Utility method for {@link #createNumber(java.lang.String)}.</p>
+     *
+     * <p>Returns mantissa of the given number.</p>
+     * 
+     * @param str the string representation of the number
+     * @param stopPos the position of the exponent or decimal point
+     * @return mantissa of the given number
+     */
+    private static String getMantissa(final String str, final int stopPos) {
+        final char firstChar = str.charAt(0);
+        final boolean hasSign = (firstChar == '-' || firstChar == '+');
+
+        return hasSign ? str.substring(1, stopPos) : str.substring(0, stopPos);
+    }
+
+    /**
+     * <p>Utility method for {@link #createNumber(java.lang.String)}.</p>
+     *
      * <p>Returns <code>true</code> if s is <code>null</code>.</p>
      * 
      * @param str  the String to check
@@ -732,7 +761,7 @@ public class NumberUtils {
             negate = true;
             pos = 1;
         }
-        if (str.startsWith("0x", pos) || str.startsWith("0x", pos)) { // hex
+        if (str.startsWith("0x", pos) || str.startsWith("0X", pos)) { // hex
             radix = 16;
             pos += 2;
         } else if (str.startsWith("#", pos)) { // alternative hex (allowed by Long/Integer)
@@ -783,8 +812,9 @@ public class NumberUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from min(long[]) to min(long...)
      */
-    public static long min(final long[] array) {
+    public static long min(final long... array) {
         // Validates input
         validateArray(array);
     
@@ -806,8 +836,9 @@ public class NumberUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from min(int[]) to min(int...)
      */
-    public static int min(final int[] array) {
+    public static int min(final int... array) {
         // Validates input
         validateArray(array);
     
@@ -829,8 +860,9 @@ public class NumberUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from min(short[]) to min(short...)
      */
-    public static short min(final short[] array) {
+    public static short min(final short... array) {
         // Validates input
         validateArray(array);
     
@@ -852,8 +884,9 @@ public class NumberUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from min(byte[]) to min(byte...)
      */
-    public static byte min(final byte[] array) {
+    public static byte min(final byte... array) {
         // Validates input
         validateArray(array);
     
@@ -876,8 +909,9 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @see IEEE754rUtils#min(double[]) IEEE754rUtils for a version of this method that handles NaN differently
+     * @since 3.4 Changed signature from min(double[]) to min(double...)
      */
-    public static double min(final double[] array) {
+    public static double min(final double... array) {
         // Validates input
         validateArray(array);
     
@@ -903,8 +937,9 @@ public class NumberUtils {
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @see IEEE754rUtils#min(float[]) IEEE754rUtils for a version of this method that handles NaN differently
+     * @since 3.4 Changed signature from min(float[]) to min(float...)
      */
-    public static float min(final float[] array) {
+    public static float min(final float... array) {
         // Validates input
         validateArray(array);
     
@@ -928,11 +963,12 @@ public class NumberUtils {
      * <p>Returns the maximum value in an array.</p>
      * 
      * @param array  an array, must not be null or empty
-     * @return the minimum value in the array
+     * @return the maximum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from max(long[]) to max(long...)
      */
-    public static long max(final long[] array) {
+    public static long max(final long... array) {
         // Validates input
         validateArray(array);
 
@@ -951,11 +987,12 @@ public class NumberUtils {
      * <p>Returns the maximum value in an array.</p>
      * 
      * @param array  an array, must not be null or empty
-     * @return the minimum value in the array
+     * @return the maximum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from max(int[]) to max(int...)
      */
-    public static int max(final int[] array) {
+    public static int max(final int... array) {
         // Validates input
         validateArray(array);
     
@@ -974,11 +1011,12 @@ public class NumberUtils {
      * <p>Returns the maximum value in an array.</p>
      * 
      * @param array  an array, must not be null or empty
-     * @return the minimum value in the array
+     * @return the maximum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from max(short[]) to max(short...)
      */
-    public static short max(final short[] array) {
+    public static short max(final short... array) {
         // Validates input
         validateArray(array);
     
@@ -997,11 +1035,12 @@ public class NumberUtils {
      * <p>Returns the maximum value in an array.</p>
      * 
      * @param array  an array, must not be null or empty
-     * @return the minimum value in the array
+     * @return the maximum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from max(byte[]) to max(byte...)
      */
-    public static byte max(final byte[] array) {
+    public static byte max(final byte... array) {
         // Validates input
         validateArray(array);
     
@@ -1020,12 +1059,13 @@ public class NumberUtils {
      * <p>Returns the maximum value in an array.</p>
      * 
      * @param array  an array, must not be null or empty
-     * @return the minimum value in the array
+     * @return the maximum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @see IEEE754rUtils#max(double[]) IEEE754rUtils for a version of this method that handles NaN differently
+     * @since 3.4 Changed signature from max(double[]) to max(double...)
      */
-    public static double max(final double[] array) {
+    public static double max(final double... array) {
         // Validates input
         validateArray(array);
 
@@ -1047,12 +1087,13 @@ public class NumberUtils {
      * <p>Returns the maximum value in an array.</p>
      * 
      * @param array  an array, must not be null or empty
-     * @return the minimum value in the array
+     * @return the maximum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
      * @see IEEE754rUtils#max(float[]) IEEE754rUtils for a version of this method that handles NaN differently
+     * @since 3.4 Changed signature from max(float[]) to max(float...)
      */
-    public static float max(final float[] array) {
+    public static float max(final float... array) {
         // Validates input
         validateArray(array);
 
@@ -1079,9 +1120,8 @@ public class NumberUtils {
     private static void validateArray(final long[] array) {
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
         }
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
     }
 
     /**
@@ -1093,9 +1133,8 @@ public class NumberUtils {
     private static void validateArray(final int[] array) {
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
         }
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
     }
 
     /**
@@ -1107,9 +1146,8 @@ public class NumberUtils {
     private static void validateArray(final short[] array) {
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
         }
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
     }
 
     /**
@@ -1121,9 +1159,8 @@ public class NumberUtils {
     private static void validateArray(final byte[] array) {
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
         }
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
     }
 
     /**
@@ -1135,9 +1172,8 @@ public class NumberUtils {
     private static void validateArray(final double[] array) {
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
         }
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
     }
 
     /**
@@ -1149,9 +1185,8 @@ public class NumberUtils {
     private static void validateArray(final float[] array) {
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
         }
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
     }
      
     // 3 param min
@@ -1519,4 +1554,108 @@ public class NumberUtils {
         return !allowSigns && foundDigit;
     }
 
+    /**
+     * <p>Checks whether the given String is a parsable number.</p>
+     *
+     * <p>Parsable numbers include those Strings understood by {@link Integer#parseInt(String)},
+     * {@link Long#parseLong(String)}, {@link Float#parseFloat(String)} or
+     * {@link Double#parseDouble(String)}. This method can be used instead of catching {@link java.text.ParseException}
+     * when calling one of those methods.</p>
+     *
+     * <p>Hexadecimal and scientific notations are <strong>not</strong> considered parsable.
+     * See {@link #isNumber(String)} on those cases.</p>
+     *
+     * <p>{@code Null} and empty String will return <code>false</code>.</p>
+     *
+     * @param str the String to check.
+     * @return {@code true} if the string is a parsable number.
+     * @since 3.4
+     */
+    public static boolean isParsable(final String str) {
+        if( StringUtils.endsWith( str, "." ) ) {
+            return false;
+        }
+        if( StringUtils.startsWith( str, "-" ) ) {
+            return isDigits( StringUtils.replaceOnce( str.substring(1), ".", StringUtils.EMPTY ) );
+        } else {
+            return isDigits( StringUtils.replaceOnce( str, ".", StringUtils.EMPTY ) );
+        }
+    }
+
+    /**
+     * <p>Compares two {@code int} values numerically. This is the same functionality as provided in Java 7.</p>
+     *
+     * @param x the first {@code int} to compare
+     * @param y the second {@code int} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         a value less than {@code 0} if {@code x < y}; and
+     *         a value greater than {@code 0} if {@code x > y}
+     * @since 3.4
+     */
+    public static int compare(int x, int y) {
+        if (x == y) {
+            return 0;
+        }
+        if (x < y) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+ 
+    /**
+     * <p>Compares to {@code long} values numerically. This is the same functionality as provided in Java 7.</p>
+     *
+     * @param x the first {@code long} to compare
+     * @param y the second {@code long} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         a value less than {@code 0} if {@code x < y}; and
+     *         a value greater than {@code 0} if {@code x > y}
+     * @since 3.4
+     */
+    public static int compare(long x, long y) {
+        if (x == y) {
+            return 0;
+        }
+        if (x < y) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * <p>Compares to {@code short} values numerically. This is the same functionality as provided in Java 7.</p>
+     *
+     * @param x the first {@code short} to compare
+     * @param y the second {@code short} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         a value less than {@code 0} if {@code x < y}; and
+     *         a value greater than {@code 0} if {@code x > y}
+     * @since 3.4
+     */
+    public static int compare(short x, short y) {
+        if (x == y) {
+            return 0;
+        }
+        if (x < y) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * <p>Compares two {@code byte} values numerically. This is the same functionality as provided in Java 7.</p>
+     *
+     * @param x the first {@code byte} to compare
+     * @param y the second {@code byte} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         a value less than {@code 0} if {@code x < y}; and
+     *         a value greater than {@code 0} if {@code x > y}
+     * @since 3.4
+     */
+    public static int compare(byte x, byte y) {
+        return x-y;
+    }
 }

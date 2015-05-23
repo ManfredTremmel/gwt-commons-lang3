@@ -24,7 +24,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link Diff}.
  *
- * @version $Id: DiffTest.java 1561215 2014-01-24 22:37:50Z djones $
+ * @version $Id: DiffTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class DiffTest {
 
@@ -34,7 +34,7 @@ public class DiffTest {
     private static class BooleanDiff extends Diff<Boolean> {        
         private static final long serialVersionUID = 1L;
 
-        protected BooleanDiff(String fieldName) {
+        protected BooleanDiff(final String fieldName) {
             super(fieldName);        
         }
 

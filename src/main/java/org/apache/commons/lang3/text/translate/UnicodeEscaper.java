@@ -25,7 +25,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Translates codepoints to their Unicode escaped value.
  *
  * @since 3.0
- * @version $Id: UnicodeEscaper.java 1552652 2013-12-20 13:23:16Z britter $
+ * @version $Id: UnicodeEscaper.java 1666535 2015-03-13 18:18:59Z britter $
  */
 public class UnicodeEscaper extends CodePointTranslator {
 
@@ -117,14 +117,12 @@ public class UnicodeEscaper extends CodePointTranslator {
         // TODO: Handle potential + sign per various Unicode escape implementations
         if (codepoint > 0xffff) {
             out.write(toUtf16Escape(codepoint));
-        } else if (codepoint > 0xfff) {
-            out.write("\\u" + hex(codepoint));
-        } else if (codepoint > 0xff) {
-            out.write("\\u0" + hex(codepoint));
-        } else if (codepoint > 0xf) {
-            out.write("\\u00" + hex(codepoint));
         } else {
-            out.write("\\u000" + hex(codepoint));
+          out.write("\\u");
+          out.write(HEX_DIGITS[(codepoint >> 12) & 15]);
+          out.write(HEX_DIGITS[(codepoint >> 8) & 15]);
+          out.write(HEX_DIGITS[(codepoint >> 4) & 15]);
+          out.write(HEX_DIGITS[(codepoint) & 15]);
         }
         return true;
     }

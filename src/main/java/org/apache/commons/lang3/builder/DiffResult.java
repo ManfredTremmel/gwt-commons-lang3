@@ -34,7 +34,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  * 
  * @since 3.3
- * @version $Id: DiffResult.java 1561225 2014-01-24 23:17:29Z djones $
+ * @version $Id: DiffResult.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class DiffResult implements Iterable<Diff<?>> {
@@ -180,15 +180,15 @@ public class DiffResult implements Iterable<Diff<?>> {
      * 
      * @return a {@code String} description of the differences.
      */
-    public String toString(ToStringStyle style) {
+    public String toString(final ToStringStyle style) {
         if (diffs.size() == 0) {
             return OBJECTS_SAME_STRING;
         }
 
-        ToStringBuilder lhsBuilder = new ToStringBuilder(lhs, style);
-        ToStringBuilder rhsBuilder = new ToStringBuilder(rhs, style);
+        final ToStringBuilder lhsBuilder = new ToStringBuilder(lhs, style);
+        final ToStringBuilder rhsBuilder = new ToStringBuilder(rhs, style);
 
-        for (Diff<?> diff : diffs) {
+        for (final Diff<?> diff : diffs) {
             lhsBuilder.append(diff.getFieldName(), diff.getLeft());
             rhsBuilder.append(diff.getFieldName(), diff.getRight());
         }

@@ -16,6 +16,8 @@
  */
 package org.apache.commons.lang3.mutable;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 /**
  * A mutable <code>short</code> wrapper.
  * <p>
@@ -23,7 +25,7 @@ package org.apache.commons.lang3.mutable;
  * 
  * @see Short
  * @since 2.1
- * @version $Id: MutableShort.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: MutableShort.java 1669791 2015-03-28 15:22:59Z britter $
  */
 public class MutableShort extends Number implements Comparable<MutableShort>, Mutable<Number> {
 
@@ -268,8 +270,7 @@ public class MutableShort extends Number implements Comparable<MutableShort>, Mu
      */
     @Override
     public int compareTo(final MutableShort other) {
-        final short anotherVal = other.value;
-        return value < anotherVal ? -1 : (value == anotherVal ? 0 : 1);
+        return NumberUtils.compare(this.value, other.value);
     }
 
     //-----------------------------------------------------------------------

@@ -36,7 +36,7 @@ import org.junit.Test;
 /**
  * Test class for StrSubstitutor.
  *
- * @version $Id: StrSubstitutorTest.java 1524541 2013-09-18 19:35:16Z oheger $
+ * @version $Id: StrSubstitutorTest.java 1654135 2015-01-23 08:10:41Z britter $
  */
 public class StrSubstitutorTest {
 
@@ -587,6 +587,18 @@ public class StrSubstitutorTest {
         assertEquals(buf.toString(), StrSubstitutor.replaceSystemProperties("Hi ${user.name}, you are "
             + "working with ${os.name}, your home "
             + "directory is ${user.home}."));
+    }
+
+    /**
+     * Test for LANG-1055: StrSubstitutor.replaceSystemProperties does not work consistently
+     */
+    @Test
+    public void testLANG1055() {
+        System.setProperty("test_key",  "test_value");
+
+        String expected = StrSubstitutor.replace("test_key=${test_key}", System.getProperties());
+        String actual = StrSubstitutor.replaceSystemProperties("test_key=${test_key}");
+        assertEquals(expected, actual);
     }
 
     /**

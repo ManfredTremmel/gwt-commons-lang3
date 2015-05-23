@@ -18,12 +18,12 @@ package org.apache.commons.lang3.reflect.testbed;
 
 /**
  * Class declaring a parameter variable.
- * @version $Id: GenericParent.java 1510301 2013-08-04 18:40:48Z mbenson $
+ * @version $Id: GenericParent.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class GenericParent<T> implements GenericConsumer<T> {
 
     @Override
-    public void consume(T t) {
+    public void consume(final T t) {
     }
 
 }

@@ -24,7 +24,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>The methods of this class do not allow {@code null} inputs.</p>
  *
  * @since 3.3
- * @version $Id: ClassPathUtils.java 1561722 2014-01-27 16:19:55Z britter $
+ * @version $Id: ClassPathUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 //@Immutable
 public class ClassPathUtils {
@@ -84,7 +84,7 @@ public class ClassPathUtils {
     public static String toFullyQualifiedName(final Package context, final String resourceName) {
         Validate.notNull(context, "Parameter '%s' must not be null!", "context" );
         Validate.notNull(resourceName, "Parameter '%s' must not be null!", "resourceName");
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append(context.getName());
         sb.append(".");
         sb.append(resourceName);
@@ -135,7 +135,7 @@ public class ClassPathUtils {
     public static String toFullyQualifiedPath(final Package context, final String resourceName) {
         Validate.notNull(context, "Parameter '%s' must not be null!", "context" );
         Validate.notNull(resourceName, "Parameter '%s' must not be null!", "resourceName");
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append(context.getName().replace('.', '/'));
         sb.append("/");
         sb.append(resourceName);

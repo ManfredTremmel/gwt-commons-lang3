@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
@@ -36,7 +37,7 @@ import org.junit.Test;
 /**
  * Unit tests for {@link StringEscapeUtils}.
  *
- * @version $Id: StringEscapeUtilsTest.java 1585287 2014-04-06 11:24:03Z britter $
+ * @version $Id: StringEscapeUtilsTest.java 1609902 2014-07-12 11:01:37Z britter $
  */
 public class StringEscapeUtilsTest {
     private final static String FOO = "foo";
@@ -219,7 +220,7 @@ public class StringEscapeUtilsTest {
 
     @Test
     public void testEscapeHtml() {
-        for (String[] element : HTML_ESCAPES) {
+        for (final String[] element : HTML_ESCAPES) {
             final String message = element[0];
             final String expected = element[1];
             final String original = element[2];
@@ -236,7 +237,7 @@ public class StringEscapeUtilsTest {
 
     @Test
     public void testUnescapeHtml4() {
-        for (String[] element : HTML_ESCAPES) {
+        for (final String[] element : HTML_ESCAPES) {
             final String message = element[0];
             final String expected = element[2];
             final String original = element[1];
@@ -510,18 +511,16 @@ public class StringEscapeUtilsTest {
 
     /**
      * Tests // https://issues.apache.org/jira/browse/LANG-480
-     * 
-     * @throws java.io.UnsupportedEncodingException
      */
     @Test
-    public void testEscapeHtmlHighUnicode() throws java.io.UnsupportedEncodingException {
+    public void testEscapeHtmlHighUnicode() {
         // this is the utf8 representation of the character:
         // COUNTING ROD UNIT DIGIT THREE
         // in Unicode
         // codepoint: U+1D362
         final byte[] data = new byte[] { (byte)0xF0, (byte)0x9D, (byte)0x8D, (byte)0xA2 };
 
-        final String original = new String(data, "UTF8");
+        final String original = new String(data, Charset.forName("UTF8"));
 
         final String escaped = StringEscapeUtils.escapeHtml4( original );
         assertEquals( "High Unicode should not have been escaped", original, escaped);
@@ -584,9 +583,9 @@ public class StringEscapeUtilsTest {
      */
     @Test
     public void testLang911() {
-        String bellsTest = "\ud83d\udc80\ud83d\udd14";
-        String value = StringEscapeUtils.escapeJava(bellsTest);
-        String valueTest = StringEscapeUtils.unescapeJava(value);
+        final String bellsTest = "\ud83d\udc80\ud83d\udd14";
+        final String value = StringEscapeUtils.escapeJava(bellsTest);
+        final String valueTest = StringEscapeUtils.unescapeJava(value);
         assertEquals(bellsTest, valueTest);
     }
 
@@ -610,8 +609,8 @@ public class StringEscapeUtilsTest {
 
         assertEquals("He didn't say, \\\"stop!\\\"", StringEscapeUtils.escapeJson("He didn't say, \"stop!\""));
 
-        String expected = "\\\"foo\\\" isn't \\\"bar\\\". specials: \\b\\r\\n\\f\\t\\\\\\/";
-        String input ="\"foo\" isn't \"bar\". specials: \b\r\n\f\t\\/";
+        final String expected = "\\\"foo\\\" isn't \\\"bar\\\". specials: \\b\\r\\n\\f\\t\\\\\\/";
+        final String input ="\"foo\" isn't \"bar\". specials: \b\r\n\f\t\\/";
 
         assertEquals(expected, StringEscapeUtils.escapeJson(input));
     }

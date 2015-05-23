@@ -32,6 +32,16 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>FastDateFormat is a fast and thread-safe version of
  * {@link java.text.SimpleDateFormat}.</p>
  *
+ * <p>To obtain an instance of FastDateFormat, use one of the static factory methods: 
+ * {@link #getInstance(String, TimeZone, Locale)}, {@link #getDateInstance(int, TimeZone, Locale)}, 
+ * {@link #getTimeInstance(int, TimeZone, Locale)}, or {@link #getDateTimeInstance(int, int, TimeZone, Locale)} 
+ * </p>
+ * 
+ * <p>Since FastDateFormat is thread safe, you can use a static member instance:</p>
+ * <code>
+ *   private static final FastDateFormat DATE_FORMATTER = FastDateFormat.getDateTimeInstance(FastDateFormat.LONG, FastDateFormat.SHORT);
+ * </code>
+ * 
  * <p>This class can be used as a direct replacement to
  * {@code SimpleDateFormat} in most formatting and parsing situations.
  * This class is especially useful in multi-threaded server environments.
@@ -49,7 +59,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * This pattern letter can be used here (on all JDK versions).</p>
  *
  * <p>In addition, the pattern {@code 'ZZ'} has been made to represent
- * ISO8601 full format time zones (eg. {@code +08:00} or {@code -11:00}).
+ * ISO 8601 full format time zones (eg. {@code +08:00} or {@code -11:00}).
  * This introduces a minor incompatibility with Java 1.4, but at a gain of
  * useful functionality.</p>
  *
@@ -60,7 +70,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * versions. FastDateFormat implements the behavior of Java 7.</p>
  *
  * @since 2.0
- * @version $Id: FastDateFormat.java 1572877 2014-02-28 08:42:25Z britter $
+ * @version $Id: FastDateFormat.java 1591488 2014-04-30 21:49:35Z ggregory $
  */
 @GwtIncompatible("incompatible method")
 public class FastDateFormat extends Format implements DateParser, DatePrinter {

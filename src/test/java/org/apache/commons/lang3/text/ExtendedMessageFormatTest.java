@@ -42,7 +42,7 @@ import org.apache.commons.lang3.SystemUtils;
  * Test case for {@link ExtendedMessageFormat}.
  *
  * @since 2.4
- * @version $Id: ExtendedMessageFormatTest.java 1582699 2014-03-28 11:15:32Z sebb $
+ * @version $Id: ExtendedMessageFormatTest.java 1666679 2015-03-14 12:46:02Z britter $
  */
 public class ExtendedMessageFormatTest {
 
@@ -87,6 +87,22 @@ public class ExtendedMessageFormatTest {
         final String pattern = "Hi {0,lower}, got {1,choice,0#none|1#one|1<{1,number}}, {2,upper}!";
         final ExtendedMessageFormat emf = new ExtendedMessageFormat(pattern, registry);
         assertEquals(emf.format(new Object[] {"there", 3, "great"}), "Hi there, got 3, GREAT!");
+    }
+
+    /**
+     * Test Bug LANG-948 - Exception while using ExtendedMessageFormat and escaping braces
+     */
+    @Test
+    public void testEscapedBraces_LANG_948() {
+        // message without placeholder because braces are escaped by quotes 
+        final String pattern = "Message without placeholders '{}'";
+        final ExtendedMessageFormat emf = new ExtendedMessageFormat(pattern, registry);
+        assertEquals("Message without placeholders {}", emf.format(new Object[] {"DUMMY"}));
+
+        // message with placeholder because quotes are escaped by quotes 
+        final String pattern2 = "Message with placeholder ''{0}''";
+        final ExtendedMessageFormat emf2 = new ExtendedMessageFormat(pattern2, registry);
+        assertEquals("Message with placeholder 'DUMMY'", emf2.format(new Object[] {"DUMMY"}));
     }
 
     /**

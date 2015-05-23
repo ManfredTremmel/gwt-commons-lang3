@@ -62,6 +62,10 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   }
  * }
  * </pre>
+ * 
+ * <p>Values are compared in the order they are appended to the builder. If any comparison returns
+ * a non-zero result, then that value will be the result returned by {@code toComparison()} and all
+ * subsequent comparisons are skipped.</p>
  *
  * <p>Alternatively, there are {@link #reflectionCompare(Object, Object) reflectionCompare} methods that use
  * reflection to determine the fields to append. Because fields can be private,
@@ -78,6 +82,10 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   return CompareToBuilder.reflectionCompare(this, o);
  * }
  * </pre>
+ * 
+ * <p>The reflective methods compare object fields in the order returned by 
+ * {@link Class#getDeclaredFields()}. The fields of the class are compared first, followed by those
+ * of its parent classes (in order from the bottom to the top of the class hierarchy).</p>
  *
  * @see java.lang.Comparable
  * @see java.lang.Object#equals(Object)
@@ -85,7 +93,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @see EqualsBuilder
  * @see HashCodeBuilder
  * @since 1.0
- * @version $Id: CompareToBuilder.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: CompareToBuilder.java 1628165 2014-09-29 12:02:11Z djones $
  */
 public class CompareToBuilder implements Builder<Integer> {
     

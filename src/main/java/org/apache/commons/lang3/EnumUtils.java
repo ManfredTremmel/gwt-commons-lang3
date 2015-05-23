@@ -32,7 +32,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>#ThreadSafe#</p>
  *
  * @since 3.0
- * @version $Id: EnumUtils.java 1573185 2014-03-01 15:51:39Z sebb $
+ * @version $Id: EnumUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class EnumUtils {
 
@@ -270,7 +270,7 @@ public class EnumUtils {
      */
     public static <E extends Enum<E>> EnumSet<E> processBitVectors(final Class<E> enumClass, final long... values) {
         final EnumSet<E> results = EnumSet.noneOf(asEnum(enumClass));
-        long[] lvalues = ArrayUtils.clone(Validate.notNull(values));
+        final long[] lvalues = ArrayUtils.clone(Validate.notNull(values));
         ArrayUtils.reverse(lvalues);
         for (final E constant : enumClass.getEnumConstants()) {
             final int block = constant.ordinal() / Long.SIZE;

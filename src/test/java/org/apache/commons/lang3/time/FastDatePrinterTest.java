@@ -16,12 +16,10 @@
  */
 package org.apache.commons.lang3.time;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,13 +33,15 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.time.FastDatePrinter}.
  *
- * @version $Id: FastDatePrinterTest.java 1552661 2013-12-20 13:36:30Z britter $
+ * @version $Id: FastDatePrinterTest.java 1668517 2015-03-23 05:13:20Z chas $
  * @since 3.0
  */
 public class FastDatePrinterTest {
     
     private static final String YYYY_MM_DD = "yyyy/MM/dd";
     private static final TimeZone NEW_YORK = TimeZone.getTimeZone("America/New_York");
+    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+    private static final TimeZone INDIA = TimeZone.getTimeZone("Asia/Calcutta");
     private static final Locale SWEDEN = new Locale("sv", "SE");
 
         DatePrinter getInstance(final String format) {
@@ -62,10 +62,10 @@ public class FastDatePrinterTest {
 
     /**
      * Override this method in derived tests to change the construction of instances
-     * @param format
-     * @param timeZone
-     * @param locale
-     * @return
+     * @param format the format string to use
+     * @param timeZone the time zone to use
+     * @param locale the locale to use
+     * @return the DatePrinter to use for testing
      */
     protected DatePrinter getInstance(final String format, final TimeZone timeZone, final Locale locale) {
         return new FastDatePrinter(format, timeZone, locale);
@@ -262,28 +262,79 @@ public class FastDatePrinterTest {
         final DatePrinter printer= getInstance(YYYY_MM_DD, NEW_YORK);
         assertEquals(NEW_YORK, printer.getTimeZone());
     }
+
+    @Test
+    public void testTimeZoneAsZ() throws Exception {
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        FastDateFormat noColonFormat = FastDateFormat.getInstance("Z");
+        assertEquals("+0000", noColonFormat.format(c));
+        
+        FastDateFormat isoFormat = FastDateFormat.getInstance("ZZ");
+        assertEquals("Z", isoFormat.format(c));
+        
+        FastDateFormat colonFormat = FastDateFormat.getInstance("ZZZ");
+        assertEquals("+00:00", colonFormat.format(c));
+    }
+
+    private static Calendar initializeCalendar(TimeZone tz) {
+        Calendar cal = Calendar.getInstance(tz);
+        cal.set(Calendar.YEAR, 2001);
+        cal.set(Calendar.MONTH, 1); // not daylight savings
+        cal.set(Calendar.DAY_OF_MONTH, 4);
+        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal.set(Calendar.MINUTE, 8);
+        cal.set(Calendar.SECOND, 56);
+        cal.set(Calendar.MILLISECOND, 235);
+        return cal;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test1806Argument() {
+        getInstance("XXXX");
+    }
+
+    private static enum Expected1806 {
+        India(INDIA, "+05", "+0530", "+05:30"), Greenwich(GMT, "Z", "Z", "Z"), NewYork(
+                NEW_YORK, "-05", "-0500", "-05:00");
+
+        private Expected1806(TimeZone zone, String one, String two, String three) {
+            this.zone = zone;
+            this.one = one;
+            this.two = two;
+            this.three = three;
+        }
+
+        final TimeZone zone;
+        final String one;
+        final String two;
+        final String three;
+    }
+
+    @Test
+    public void test1806() throws ParseException {
+        for (Expected1806 trial : Expected1806.values()) {
+            Calendar cal = initializeCalendar(trial.zone);
+
+            DatePrinter printer = getInstance("X", trial.zone);
+            assertEquals(trial.one, printer.format(cal));
+
+            printer = getInstance("XX", trial.zone);
+            assertEquals(trial.two, printer.format(cal));
+
+            printer = getInstance("XXX", trial.zone);
+            assertEquals(trial.three, printer.format(cal));
+        }
+    }
     
     @Test
-    public void testCalendarTimezoneRespected() {
-        final String[] availableZones = TimeZone.getAvailableIDs();
-        final TimeZone currentZone = TimeZone.getDefault();
-        
-        TimeZone anotherZone = null;
-        for (final String zone : availableZones) {
-            if (!zone.equals(currentZone.getID())) {
-                anotherZone = TimeZone.getTimeZone(zone);
-            }
-        }
-        
-        assertNotNull("Cannot find another timezone", anotherZone);
-        
-        final String pattern = "h:mma z";
-        final Calendar cal = Calendar.getInstance(anotherZone);
-        
-        final SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        sdf.setTimeZone(anotherZone);
-        final String expectedValue = sdf.format(cal.getTime());
-        final String actualValue = FastDateFormat.getInstance(pattern).format(cal);
-        assertEquals(expectedValue, actualValue);
+    public void testLang1103() throws ParseException {
+        Calendar cal = Calendar.getInstance(SWEDEN);
+        cal.set(Calendar.DAY_OF_MONTH, 2);
+
+        assertEquals("2", getInstance("d", SWEDEN).format(cal));
+        assertEquals("02", getInstance("dd", SWEDEN).format(cal));
+        assertEquals("002", getInstance("ddd", SWEDEN).format(cal));
+        assertEquals("0002", getInstance("dddd", SWEDEN).format(cal));
+        assertEquals("00002", getInstance("ddddd", SWEDEN).format(cal));
     }
 }

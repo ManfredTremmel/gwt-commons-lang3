@@ -16,13 +16,15 @@
  */
 package org.apache.commons.lang3.math;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * <p>Provides IEEE-754r variants of NumberUtils methods. </p>
  *
  * <p>See: <a href="http://en.wikipedia.org/wiki/IEEE_754r">http://en.wikipedia.org/wiki/IEEE_754r</a></p>
  *
  * @since 2.4
- * @version $Id: IEEE754rUtils.java 1436768 2013-01-22 07:07:42Z ggregory $
+ * @version $Id: IEEE754rUtils.java 1593679 2014-05-10 07:22:22Z djones $
  */
 public class IEEE754rUtils {
     
@@ -33,14 +35,15 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+      * @since 3.4 Changed signature from min(double[]) to min(double...)
      */
-    public static double min(final double[] array) {
+    public static double min(final double... array) {
         // Validates input
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
-        }
+        } 
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
+        
     
         // Finds and returns min
         double min = array[0];
@@ -58,15 +61,15 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from min(float[]) to min(float...)
      */
-    public static float min(final float[] array) {
+    public static float min(final float... array) {
         // Validates input
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
-        }
-    
+        } 
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
+        
         // Finds and returns min
         float min = array[0];
         for (int i = 1; i < array.length; i++) {
@@ -151,15 +154,15 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from max(double[]) to max(double...)
      */
-    public static double max(final double[] array) {
+    public static double max(final double... array) {
         // Validates input
         if (array== null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
-        }
-    
+        }         
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
+        
         // Finds and returns max
         double max = array[0];
         for (int j = 1; j < array.length; j++) {
@@ -176,15 +179,15 @@ public class IEEE754rUtils {
      * @return the minimum value in the array
      * @throws IllegalArgumentException if <code>array</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>array</code> is empty
+     * @since 3.4 Changed signature from max(float[]) to max(float...)
      */
-    public static float max(final float[] array) {
+    public static float max(final float... array) {
         // Validates input
         if (array == null) {
             throw new IllegalArgumentException("The Array must not be null");
-        } else if (array.length == 0) {
-            throw new IllegalArgumentException("Array cannot be empty.");
-        }
-
+        } 
+        Validate.isTrue(array.length != 0, "Array cannot be empty.");
+        
         // Finds and returns max
         float max = array[0];
         for (int j = 1; j < array.length; j++) {

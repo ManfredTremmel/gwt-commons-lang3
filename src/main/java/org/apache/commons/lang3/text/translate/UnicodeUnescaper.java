@@ -27,7 +27,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * without the +.
  * 
  * @since 3.0
- * @version $Id: UnicodeUnescaper.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: UnicodeUnescaper.java 1606060 2014-06-27 12:33:07Z ggregory $
  */
 public class UnicodeUnescaper extends CharSequenceTranslator {
 
@@ -59,10 +59,9 @@ public class UnicodeUnescaper extends CharSequenceTranslator {
                     throw new IllegalArgumentException("Unable to parse unicode value: " + unicode, nfe);
                 }
                 return i + 4;
-            } else {
-                throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length())
-                        + "' due to end of CharSequence");
             }
+            throw new IllegalArgumentException("Less than 4 hex digits in unicode value: '" + input.subSequence(index, input.length())
+                    + "' due to end of CharSequence");
         }
         return 0;
     }

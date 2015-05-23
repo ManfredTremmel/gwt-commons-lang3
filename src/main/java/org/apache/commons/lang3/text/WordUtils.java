@@ -29,7 +29,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Each method documents its behaviour in more detail.</p>
  * 
  * @since 2.0
- * @version $Id: WordUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: WordUtils.java 1586649 2014-04-11 13:28:30Z britter $
  */
 public class WordUtils {
 
@@ -185,10 +185,14 @@ public class WordUtils {
         int offset = 0;
         final StringBuilder wrappedLine = new StringBuilder(inputLineLength + 32);
         
-        while (inputLineLength - offset > wrapLength) {
+        while (offset < inputLineLength) {
             if (str.charAt(offset) == ' ') {
                 offset++;
                 continue;
+            }
+            // only last line without leading spaces is left
+            if(inputLineLength - offset <= wrapLength) {
+                break;
             }
             int spaceToWrapAt = str.lastIndexOf(' ', wrapLength + offset);
 

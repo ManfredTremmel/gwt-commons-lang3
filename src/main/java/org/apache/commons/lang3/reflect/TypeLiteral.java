@@ -71,7 +71,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   &lt;T&gt; T obtain(Typed&lt;T&gt; typed, ...);
  * </pre>
  *
- * @version $Id: TypeLiteral.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: TypeLiteral.java 1606051 2014-06-27 12:22:17Z ggregory $
  * @since 3.2
  */
 @GwtIncompatible("incompatible class")
@@ -99,7 +99,7 @@ public abstract class TypeLiteral<T> implements Typed<T> {
     }
 
     @Override
-    public final boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
         if (obj == this) {
             return true;
         }

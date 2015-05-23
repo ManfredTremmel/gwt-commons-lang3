@@ -36,7 +36,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Each method documents its behaviour in more detail.</p>
  *
  * @since 2.2
- * @version $Id: LocaleUtils.java 1565235 2014-02-06 13:31:43Z sebb $
+ * @version $Id: LocaleUtils.java 1606089 2014-06-27 13:18:55Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class LocaleUtils {
@@ -126,24 +126,22 @@ public class LocaleUtils {
             return new Locale("", str.substring(1, 3), str.substring(4));
         }
         
-        String[] split = str.split("_", -1);
-        int occurrences = split.length -1;
+        final String[] split = str.split("_", -1);
+        final int occurrences = split.length -1;
         switch (occurrences) {
             case 0:
                 if (StringUtils.isAllLowerCase(str) && (len == 2 || len == 3)) {
                     return new Locale(str);
-                } else {
-                    throw new IllegalArgumentException("Invalid locale format: " + str);
                 }
+            throw new IllegalArgumentException("Invalid locale format: " + str);
                 
             case 1:
                 if (StringUtils.isAllLowerCase(split[0]) &&
                     (split[0].length() == 2 || split[0].length() == 3) &&
                      split[1].length() == 2 && StringUtils.isAllUpperCase(split[1])) {
                     return new Locale(split[0], split[1]);
-                } else {
-                    throw new IllegalArgumentException("Invalid locale format: " + str);
                 }
+            throw new IllegalArgumentException("Invalid locale format: " + str);
 
             case 2:
                 if (StringUtils.isAllLowerCase(split[0]) && 

@@ -27,6 +27,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 
@@ -43,7 +44,7 @@ import org.junit.Test;
  * @see <a href="https://issues.apache.org/jira/browse/LANG-762">[LANG-762] Handle or document ReflectionToStringBuilder
  *      and ToStringBuilder for collections that are not thread safe</a>
  * @since 3.1
- * @version $Id: ToStringStyleConcurrencyTest.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: ToStringStyleConcurrencyTest.java 1669310 2015-03-26 10:21:24Z britter $
  */
 public class ToStringStyleConcurrencyTest {
 
@@ -106,5 +107,7 @@ public class ToStringStyleConcurrencyTest {
         for (final Future<Integer> future : futures) {
             future.get();
         }
+        threadPool.shutdown();
+        threadPool.awaitTermination(1, TimeUnit.SECONDS);
     }
 }

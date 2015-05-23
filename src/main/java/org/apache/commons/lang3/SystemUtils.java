@@ -33,7 +33,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 1.0
- * @version $Id: SystemUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: SystemUtils.java 1671043 2015-04-03 12:09:07Z britter $
  */
 @GwtIncompatible("incompatible class")
 public class SystemUtils {
@@ -942,6 +942,18 @@ public class SystemUtils {
      */
     public static final boolean IS_JAVA_1_8 = getJavaVersionMatches("1.8");
 
+    /**
+     * <p>
+     * Is {@code true} if this is Java version 1.9 (also 1.9.x versions).
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_JAVA_1_9 = getJavaVersionMatches("1.9");
+
     // Operating system checks
     // -----------------------------------------------------------------------
     // These MUST be declared after those above as they depend on the
@@ -1033,6 +1045,138 @@ public class SystemUtils {
      * @since 2.0
      */
     public static final boolean IS_OS_MAC_OSX = getOSMatchesName("Mac OS X");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Cheetah.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_CHEETAH = getOSMatches("Mac OS X", "10.0");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Puma.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_PUMA = getOSMatches("Mac OS X", "10.1");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Jaguar.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_JAGUAR = getOSMatches("Mac OS X", "10.2");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Panther.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_PANTHER = getOSMatches("Mac OS X", "10.3");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Tiger.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_TIGER = getOSMatches("Mac OS X", "10.4");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Leopard.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_LEOPARD = getOSMatches("Mac OS X", "10.5");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Snow Leopard.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_SNOW_LEOPARD = getOSMatches("Mac OS X", "10.6");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Lion.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_LION = getOSMatches("Mac OS X", "10.7");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Mountain Lion.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_MOUNTAIN_LION = getOSMatches("Mac OS X", "10.8");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Mavericks.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_MAVERICKS = getOSMatches("Mac OS X", "10.9");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X Yosemite.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_MAC_OSX_YOSEMITE = getOSMatches("Mac OS X", "10.10");
 
     /**
      * <p>
@@ -1141,7 +1285,7 @@ public class SystemUtils {
      *
      * @since 2.0
      */
-    public static final boolean IS_OS_WINDOWS_2000 = getOSMatches(OS_NAME_WINDOWS_PREFIX, "5.0");
+    public static final boolean IS_OS_WINDOWS_2000 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 2000");
 
     /**
      * <p>
@@ -1153,11 +1297,11 @@ public class SystemUtils {
      *
      * @since 3.1
      */
-    public static final boolean IS_OS_WINDOWS_2003 = getOSMatches(OS_NAME_WINDOWS_PREFIX, "5.2");
+    public static final boolean IS_OS_WINDOWS_2003 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 2003");
 
     /**
      * <p>
-     * Is {@code true} if this is Windows 2008.
+     * Is {@code true} if this is Windows Server 2008.
      * </p>
      * <p>
      * The field will return {@code false} if {@code OS_NAME} is {@code null}.
@@ -1165,7 +1309,19 @@ public class SystemUtils {
      *
      * @since 3.1
      */
-    public static final boolean IS_OS_WINDOWS_2008 = getOSMatches(OS_NAME_WINDOWS_PREFIX + " Server 2008", "6.1");
+    public static final boolean IS_OS_WINDOWS_2008 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " Server 2008");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Windows Server 2012.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.4
+     */
+    public static final boolean IS_OS_WINDOWS_2012 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " Server 2012");
 
     /**
      * <p>
@@ -1177,8 +1333,7 @@ public class SystemUtils {
      *
      * @since 2.0
      */
-    public static final boolean IS_OS_WINDOWS_95 = getOSMatches(OS_NAME_WINDOWS_PREFIX + " 9", "4.0");
-    // Java 1.2 running on Windows98 returns 'Windows 95', hence the above
+    public static final boolean IS_OS_WINDOWS_95 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 95");
 
     /**
      * <p>
@@ -1190,8 +1345,7 @@ public class SystemUtils {
      *
      * @since 2.0
      */
-    public static final boolean IS_OS_WINDOWS_98 = getOSMatches(OS_NAME_WINDOWS_PREFIX + " 9", "4.1");
-    // Java 1.2 running on Windows98 returns 'Windows 95', hence the above
+    public static final boolean IS_OS_WINDOWS_98 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 98");
 
     /**
      * <p>
@@ -1203,8 +1357,7 @@ public class SystemUtils {
      *
      * @since 2.0
      */
-    public static final boolean IS_OS_WINDOWS_ME = getOSMatches(OS_NAME_WINDOWS_PREFIX, "4.9");
-    // Java 1.2 running on WindowsME may return 'Windows 95', hence the above
+    public static final boolean IS_OS_WINDOWS_ME = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " Me");
 
     /**
      * <p>
@@ -1217,7 +1370,6 @@ public class SystemUtils {
      * @since 2.0
      */
     public static final boolean IS_OS_WINDOWS_NT = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " NT");
-    // Windows 2000 returns 'Windows 2000' but may suffer from same Java1.2 problem
 
     /**
      * <p>
@@ -1229,7 +1381,7 @@ public class SystemUtils {
      *
      * @since 2.0
      */
-    public static final boolean IS_OS_WINDOWS_XP = getOSMatches(OS_NAME_WINDOWS_PREFIX, "5.1");
+    public static final boolean IS_OS_WINDOWS_XP = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " XP");
 
     // -----------------------------------------------------------------------
     /**
@@ -1242,7 +1394,7 @@ public class SystemUtils {
      *
      * @since 2.4
      */
-    public static final boolean IS_OS_WINDOWS_VISTA = getOSMatches(OS_NAME_WINDOWS_PREFIX, "6.0");
+    public static final boolean IS_OS_WINDOWS_VISTA = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " Vista");
 
     /**
      * <p>
@@ -1254,7 +1406,7 @@ public class SystemUtils {
      *
      * @since 3.0
      */
-    public static final boolean IS_OS_WINDOWS_7 = getOSMatches(OS_NAME_WINDOWS_PREFIX, "6.1");
+    public static final boolean IS_OS_WINDOWS_7 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 7");
 
     /**
      * <p>
@@ -1266,7 +1418,7 @@ public class SystemUtils {
      *
      * @since 3.2
      */
-    public static final boolean IS_OS_WINDOWS_8 = getOSMatches(OS_NAME_WINDOWS_PREFIX, "6.2");
+    public static final boolean IS_OS_WINDOWS_8 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 8");
 
     /**
      * <p>
@@ -1451,7 +1603,7 @@ public class SystemUtils {
         if (osName == null || osVersion == null) {
             return false;
         }
-        return osName.startsWith(osNamePrefix) && osVersion.startsWith(osVersionPrefix);
+        return isOSNameMatch(osName, osNamePrefix) && isOSVersionMatch(osVersion, osVersionPrefix);
     }
 
     /**
@@ -1469,6 +1621,32 @@ public class SystemUtils {
             return false;
         }
         return osName.startsWith(osNamePrefix);
+    }
+
+    /**
+     * Decides if the operating system version matches.
+     * <p>
+     * This method is package private instead of private to support unit test invocation.
+     * </p>
+     *
+     * @param osVersion the actual OS version
+     * @param osVersionPrefix the prefix for the expected OS version
+     * @return true if matches, or false if not or can't determine
+     */
+    static boolean isOSVersionMatch(final String osVersion, final String osVersionPrefix) {
+        if (StringUtils.isEmpty(osVersion)) {
+            return false;
+        }
+        // Compare parts of the version string instead of using String.startsWith(String) because otherwise
+        // osVersionPrefix 10.1 would also match osVersion 10.10
+        String[] versionPrefixParts = osVersionPrefix.split("\\.");
+        String[] versionParts = osVersion.split("\\.");
+        for (int i = 0; i < Math.min(versionPrefixParts.length, versionParts.length); i++) {
+            if (!versionPrefixParts[i].equals(versionParts[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // -----------------------------------------------------------------------

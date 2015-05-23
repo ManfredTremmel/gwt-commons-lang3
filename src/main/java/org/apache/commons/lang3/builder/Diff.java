@@ -41,7 +41,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *            between primitive objects are stored as their Object wrapper
  *            equivalent.
  * @since 3.3
- * @version $Id: Diff.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: Diff.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public abstract class Diff<T> extends Pair<T, T> {
@@ -59,7 +59,7 @@ public abstract class Diff<T> extends Pair<T, T> {
      * @param fieldName
      *            the name of the field
      */
-    protected Diff(String fieldName) {
+    protected Diff(final String fieldName) {
         this.type = ObjectUtils.defaultIfNull(
                 TypeUtils.getTypeArguments(getClass(), Diff.class).get(
                         Diff.class.getTypeParameters()[0]), Object.class);
@@ -115,7 +115,7 @@ public abstract class Diff<T> extends Pair<T, T> {
      * @return nothing
      */
     @Override
-    public final T setValue(T value) {
+    public final T setValue(final T value) {
         throw new UnsupportedOperationException("Cannot alter Diff object.");
     }
 }

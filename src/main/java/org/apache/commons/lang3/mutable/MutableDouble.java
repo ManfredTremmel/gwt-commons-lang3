@@ -23,7 +23,7 @@ package org.apache.commons.lang3.mutable;
  * 
  * @see Double
  * @since 2.1
- * @version $Id: MutableDouble.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: MutableDouble.java 1669791 2015-03-28 15:22:59Z britter $
  */
 public class MutableDouble extends Number implements Comparable<MutableDouble>, Mutable<Number> {
 
@@ -297,8 +297,7 @@ public class MutableDouble extends Number implements Comparable<MutableDouble>, 
      */
     @Override
     public int compareTo(final MutableDouble other) {
-        final double anotherVal = other.value;
-        return Double.compare(value, anotherVal);
+        return Double.compare(this.value, other.value);
     }
 
     //-----------------------------------------------------------------------

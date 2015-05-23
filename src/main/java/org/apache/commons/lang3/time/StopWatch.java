@@ -55,7 +55,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>This class is not thread-safe</p>
  * 
  * @since 2.0
- * @version $Id: StopWatch.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: StopWatch.java 1591488 2014-04-30 21:49:35Z ggregory $
  */
 @GwtIncompatible("incompatible method")
 public class StopWatch {
@@ -410,7 +410,7 @@ public class StopWatch {
      * </p>
      * 
      * <p>
-     * The format used is ISO8601-like, <i>hours</i>:<i>minutes</i>:<i>seconds</i>.<i>milliseconds</i>.
+     * The format used is ISO 8601-like, <i>hours</i>:<i>minutes</i>:<i>seconds</i>.<i>milliseconds</i>.
      * </p>
      * 
      * @return the time as a String
@@ -426,7 +426,7 @@ public class StopWatch {
      * </p>
      * 
      * <p>
-     * The format used is ISO8601-like, <i>hours</i>:<i>minutes</i>:<i>seconds</i>.<i>milliseconds</i>.
+     * The format used is ISO 8601-like, <i>hours</i>:<i>minutes</i>:<i>seconds</i>.<i>milliseconds</i>.
      * </p>
      * 
      * @return the split time as a String

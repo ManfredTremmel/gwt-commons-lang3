@@ -113,7 +113,7 @@ import com.google.gwt.regexp.shared.RegExp;
  * <p>#ThreadSafe#</p>
  * @see java.lang.String
  * @since 1.0
- * @version $Id: StringUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: StringUtils.java 1648067 2014-12-27 16:45:42Z britter $
  */
 //@Immutable
 public class StringUtils {
@@ -176,16 +176,6 @@ public class StringUtils {
     private static final int PAD_LIMIT = 8192;
 
     /**
-     * A regex pattern for recognizing blocks of whitespace characters.
-     * The apparent convolutedness of the pattern serves the purpose of
-     * ignoring "blocks" consisting of only a single space:  the pattern
-     * is used only to normalize whitespace, condensing "blocks" down to a
-     * single space, thus matching the same would likely cause a great
-     * many noop replacements.
-     */
-    private static final String WHITESPACE_PATTERN = "(?: |\\u00A0|\\s|[\\s&&[^ ]])\\s*";
-
-    /**
      * <p>{@code StringUtils} instances should NOT be constructed in
      * standard programming. Instead, the class should be used as
      * {@code StringUtils.trim(" foo ");}.</p>
@@ -238,7 +228,7 @@ public class StringUtils {
      * @since 3.0 Changed signature from isNotEmpty(String) to isNotEmpty(CharSequence)
      */
     public static boolean isNotEmpty(final CharSequence cs) {
-        return !StringUtils.isEmpty(cs);
+        return !isEmpty(cs);
     }
        
     /**
@@ -258,11 +248,11 @@ public class StringUtils {
      * @return {@code true} if any of the CharSequences are empty or null
      * @since 3.2
      */
-    public static boolean isAnyEmpty(CharSequence... css) {
+    public static boolean isAnyEmpty(final CharSequence... css) {
       if (ArrayUtils.isEmpty(css)) {
         return true;
       }
-      for (CharSequence cs : css){
+      for (final CharSequence cs : css){
         if (isEmpty(cs)) {
           return true;
         }
@@ -287,7 +277,7 @@ public class StringUtils {
      * @return {@code true} if none of the CharSequences are empty or null
      * @since 3.2
      */
-    public static boolean isNoneEmpty(CharSequence... css) {
+    public static boolean isNoneEmpty(final CharSequence... css) {
       return !isAnyEmpty(css);
     }    
     /**
@@ -337,7 +327,7 @@ public class StringUtils {
      * @since 3.0 Changed signature from isNotBlank(String) to isNotBlank(CharSequence)
      */
     public static boolean isNotBlank(final CharSequence cs) {
-        return !StringUtils.isBlank(cs);
+        return !isBlank(cs);
     }
     
         /**
@@ -358,11 +348,11 @@ public class StringUtils {
      * @return {@code true} if any of the CharSequences are blank or null or whitespace only
      * @since 3.2
      */
-    public static boolean isAnyBlank(CharSequence... css) {
+    public static boolean isAnyBlank(final CharSequence... css) {
       if (ArrayUtils.isEmpty(css)) {
         return true;
       }
-      for (CharSequence cs : css){
+      for (final CharSequence cs : css){
         if (isBlank(cs)) {
           return true;
         }
@@ -388,7 +378,7 @@ public class StringUtils {
      * @return {@code true} if none of the CharSequences are blank or null or whitespace only
      * @since 3.2
      */
-    public static boolean isNoneBlank(CharSequence... css) {
+    public static boolean isNoneBlank(final CharSequence... css) {
       return !isAnyBlank(css);
     }
 
@@ -591,7 +581,7 @@ public class StringUtils {
         str = stripStart(str, stripChars);
         return stripEnd(str, stripChars);
     }
-
+    
     /**
      * <p>Strips any of a set of characters from the start of a String.</p>
      *
@@ -1037,9 +1027,9 @@ public class StringUtils {
         int index = lastIndex ? str.length() : INDEX_NOT_FOUND;
         do {
             if (lastIndex) {
-                index = CharSequenceUtils.lastIndexOf(str, searchStr, index - 1);
+                index = CharSequenceUtils.lastIndexOf(str, searchStr, index - searchStr.length());
             } else {
-                index = CharSequenceUtils.indexOf(str, searchStr, index + 1);
+                index = CharSequenceUtils.indexOf(str, searchStr, index + searchStr.length());
             }
             if (index < 0) {
                 return index;
@@ -1682,6 +1672,41 @@ public class StringUtils {
             return false;
         }
         return containsAny(cs, CharSequenceUtils.toCharArray(searchChars));
+    }
+
+    /**
+     * <p>Checks if the CharSequence contains any of the CharSequences in the given array.</p>
+     *
+     * <p>
+     * A {@code null} CharSequence will return {@code false}. A {@code null} or zero
+     * length search array will return {@code false}.
+     * </p>
+     *
+     * <pre>
+     * StringUtils.containsAny(null, *)            = false
+     * StringUtils.containsAny("", *)              = false
+     * StringUtils.containsAny(*, null)            = false
+     * StringUtils.containsAny(*, [])              = false
+     * StringUtils.containsAny("abcd", "ab", "cd") = false
+     * StringUtils.containsAny("abc", "d", "abc")  = true
+     * </pre>
+     *
+     * 
+     * @param cs The CharSequence to check, may be null
+     * @param searchCharSequences The array of CharSequences to search for, may be null
+     * @return {@code true} if any of the search CharSequences are found, {@code false} otherwise
+     * @since 3.4
+     */
+    public static boolean containsAny(CharSequence cs, CharSequence... searchCharSequences) {
+        if (isEmpty(cs) || ArrayUtils.isEmpty(searchCharSequences)) {
+            return false;
+        }
+        for (CharSequence searchCharSequence : searchCharSequences) {
+            if (contains(cs, searchCharSequence)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // IndexOfAnyBut chars
@@ -4048,6 +4073,7 @@ public class StringUtils {
         final Object first = iterator.next();
         if (!iterator.hasNext()) {
             @SuppressWarnings( "deprecation" ) // ObjectUtils.toString(Object) has been deprecated in 3.2
+            final
             String result = ObjectUtils.toString(first);
             return result;
         }
@@ -4612,20 +4638,18 @@ public class StringUtils {
      * </p>
      *
      * <pre>
-     *  StringUtils.replaceEach(null, *, *, *) = null
-     *  StringUtils.replaceEach("", *, *, *) = ""
-     *  StringUtils.replaceEach("aba", null, null, *) = "aba"
-     *  StringUtils.replaceEach("aba", new String[0], null, *) = "aba"
-     *  StringUtils.replaceEach("aba", null, new String[0], *) = "aba"
-     *  StringUtils.replaceEach("aba", new String[]{"a"}, null, *) = "aba"
-     *  StringUtils.replaceEach("aba", new String[]{"a"}, new String[]{""}, *) = "b"
-     *  StringUtils.replaceEach("aba", new String[]{null}, new String[]{"a"}, *) = "aba"
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"}, *) = "wcte"
+     *  StringUtils.replaceEachRepeatedly(null, *, *) = null
+     *  StringUtils.replaceEachRepeatedly("", *, *) = ""
+     *  StringUtils.replaceEachRepeatedly("aba", null, null) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[0], null) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", null, new String[0]) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[]{"a"}, null) = "aba"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[]{"a"}, new String[]{""}) = "b"
+     *  StringUtils.replaceEachRepeatedly("aba", new String[]{null}, new String[]{"a"}) = "aba"
+     *  StringUtils.replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"}) = "wcte"
      *  (example of how it repeats)
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, false) = "dcte"
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, true) = "tcte"
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}, true) = IllegalStateException
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}, false) = "dcabe"
+     *  StringUtils.replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}) = "tcte"
+     *  StringUtils.replaceEachRepeatedly("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}) = IllegalStateException
      * </pre>
      *
      * @param text
@@ -4653,7 +4677,9 @@ public class StringUtils {
 
     /**
      * <p>
-     * Replaces all occurrences of Strings within another String.
+     * Replace all occurrences of Strings within another String.
+     * This is a private recursive helper method for {@link #replaceEachRepeatedly(String, String[], String[])} and
+     * {@link #replaceEach(String, String[], String[])}
      * </p>
      *
      * <p>
@@ -4663,19 +4689,19 @@ public class StringUtils {
      * </p>
      *
      * <pre>
-     *  StringUtils.replaceEach(null, *, *, *) = null
-     *  StringUtils.replaceEach("", *, *, *) = ""
-     *  StringUtils.replaceEach("aba", null, null, *) = "aba"
-     *  StringUtils.replaceEach("aba", new String[0], null, *) = "aba"
-     *  StringUtils.replaceEach("aba", null, new String[0], *) = "aba"
-     *  StringUtils.replaceEach("aba", new String[]{"a"}, null, *) = "aba"
-     *  StringUtils.replaceEach("aba", new String[]{"a"}, new String[]{""}, *) = "b"
-     *  StringUtils.replaceEach("aba", new String[]{null}, new String[]{"a"}, *) = "aba"
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"}, *) = "wcte"
+     *  StringUtils.replaceEach(null, *, *, *, *) = null
+     *  StringUtils.replaceEach("", *, *, *, *) = ""
+     *  StringUtils.replaceEach("aba", null, null, *, *) = "aba"
+     *  StringUtils.replaceEach("aba", new String[0], null, *, *) = "aba"
+     *  StringUtils.replaceEach("aba", null, new String[0], *, *) = "aba"
+     *  StringUtils.replaceEach("aba", new String[]{"a"}, null, *, *) = "aba"
+     *  StringUtils.replaceEach("aba", new String[]{"a"}, new String[]{""}, *, >=0) = "b"
+     *  StringUtils.replaceEach("aba", new String[]{null}, new String[]{"a"}, *, >=0) = "aba"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"w", "t"}, *, >=0) = "wcte"
      *  (example of how it repeats)
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, false) = "dcte"
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, true) = "tcte"
-     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}, *) = IllegalStateException
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, false, >=0) = "dcte"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "t"}, true, >=2) = "tcte"
+     *  StringUtils.replaceEach("abcde", new String[]{"ab", "d"}, new String[]{"d", "ab"}, *, *) = IllegalStateException
      * </pre>
      *
      * @param text
@@ -5708,7 +5734,7 @@ public class StringUtils {
             return str;
         }
 
-        char firstChar = str.charAt(0);
+        final char firstChar = str.charAt(0);
         if (Character.isTitleCase(firstChar)) {
             // already capitalized
             return str;
@@ -5746,7 +5772,7 @@ public class StringUtils {
             return str;
         }
 
-        char firstChar = str.charAt(0);
+        final char firstChar = str.charAt(0);
         if (Character.isLowerCase(firstChar)) {
             // already uncapitalized
             return str;
@@ -5837,6 +5863,39 @@ public class StringUtils {
         while ((idx = CharSequenceUtils.indexOf(str, sub, idx)) != INDEX_NOT_FOUND) {
             count++;
             idx += sub.length();
+        }
+        return count;
+    }
+
+    /**
+     * <p>Counts how many times the char appears in the given string.</p>
+     *
+     * <p>A {@code null} or empty ("") String input returns {@code 0}.</p>
+     *
+     * <pre>
+     * StringUtils.countMatches(null, *)       = 0
+     * StringUtils.countMatches("", *)         = 0
+     * StringUtils.countMatches("abba", 0)  = 0
+     * StringUtils.countMatches("abba", 'a')   = 2
+     * StringUtils.countMatches("abba", 'b')  = 2
+     * StringUtils.countMatches("abba", 'x') = 0
+     * </pre>
+     *
+     * @param str  the CharSequence to check, may be null
+     * @param ch  the char to count
+     * @return the number of occurrences, 0 if the CharSequence is {@code null}
+     * @since 3.4
+     */
+    public static int countMatches(final CharSequence str, final char ch) {
+        if (isEmpty(str)) {
+            return 0;
+        }
+        int count = 0;
+        // We could also call str.toCharArray() for faster look ups but that would generate more garbage.
+        for (int i = 0; i < str.length(); i++) {
+            if (ch == str.charAt(i)) {
+                count++;
+            }
         }
         return count;
     }
@@ -6037,6 +6096,7 @@ public class StringUtils {
      * StringUtils.isNumeric("")     = false
      * StringUtils.isNumeric("  ")   = false
      * StringUtils.isNumeric("123")  = true
+     * StringUtils.isNumeric("\u0967\u0968\u0969")  = true
      * StringUtils.isNumeric("12 3") = false
      * StringUtils.isNumeric("ab2c") = false
      * StringUtils.isNumeric("12-3") = false
@@ -6077,6 +6137,8 @@ public class StringUtils {
      * StringUtils.isNumericSpace("  ")   = true
      * StringUtils.isNumericSpace("123")  = true
      * StringUtils.isNumericSpace("12 3") = true
+     * StringUtils.isNumeric("\u0967\u0968\u0969")  = true
+     * StringUtils.isNumeric("\u0967\u0968 \u0969")  = true
      * StringUtils.isNumericSpace("ab2c") = false
      * StringUtils.isNumericSpace("12-3") = false
      * StringUtils.isNumericSpace("12.3") = false
@@ -6144,7 +6206,10 @@ public class StringUtils {
      * StringUtils.isAllLowerCase("")     = false
      * StringUtils.isAllLowerCase("  ")   = false
      * StringUtils.isAllLowerCase("abc")  = true
-     * StringUtils.isAllLowerCase("abC") = false
+     * StringUtils.isAllLowerCase("abC")  = false
+     * StringUtils.isAllLowerCase("ab c") = false
+     * StringUtils.isAllLowerCase("ab1c") = false
+     * StringUtils.isAllLowerCase("ab/c") = false
      * </pre>
      *
      * @param cs  the CharSequence to check, may be null
@@ -6176,7 +6241,10 @@ public class StringUtils {
      * StringUtils.isAllUpperCase("")     = false
      * StringUtils.isAllUpperCase("  ")   = false
      * StringUtils.isAllUpperCase("ABC")  = true
-     * StringUtils.isAllUpperCase("aBC") = false
+     * StringUtils.isAllUpperCase("aBC")  = false
+     * StringUtils.isAllUpperCase("A C")  = false
+     * StringUtils.isAllUpperCase("A1C")  = false
+     * StringUtils.isAllUpperCase("A/C")  = false
      * </pre>
      *
      * @param cs the CharSequence to check, may be null
@@ -6259,7 +6327,7 @@ public class StringUtils {
      * @see StringUtils#defaultString(String, String)
      */
     public static <T extends CharSequence> T defaultIfBlank(final T str, final T defaultStr) {
-        return StringUtils.isBlank(str) ? defaultStr : str;
+        return isBlank(str) ? defaultStr : str;
     }
 
     /**
@@ -6281,7 +6349,7 @@ public class StringUtils {
      * @see StringUtils#defaultString(String, String)
      */
     public static <T extends CharSequence> T defaultIfEmpty(final T str, final T defaultStr) {
-        return StringUtils.isEmpty(str) ? defaultStr : str;
+        return isEmpty(str) ? defaultStr : str;
     }
 
     // Reversing
@@ -6345,8 +6413,8 @@ public class StringUtils {
      *
      * <p>Specifically:</p>
      * <ul>
-     *   <li>If {@code str} is less than {@code maxWidth} characters
-     *       long, return it.</li>
+     *   <li>If the number of characters in {@code str} is less than or equal to 
+     *       {@code maxWidth}, return {@code str}.</li>
      *   <li>Else abbreviate it to {@code (substring(str, 0, max-3) + "...")}.</li>
      *   <li>If {@code maxWidth} is less than {@code 4}, throw an
      *       {@code IllegalArgumentException}.</li>
@@ -7093,6 +7161,85 @@ public class StringUtils {
     }
 
     /**
+     * <p>Find the Fuzzy Distance which indicates the similarity score between two Strings.</p>
+     *
+     * <p>This string matching algorithm is similar to the algorithms of editors such as Sublime Text,
+     * TextMate, Atom and others. One point is given for every matched character. Subsequent
+     * matches yield two bonus points. A higher score indicates a higher similarity.</p>
+     *
+     * <pre>
+     * StringUtils.getFuzzyDistance(null, null, null)                                    = IllegalArgumentException
+     * StringUtils.getFuzzyDistance("", "", Locale.ENGLISH)                              = 0
+     * StringUtils.getFuzzyDistance("Workshop", "b", Locale.ENGLISH)                     = 0
+     * StringUtils.getFuzzyDistance("Room", "o", Locale.ENGLISH)                         = 1
+     * StringUtils.getFuzzyDistance("Workshop", "w", Locale.ENGLISH)                     = 1
+     * StringUtils.getFuzzyDistance("Workshop", "ws", Locale.ENGLISH)                    = 2
+     * StringUtils.getFuzzyDistance("Workshop", "wo", Locale.ENGLISH)                    = 4
+     * StringUtils.getFuzzyDistance("Apache Software Foundation", "asf", Locale.ENGLISH) = 3
+     * </pre>
+     *
+     * @param term a full term that should be matched against, must not be null
+     * @param query the query that will be matched against a term, must not be null
+     * @param locale This string matching logic is case insensitive. A locale is necessary to normalize
+     *  both Strings to lower case.
+     * @return result score
+     * @throws IllegalArgumentException if either String input {@code null} or Locale input {@code null}
+     * @since 3.4
+     */
+    public static int getFuzzyDistance(final CharSequence term, final CharSequence query, final Locale locale) {
+        if (term == null || query == null) {
+            throw new IllegalArgumentException("Strings must not be null");
+        } else if (locale == null) {
+            throw new IllegalArgumentException("Locale must not be null");
+        }
+
+        // fuzzy logic is case insensitive. We normalize the Strings to lower
+        // case right from the start. Turning characters to lower case
+        // via Character.toLowerCase(char) is unfortunately insufficient
+        // as it does not accept a locale.
+        final String termLowerCase = term.toString().toLowerCase(locale);
+        final String queryLowerCase = query.toString().toLowerCase(locale);
+
+        // the resulting score
+        int score = 0;
+
+        // the position in the term which will be scanned next for potential
+        // query character matches
+        int termIndex = 0;
+
+        // index of the previously matched character in the term
+        int previousMatchingCharacterIndex = Integer.MIN_VALUE;
+
+        for (int queryIndex = 0; queryIndex < queryLowerCase.length(); queryIndex++) {
+            final char queryChar = queryLowerCase.charAt(queryIndex);
+
+            boolean termCharacterMatchFound = false;
+            for (; termIndex < termLowerCase.length() && !termCharacterMatchFound; termIndex++) {
+                final char termChar = termLowerCase.charAt(termIndex);
+
+                if (queryChar == termChar) {
+                    // simple character matches result in one point
+                    score++;
+
+                    // subsequent character matches further improve
+                    // the score.
+                    if (previousMatchingCharacterIndex + 1 == termIndex) {
+                        score += 2;
+                    }
+
+                    previousMatchingCharacterIndex = termIndex;
+
+                    // we can leave the nested loop. Every character in the
+                    // query can match at most one character in the term.
+                    termCharacterMatchFound = true;
+                }
+            }
+        }
+
+        return score;
+    }
+
+    /**
      * Gets a set of matching characters between two strings.
      *
      * <p><Two characters from the first string and the second string are considered matching if the character's
@@ -7129,7 +7276,7 @@ public class StringUtils {
      * @param second The second string.
      * @return The number of transposition between the two strings.
      */
-    private static int transpositions(CharSequence first, CharSequence second) {
+    private static int transpositions(final CharSequence first, final CharSequence second) {
         int transpositions = 0;
         for (int i = 0; i < first.length(); i++) {
             if (first.charAt(i) != second.charAt(i)) {
@@ -7146,7 +7293,7 @@ public class StringUtils {
      * @param second The second string.
      * @return A number between 0 and 4.
      */
-    private static int commonPrefixLength(CharSequence first, CharSequence second) {
+    private static int commonPrefixLength(final CharSequence first, final CharSequence second) {
         final int result = getCommonPrefix(first.toString(), second.toString()).length();
 
         // Limit the result to 4.
@@ -7253,7 +7400,7 @@ public class StringUtils {
             return false;
         }
         for (final CharSequence searchString : searchStrings) {
-            if (StringUtils.startsWith(string, searchString)) {
+            if (startsWith(string, searchString)) {
                 return true;
             }
         }
@@ -7381,10 +7528,34 @@ public class StringUtils {
      * @since 3.0
      */
     public static String normalizeSpace(final String str) {
-        if (str == null) {
-            return null;
+        // LANG-1020: Improved performance significantly by normalizing manually instead of using regex
+        // See https://github.com/librucha/commons-lang-normalizespaces-benchmark for performance test
+        if (isEmpty(str)) {
+            return str;
         }
-        return trim(str).replaceAll(WHITESPACE_PATTERN, SPACE);
+        final int size = str.length();
+        final char[] newChars = new char[size];
+        int count = 0;
+        int whitespacesCount = 0;
+        boolean startWhitespaces = true;
+        for (int i = 0; i < size; i++) {
+            char actualChar = str.charAt(i);
+            boolean isWhitespace = CharUtils.isWhitespace(actualChar);
+            if (!isWhitespace) {
+                startWhitespaces = false;
+                newChars[count++] = (actualChar == 160 ? 32 : actualChar);
+                whitespacesCount = 0;
+            } else {
+                if (whitespacesCount == 0 && !startWhitespaces) {
+                    newChars[count++] = SPACE.charAt(0);
+                }
+                whitespacesCount++;
+            }
+        }
+        if (startWhitespaces) {
+            return EMPTY;
+        }
+        return new String(newChars, 0, count - (whitespacesCount > 0 ? 1 : 0));
     }
 
     /**
@@ -7410,7 +7581,7 @@ public class StringUtils {
             return false;
         }
         for (final CharSequence searchString : searchStrings) {
-            if (StringUtils.endsWith(string, searchString)) {
+            if (endsWith(string, searchString)) {
                 return true;
             }
         }
@@ -7654,8 +7825,76 @@ public class StringUtils {
      * @since 3.3 No longer throws {@link UnsupportedEncodingException}.
      */
     @GwtIncompatible("incompatible method")
-    public static String toEncodedString(byte[] bytes, Charset charset) {
+    public static String toEncodedString(final byte[] bytes, final Charset charset) {
         return new String(bytes, charset != null ? charset : Charset.defaultCharset());
+    }
+
+    /**
+     * <p>
+     * Wraps a string with a char.
+     * </p>
+     * 
+     * <pre>
+     * StringUtils.wrap(null, *)        = null
+     * StringUtils.wrap("", *)          = ""
+     * StringUtils.wrap("ab", '\0')     = "ab"
+     * StringUtils.wrap("ab", 'x')      = "xabx"
+     * StringUtils.wrap("ab", '\'')     = "'ab'"
+     * StringUtils.wrap("\"ab\"", '\"') = "\"\"ab\"\""
+     * </pre>
+     * 
+     * @param str
+     *            the string to be wrapped, may be {@code null}
+     * @param wrapWith
+     *            the char that will wrap {@code str}
+     * @return the wrapped string, or {@code null} if {@code str==null}
+     * @since 3.4
+     */
+    public static String wrap(final String str, final char wrapWith) {
+
+        if (isEmpty(str) || wrapWith == '\0') {
+            return str;
+        }
+
+        return wrapWith + str + wrapWith;
+    }
+
+    /**
+     * <p>
+     * Wraps a String with another String.
+     * </p>
+     * 
+     * <p>
+     * A {@code null} input String returns {@code null}.
+     * </p>
+     * 
+     * <pre>
+     * StringUtils.wrap(null, *)         = null
+     * StringUtils.wrap("", *)           = ""
+     * StringUtils.wrap("ab", null)      = "ab"
+     * StringUtils.wrap("ab", "x")       = "xabx"
+     * StringUtils.wrap("ab", "\"")      = "\"ab\""
+     * StringUtils.wrap("\"ab\"", "\"")  = "\"\"ab\"\""
+     * StringUtils.wrap("ab", "'")       = "'ab'"
+     * StringUtils.wrap("'abcd'", "'")   = "''abcd''"
+     * StringUtils.wrap("\"abcd\"", "'") = "'\"abcd\"'"
+     * StringUtils.wrap("'abcd'", "\"")  = "\"'abcd'\""
+     * </pre>
+     * 
+     * @param str
+     *            the String to be wrapper, may be null
+     * @param wrapWith
+     *            the String that will wrap str
+     * @return wrapped String, {@code null} if null String input
+     * @since 3.4
+     */
+    public static String wrap(final String str, final String wrapWith) {
+
+        if (isEmpty(str) || isEmpty(wrapWith)) {
+            return str;
+        }
+
+        return wrapWith.concat(str).concat(wrapWith);
     }
 
     /**
@@ -7679,14 +7918,14 @@ public class StringUtils {
     public static String simpleFormat(final String format, final Object... args) {
         String retVal = format;
         for (final Object current : args) {
-        	String argString = null;
-        	try {
-        		argString = StringUtils.substring(java.util.Objects.toString(current), 0, 256);
+            String argString = null;
+            try {
+                argString = StringUtils.substring(java.util.Objects.toString(current), 0, 256);
                 retVal = retVal.replaceFirst("[%][sd]", argString);
-        	} catch (final Exception e) {
-        		argString = "Ups";
+            } catch (final Exception e) {
+                argString = "Ups";
                 retVal = retVal.replaceFirst("[%][sd]", argString);
-        	}
+            }
         }
         return retVal;
     }

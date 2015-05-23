@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * <p>
  * An utility class providing functionality related to the {@code
@@ -30,7 +32,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 3.0
- * @version $Id: ConcurrentUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: ConcurrentUtils.java 1593668 2014-05-10 05:58:17Z djones $
  */
 @GwtIncompatible("incompatible class")
 public class ConcurrentUtils {
@@ -144,12 +146,10 @@ public class ConcurrentUtils {
      * checked exception
      */
     static Throwable checkedException(final Throwable ex) {
-        if (ex != null && !(ex instanceof RuntimeException)
-                && !(ex instanceof Error)) {
-            return ex;
-        } else {
-            throw new IllegalArgumentException("Not a checked exception: " + ex);
-        }
+        Validate.isTrue(ex != null && !(ex instanceof RuntimeException)
+                && !(ex instanceof Error), "Not a checked exception: " + ex);
+        
+        return ex;
     }
 
     /**

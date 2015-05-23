@@ -44,7 +44,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * {@code [I}. </p>
  *
  * @since 2.0
- * @version $Id: ClassUtils.java 1582669 2014-03-28 10:05:06Z britter $
+ * @version $Id: ClassUtils.java 1669311 2015-03-26 10:24:19Z britter $
  */
 public class ClassUtils {
     /**
@@ -129,7 +129,7 @@ public class ClassUtils {
         m.put("char", "C");
         m.put("void", "V");
         final Map<String, String> r = new HashMap<String, String>();
-        for (Map.Entry<String, String> e : m.entrySet()) {
+        for (final Map.Entry<String, String> e : m.entrySet()) {
             r.put(e.getValue(), e.getKey());
         }
         abbreviationMap = Collections.unmodifiableMap(m);
@@ -314,6 +314,87 @@ public class ClassUtils {
             return StringUtils.EMPTY;
         }
         return className.substring(0, i);
+    }
+
+    // Abbreviated name
+    // ----------------------------------------------------------------------
+    /**
+     * <p>Gets the abbreviated name of a {@code Class}.</p>
+     *
+     * @param cls  the class to get the abbreviated name for, may be {@code null}
+     * @param len  the desired length of the abbreviated name
+     * @return the abbreviated name or an empty string
+     * @throws IllegalArgumentException if len &lt;= 0
+     * @see #getAbbreviatedName(String, int)
+     * @since 3.4
+     */
+    public static String getAbbreviatedName(final Class<?> cls, int len) {
+      if (cls == null) {
+        return StringUtils.EMPTY;
+      }
+      return getAbbreviatedName(cls.getName(), len);
+    }
+
+    /**
+     * <p>Gets the abbreviated class name from a {@code String}.</p>
+     *
+     * <p>The string passed in is assumed to be a class name - it is not checked.</p>
+     *
+     * <p>The abbreviation algorithm will shorten the class name, usually without
+     * significant loss of meaning.</p>
+     * <p>The abbreviated class name will always include the complete package hierarchy.
+     * If enough space is available, rightmost sub-packages will be displayed in full
+     * length.</p>
+     *
+     * <p>The following table illustrates the algorithm:</p>
+     * <table summary="abbreviation examples">
+     * <tr><td>className</td><td>len</td><td>return</td></tr>
+     * <tr><td>              null</td><td> 1</td><td>""</td></tr>
+     * <tr><td>"java.lang.String"</td><td> 5</td><td>"j.l.String"</td></tr>
+     * <tr><td>"java.lang.String"</td><td>15</td><td>"j.lang.String"</td></tr>
+     * <tr><td>"java.lang.String"</td><td>30</td><td>"java.lang.String"</td></tr>
+     * </table>
+     * @param className  the className to get the abbreviated name for, may be {@code null}
+     * @param len  the desired length of the abbreviated name
+     * @return the abbreviated name or an empty string
+     * @throws IllegalArgumentException if len &lt;= 0
+     * @since 3.4
+     */
+    public static String getAbbreviatedName(String className, int len) {
+      if (len <= 0) {
+        throw new IllegalArgumentException("len must be > 0");
+      }
+      if (className == null) {
+        return StringUtils.EMPTY;
+      }
+
+      int availableSpace = len;
+      int packageLevels = StringUtils.countMatches(className, '.');
+      String[] output = new String[packageLevels + 1];
+      int endIndex = className.length() - 1;
+      for (int level = packageLevels; level >= 0; level--) {
+        int startIndex = className.lastIndexOf('.', endIndex);
+        String part = className.substring(startIndex + 1, endIndex + 1);
+        availableSpace -= part.length();
+        if (level > 0) {
+          // all elements except top level require an additional char space
+          availableSpace--;
+        }
+        if (level == packageLevels) {
+          // ClassName is always complete
+          output[level] = part;
+        } else {
+          if (availableSpace > 0) {
+            output[level] = part;
+          } else {
+            // if no space is left still the first char is used
+            output[level] = part.substring(0, 1);
+          }
+        }
+        endIndex = startIndex - 1;
+      }
+
+      return StringUtils.join(output, '.');
     }
 
     // Superclasses/Superinterfaces
@@ -1124,33 +1205,31 @@ public class ClassUtils {
         className = StringUtils.deleteWhitespace(className);
         if (className == null) {
             return null;
+        }
+        int dim = 0;
+        while (className.startsWith("[")) {
+            dim++;
+            className = className.substring(1);
+        }
+        if (dim < 1) {
+            return className;
+        }
+        if (className.startsWith("L")) {
+            className = className.substring(
+                1,
+                className.endsWith(";")
+                    ? className.length() - 1
+                    : className.length());
         } else {
-            int dim = 0;
-            while (className.startsWith("[")) {
-                dim++;
-                className = className.substring(1);
-            }
-            if (dim < 1) {
-                return className;
-            } else {
-                if (className.startsWith("L")) {
-                    className = className.substring(
-                        1,
-                        className.endsWith(";")
-                            ? className.length() - 1
-                            : className.length());
-                } else {
-                    if (className.length() > 0) {
-                        className = reverseAbbreviationMap.get(className.substring(0, 1));
-                    }
-                }
-                final StringBuilder canonicalClassNameBuffer = new StringBuilder(className);
-                for (int i = 0; i < dim; i++) {
-                    canonicalClassNameBuffer.append("[]");
-                }
-                return canonicalClassNameBuffer.toString();
+            if (className.length() > 0) {
+                className = reverseAbbreviationMap.get(className.substring(0, 1));
             }
         }
+        final StringBuilder canonicalClassNameBuffer = new StringBuilder(className);
+        for (int i = 0; i < dim; i++) {
+            canonicalClassNameBuffer.append("[]");
+        }
+        return canonicalClassNameBuffer.toString();
     }
 
     /**
@@ -1175,7 +1254,7 @@ public class ClassUtils {
      * @since 3.2
      */
     @GwtIncompatible("incompatible method")
-    public static Iterable<Class<?>> hierarchy(final Class<?> type, Interfaces interfacesBehavior) {
+    public static Iterable<Class<?>> hierarchy(final Class<?> type, final Interfaces interfacesBehavior) {
         final Iterable<Class<?>> classes = new Iterable<Class<?>>() {
     
             @Override
@@ -1236,8 +1315,8 @@ public class ClassUtils {
                         return nextSuperclass;
                     }
     
-                    private void walkInterfaces(Set<Class<?>> addTo, Class<?> c) {
-                        for (Class<?> iface : c.getInterfaces()) {
+                    private void walkInterfaces(final Set<Class<?>> addTo, final Class<?> c) {
+                        for (final Class<?> iface : c.getInterfaces()) {
                             if (!seenInterfaces.contains(iface)) {
                                 addTo.add(iface);
                             }

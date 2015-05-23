@@ -43,7 +43,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.SerializationUtils}.
  *
- * @version $Id: SerializationUtilsTest.java 1563309 2014-01-31 22:32:03Z ggregory $
+ * @version $Id: SerializationUtilsTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class SerializationUtilsTest {
 
@@ -273,7 +273,7 @@ public class SerializationUtilsTest {
     
     @Test 
     public void testRoundtrip() {
-        HashMap<Object, Object> newMap = SerializationUtils.roundtrip(iMap);
+        final HashMap<Object, Object> newMap = SerializationUtils.roundtrip(iMap);
         assertEquals(iMap, newMap);
     }
     

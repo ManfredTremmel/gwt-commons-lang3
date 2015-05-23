@@ -27,7 +27,7 @@ import org.junit.Test;
 /**
  * Test class for {@code ConstantInitializer}.
  *
- * @version $Id: ConstantInitializerTest.java 1563388 2014-02-01 10:46:28Z britter $
+ * @version $Id: ConstantInitializerTest.java 1609902 2014-07-12 11:01:37Z britter $
  */
 public class ConstantInitializerTest {
     /** Constant for the object managed by the initializer. */
@@ -68,6 +68,8 @@ public class ConstantInitializerTest {
 
     /**
      * Tests whether get() returns the correct object.
+     *
+     * @throws org.apache.commons.lang3.concurrent.ConcurrentException so we don't have to catch it
      */
     @Test
     public void testGet() throws ConcurrentException {

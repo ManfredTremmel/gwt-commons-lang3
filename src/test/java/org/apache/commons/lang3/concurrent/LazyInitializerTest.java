@@ -21,7 +21,7 @@ import org.junit.Before;
 /**
  * Test class for {@code LazyInitializer}.
  *
- * @version $Id: LazyInitializerTest.java 929189 2010-03-30 16:49:22Z oheger $
+ * @version $Id: LazyInitializerTest.java 1662379 2015-02-26 08:13:58Z britter $
  */
 public class LazyInitializerTest extends AbstractConcurrentInitializerTest {
     /** The initializer to be tested. */

@@ -16,6 +16,8 @@
  */
 package org.apache.commons.lang3.mutable;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 /**
  * A mutable <code>int</code> wrapper.
  * <p>
@@ -23,7 +25,7 @@ package org.apache.commons.lang3.mutable;
  * 
  * @see Integer
  * @since 2.1
- * @version $Id: MutableInt.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * @version $Id: MutableInt.java 1669791 2015-03-28 15:22:59Z britter $
  */
 public class MutableInt extends Number implements Comparable<MutableInt>, Mutable<Number> {
 
@@ -258,8 +260,7 @@ public class MutableInt extends Number implements Comparable<MutableInt>, Mutabl
      */
     @Override
     public int compareTo(final MutableInt other) {
-        final int anotherVal = other.value;
-        return value < anotherVal ? -1 : (value == anotherVal ? 0 : 1);
+        return NumberUtils.compare(this.value, other.value);
     }
 
     //-----------------------------------------------------------------------

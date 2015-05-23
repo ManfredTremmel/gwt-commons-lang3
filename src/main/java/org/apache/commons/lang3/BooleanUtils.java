@@ -27,7 +27,7 @@ import org.apache.commons.lang3.math.NumberUtils;
  *
  * <p>#ThreadSafe#</p>
  * @since 2.0
- * @version $Id: BooleanUtils.java 1565252 2014-02-06 13:48:08Z sebb $
+ * @version $Id: BooleanUtils.java 1632874 2014-10-19 05:52:37Z djones $
  */
 public class BooleanUtils {
 
@@ -1082,6 +1082,27 @@ public class BooleanUtils {
             return xor(primitive) ? Boolean.TRUE : Boolean.FALSE;
         } catch (final NullPointerException ex) {
             throw new IllegalArgumentException("The array must not contain any null elements");
+        }
+    }
+
+    /**
+     * <p>Compares two {@code boolean} values. This is the same functionality as provided in Java 7.</p>
+     *
+     * @param x the first {@code boolean} to compare
+     * @param y the second {@code boolean} to compare
+     * @return the value {@code 0} if {@code x == y};
+     *         a value less than {@code 0} if {@code !x && y}; and
+     *         a value greater than {@code 0} if {@code x && !y}
+     * @since 3.4
+     */
+    public static int compare(boolean x, boolean y) {
+        if (x == y) {
+            return 0;
+        }
+        if (x) {
+            return 1;
+        } else {
+            return -1;
         }
     }
 

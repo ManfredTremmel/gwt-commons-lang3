@@ -40,7 +40,7 @@ import org.junit.Test;
  * Unit tests {@link org.apache.commons.lang3.time.FastDateFormat}.
  *
  * @since 2.0
- * @version $Id: FastDateFormatTest.java 1560137 2014-01-21 18:45:08Z britter $
+ * @version $Id: FastDateFormatTest.java 1669310 2015-03-26 10:21:24Z britter $
  */
 public class FastDateFormatTest {
 
@@ -196,7 +196,7 @@ public class FastDateFormatTest {
         assertEquals(sdf.toPattern(), format.getPattern());
         
         assertEquals(Locale.getDefault(), format.getLocale());
-        assertEquals(TimeZone.getDefault(), format.getTimeZone());        
+        assertEquals(TimeZone.getDefault(), format.getTimeZone());
     }
 
     @Test
@@ -208,7 +208,7 @@ public class FastDateFormatTest {
         
         assertFalse(shortShort.equals(shortLong));
         assertFalse(shortShort.equals(longShort));
-        assertFalse(shortShort.equals(longLong));      
+        assertFalse(shortShort.equals(longLong));
         assertFalse(shortLong.equals(longShort));
         assertFalse(shortLong.equals(longLong));
         assertFalse(longShort.equals(longLong));
@@ -254,8 +254,8 @@ public class FastDateFormatTest {
      * According to LANG-954 (https://issues.apache.org/jira/browse/LANG-954) this is broken in Android 2.1.
      */
     @Test
-    public void testLang954() throws Exception {
-        String pattern = "yyyy-MM-dd'T'";
+    public void testLang954() {
+        final String pattern = "yyyy-MM-dd'T'";
         FastDateFormat.getInstance(pattern);
     }
 
@@ -308,11 +308,14 @@ public class FastDateFormatTest {
                             e.printStackTrace();
                         }
                     }
-                }                
+                }
             });
         }
-        pool.shutdown();                        
-        if(!pool.awaitTermination(20, TimeUnit.SECONDS)) {
+        pool.shutdown();
+        // depending on the performance of the machine used to run the parsing,
+        // the tests can run for a while. It should however complete within
+        // 30 seconds. Might need increase on very slow machines.
+        if(!pool.awaitTermination(30, TimeUnit.SECONDS)) {
             pool.shutdownNow();
             fail("did not complete tasks");
         }

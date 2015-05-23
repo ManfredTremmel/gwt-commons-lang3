@@ -30,7 +30,7 @@ import org.junit.Test;
 /**
  * Unit tests {@link org.apache.commons.lang3.BooleanUtils}.
  *
- * @version $Id: BooleanUtilsTest.java 1565251 2014-02-06 13:47:21Z sebb $
+ * @version $Id: BooleanUtilsTest.java 1632874 2014-10-19 05:52:37Z djones $
  */
 public class BooleanUtilsTest {
 
@@ -1005,6 +1005,14 @@ public class BooleanUtilsTest {
                     Boolean.TRUE,
                     Boolean.TRUE })
                     .booleanValue());
+    }
+
+    @Test
+    public void testCompare(){
+        assertTrue(BooleanUtils.compare(true, false) > 0);
+        assertTrue(BooleanUtils.compare(true, true) == 0);
+        assertTrue(BooleanUtils.compare(false, false) == 0);
+        assertTrue(BooleanUtils.compare(false, true) < 0);
     }
     
 }

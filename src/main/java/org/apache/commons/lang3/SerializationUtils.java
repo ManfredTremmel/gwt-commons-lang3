@@ -45,7 +45,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *
  * <p>#ThreadSafe#</p>
  * @since 1.0
- * @version $Id: SerializationUtils.java 1583482 2014-03-31 22:54:57Z niallp $
+ * @version $Id: SerializationUtils.java 1653307 2015-01-20 17:30:11Z britter $
  */
 @GwtIncompatible("incompatible class")
 public class SerializationUtils {
@@ -95,8 +95,7 @@ public class SerializationUtils {
              * is of the same type as the original serialized object
              */
             @SuppressWarnings("unchecked") // see above
-            final
-            T readObject = (T) in.readObject();
+            final T readObject = (T) in.readObject();
             return readObject;
 
         } catch (final ClassNotFoundException ex) {
@@ -126,7 +125,7 @@ public class SerializationUtils {
      * @since 3.3
      */
     public static <T extends Serializable> T roundtrip(final T msg) {
-        return SerializationUtils.deserialize(SerializationUtils.serialize(msg));
+        return (T) SerializationUtils.deserialize(SerializationUtils.serialize(msg));
     }
 
     // Serialize
@@ -331,9 +330,8 @@ public class SerializationUtils {
                     final Class<?> cls = primitiveTypes.get(name);
                     if (cls != null) {
                         return cls;
-                    } else {
-                        throw cnfe;
                     }
+                    throw cnfe;
                 }
             }
         }
