@@ -513,7 +513,7 @@
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <gwt.version>2.7.0</gwt.version>
     <guava-gwt.version>18.0</guava-gwt.version>
-    <wagonSSH.version>2.4</wagonSSH.version>
+    <wagonSSH.version>2.9</wagonSSH.version>
   </properties>
   <repositories>
     <repository>    
