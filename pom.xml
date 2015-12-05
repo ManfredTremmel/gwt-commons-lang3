@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>gwt-commons-lang3</groupId>
   <artifactId>gwt-commons-lang3</artifactId>
-  <version>3.4-SNAPSHOT</version>
+  <version>3.4-gwt27-0</version>
   <name>Apache Commons Lang</name>
 
   <inceptionYear>2001</inceptionYear>
