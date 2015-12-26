@@ -1,7 +1,6 @@
 package org.apache.commons.lang3;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.Window;
 
 /**
  * dummy entry point.
