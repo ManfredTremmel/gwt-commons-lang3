@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.knightsoft-net</groupId>
   <artifactId>gwt-commons-lang3</artifactId>
-  <version>3.4-1</version>
+  <version>3.4-2</version>
   <name>Apache Commons Lang</name>
 
   <inceptionYear>2001</inceptionYear>
@@ -543,11 +543,11 @@
     <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-lang</commons.scmPubUrl>
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <gwt.version>2.7.0</gwt.version>
-    <guava-gwt.version>18.0</guava-gwt.version>
-    <nexus-staging-maven-plugin.version>1.6.6</nexus-staging-maven-plugin.version>
+    <guava-gwt.version>19.0</guava-gwt.version>
+    <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
     <wagon-webdav-jackrabbit.version>2.10</wagon-webdav-jackrabbit.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-source-plugin.version>2.4</maven-source-plugin.version>
+    <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
     <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
     <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
   </properties>
@@ -655,6 +655,7 @@
           <execution>
             <goals>
               <goal>compile</goal>
+              <goal>resources</goal>
             </goals>
           </execution>
         </executions>
