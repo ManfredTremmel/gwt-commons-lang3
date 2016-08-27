@@ -4,7 +4,6 @@
 <module rename-to='GWTCommonsLang3'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User' />
-  <inherits name='java.nio.charset.Charset' />
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='org.apache.commons.lang3.GWTCommonsLang3' />
