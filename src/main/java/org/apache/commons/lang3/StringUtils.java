@@ -583,7 +583,7 @@ public class StringUtils {
      * <p>Strips whitespace from the start and end of a String.</p>
      *
      * <p>This is similar to {@link #trim(String)} but removes whitespace.
-     * Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <p>A {@code null} input String returns {@code null}.</p>
      *
@@ -610,7 +610,7 @@ public class StringUtils {
      * {@code null} if the String is empty ("") after the strip.</p>
      *
      * <p>This is similar to {@link #trimToNull(String)} but removes whitespace.
-     * Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <pre>
      * StringUtils.stripToNull(null)     = null
@@ -641,7 +641,7 @@ public class StringUtils {
      * an empty String if {@code null} input.</p>
      *
      * <p>This is similar to {@link #trimToEmpty(String)} but removes whitespace.
-     * Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <pre>
      * StringUtils.stripToEmpty(null)     = ""
@@ -671,7 +671,7 @@ public class StringUtils {
      * An empty string ("") input returns the empty string.</p>
      *
      * <p>If the stripChars String is {@code null}, whitespace is
-     * stripped as defined by {@link CharUtils.isWhitespace(char)}.
+     * stripped as defined by {@link CharUtils#isWhitespace(char)}.
      * Alternatively use {@link #strip(String)}.</p>
      *
      * <pre>
@@ -703,7 +703,7 @@ public class StringUtils {
      * An empty string ("") input returns the empty string.</p>
      *
      * <p>If the stripChars String is {@code null}, whitespace is
-     * stripped as defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * stripped as defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <pre>
      * StringUtils.stripStart(null, *)          = null
@@ -747,7 +747,7 @@ public class StringUtils {
      * An empty string ("") input returns the empty string.</p>
      *
      * <p>If the stripChars String is {@code null}, whitespace is
-     * stripped as defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * stripped as defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <pre>
      * StringUtils.stripEnd(null, *)          = null
@@ -789,7 +789,7 @@ public class StringUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Strips whitespace from the start and end of every String in an array.
-     * Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <p>A new array is returned each time, except for length zero.
      * A {@code null} array will return {@code null}.
@@ -813,14 +813,14 @@ public class StringUtils {
     /**
      * <p>Strips any of a set of characters from the start and end of every
      * String in an array.</p>
-     * <p>Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * <p>Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <p>A new array is returned each time, except for length zero.
      * A {@code null} array will return {@code null}.
      * An empty array will return itself.
      * A {@code null} array entry will be ignored.
      * A {@code null} stripChars will strip whitespace as defined by
-     * {@link CharUtils.isWhitespace(char)}.</p>
+     * {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <pre>
      * StringUtils.stripAll(null, *)                = null
@@ -1873,7 +1873,7 @@ public class StringUtils {
      * @param seq the CharSequence to check (may be {@code null})
      * @return {@code true} if the CharSequence is not empty and
      * contains at least 1 whitespace character
-     * @see CharUtils.isWhitespace()
+     * @see CharUtils#isWhitespace
      * @since 3.0
      */
     // From org.springframework.util.StringUtils, under Apache License 2.0
@@ -2975,7 +2975,7 @@ public class StringUtils {
     /**
      * <p>Splits the provided text into an array, using whitespace as the
      * separator.
-     * Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <p>The separator is not included in the returned String array.
      * Adjacent separators are treated as one separator.
@@ -3294,7 +3294,7 @@ public class StringUtils {
      * <p>Splits the provided text into an array, using whitespace as the
      * separator, preserving all tokens, including empty tokens created by
      * adjacent separators. This is an alternative to using StringTokenizer.
-     * Whitespace is defined by {@link CharUtils.isWhitespace(char)}.</p>
+     * Whitespace is defined by {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <p>The separator is not included in the returned String array.
      * Adjacent separators are treated as separators for empty tokens.
@@ -4625,7 +4625,7 @@ public class StringUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Deletes all whitespaces from a String as defined by
-     * {@link CharUtils.isWhitespace(char)}.</p>
+     * {@link CharUtils#isWhitespace(char)}.</p>
      *
      * <pre>
      * StringUtils.deleteWhitespace(null)         = null

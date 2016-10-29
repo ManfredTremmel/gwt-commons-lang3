@@ -19,10 +19,6 @@ package org.apache.commons.lang3.text;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 import com.google.gwt.regexp.shared.MatchResult;
@@ -101,7 +97,6 @@ public class WordUtils {
      * @param wrapLength  the column to wrap the words at, less than 1 is treated as 1
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    @GwtIncompatible("incompatible method")
     public static String wrap(final String str, final int wrapLength) {
         return wrap(str, wrapLength, null, false);
     }
@@ -178,7 +173,6 @@ public class WordUtils {
      * @param wrapLongWords  true if long words (such as URLs) should be wrapped
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    @GwtIncompatible("incompatible method")
     public static String wrap(final String str, int wrapLength, String newLineStr, final boolean wrapLongWords) {
         return wrap(str, wrapLength, newLineStr, wrapLongWords, " ");
     }
@@ -272,13 +266,12 @@ public class WordUtils {
      *               if blank string is provided a space character will be used
      * @return a line with newlines inserted, <code>null</code> if null input
      */
-    @GwtIncompatible("incompatible method")
     public static String wrap(final String str, int wrapLength, String newLineStr, final boolean wrapLongWords, String wrapOn) {
         if (str == null) {
             return null;
         }
         if (newLineStr == null) {
-            newLineStr = SystemUtils.LINE_SEPARATOR;
+            newLineStr = "\n";
         }
         if (wrapLength < 1) {
             wrapLength = 1;
@@ -286,20 +279,23 @@ public class WordUtils {
         if (StringUtils.isBlank(wrapOn)) {
             wrapOn = " ";
         }
-        Pattern patternToWrapOn = Pattern.compile(wrapOn);
+        RegExp patternToWrapOn = RegExp.compile(wrapOn);
         final int inputLineLength = str.length();
         int offset = 0;
         final StringBuilder wrappedLine = new StringBuilder(inputLineLength + 32);
 
         while (offset < inputLineLength) {
             int spaceToWrapAt = -1;
-            Matcher matcher = patternToWrapOn.matcher(str.substring(offset, Math.min(offset + wrapLength + 1, inputLineLength)));
-            if (matcher.find()) {
-                if (matcher.start() == 0) {
-                    offset += matcher.end();
+            MatchResult matcher = patternToWrapOn.exec(str.substring(offset, Math.min(offset + wrapLength + 1, inputLineLength)));
+            if (matcher != null && matcher.getGroupCount() > 0) {
+                final String firstMatch = matcher.getGroup(0);
+                final int start = StringUtils.indexOf(matcher.getInput(), firstMatch);
+                if (matcher.getInput().startsWith(firstMatch)) {
+                    final int end = start + StringUtils.length(firstMatch);
+                    offset += end;
                     continue;
                 }else {
-                    spaceToWrapAt = matcher.start();
+                    spaceToWrapAt = start;
                 }
             }
 
@@ -308,8 +304,10 @@ public class WordUtils {
                 break;
             }
 
-            while(matcher.find()){
-                spaceToWrapAt = matcher.start() + offset;
+            if (matcher != null && matcher.getGroupCount() > 0) {
+                final String lastMatch = matcher.getGroup(matcher.getGroupCount() - 1);
+                final int start = StringUtils.lastIndexOf(matcher.getInput(), lastMatch);
+                spaceToWrapAt = start + offset;
             }
 
             if (spaceToWrapAt >= offset) {
@@ -327,9 +325,11 @@ public class WordUtils {
                     offset += wrapLength;
                 } else {
                     // do not wrap really long word, just extend beyond limit
-                    matcher = patternToWrapOn.matcher(str.substring(offset + wrapLength));
-                    if (matcher.find()) {
-                        spaceToWrapAt = matcher.start() + offset + wrapLength;
+                    matcher = patternToWrapOn.exec(str.substring(offset + wrapLength));
+                    if (matcher != null && matcher.getGroupCount() > 0) {
+                        final String firstMatch = matcher.getGroup(0);
+                        final int start = StringUtils.indexOf(matcher.getInput(), firstMatch);
+                        spaceToWrapAt = start + offset + wrapLength;
                     }
 
                     if (spaceToWrapAt >= 0) {
