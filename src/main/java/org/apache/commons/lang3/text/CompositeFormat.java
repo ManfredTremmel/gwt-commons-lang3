@@ -27,8 +27,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Formats using one formatter and parses using a different formatter. An
  * example of use for this would be a webapp where data is taken in one way and
  * stored in a database another way.
- * 
- * @version $Id: CompositeFormat.java 1436768 2013-01-22 07:07:42Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class CompositeFormat extends Format {

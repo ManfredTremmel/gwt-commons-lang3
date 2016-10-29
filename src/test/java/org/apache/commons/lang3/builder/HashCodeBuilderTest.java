@@ -23,8 +23,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.builder.HashCodeBuilder}.
- * 
- * @version $Id: HashCodeBuilderTest.java 1593622 2014-05-09 21:13:01Z djones $
  */
 public class HashCodeBuilderTest {
 
@@ -563,6 +561,53 @@ public class HashCodeBuilderTest {
         final HashCodeBuilder hcb = new HashCodeBuilder(17, 37).append(new Object()).append('a');
         assertEquals("hashCode() is no longer returning the same value as toHashCode() - see LANG-520", 
                      hcb.toHashCode(), hcb.hashCode());
+    }
+
+    static class TestObjectHashCodeExclude {
+        @HashCodeExclude
+        private int a;
+        private int b;
+
+        public TestObjectHashCodeExclude(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+
+        public int getA() {
+            return a;
+        }
+
+        public int getB() {
+            return b;
+        }
+    }
+
+    static class TestObjectHashCodeExclude2 {
+        @HashCodeExclude
+        private int a;
+        @HashCodeExclude
+        private int b;
+
+        public TestObjectHashCodeExclude2(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+
+        public int getA() {
+            return a;
+        }
+
+        public int getB() {
+            return b;
+        }
+    }
+
+    @Test
+    public void testToHashCodeExclude() {
+        TestObjectHashCodeExclude one = new TestObjectHashCodeExclude(1, 2);
+        TestObjectHashCodeExclude2 two = new TestObjectHashCodeExclude2(1, 2);
+        assertEquals(17 * 37 + 2, HashCodeBuilder.reflectionHashCode(one));
+        assertEquals(17, HashCodeBuilder.reflectionHashCode(two));
     }
 
 }

@@ -40,8 +40,6 @@ import org.junit.Test;
 
 /**
  * Unit tests for {@link LocaleUtils}.
- *
- * @version $Id: LocaleUtilsTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class LocaleUtilsTest  {
 

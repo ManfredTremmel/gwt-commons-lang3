@@ -30,7 +30,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * 1 to 377. This is because parsing Java is the main use case.
  * 
  * @since 3.0
- * @version $Id: OctalUnescaper.java 967237 2010-07-23 20:08:57Z mbenson $
  */
 public class OctalUnescaper extends CharSequenceTranslator {
 

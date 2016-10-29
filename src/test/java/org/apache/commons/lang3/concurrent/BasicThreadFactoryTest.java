@@ -32,8 +32,6 @@ import org.junit.Test;
 
 /**
  * Test class for {@code BasicThreadFactory}.
- *
- * @version $Id: BasicThreadFactoryTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class BasicThreadFactoryTest {
     /** Constant for the test naming pattern. */

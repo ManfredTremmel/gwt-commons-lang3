@@ -29,8 +29,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.CharUtils}.
- *
- * @version $Id: CharUtilsTest.java 1666535 2015-03-13 18:18:59Z britter $
  */
 public class CharUtilsTest {
 

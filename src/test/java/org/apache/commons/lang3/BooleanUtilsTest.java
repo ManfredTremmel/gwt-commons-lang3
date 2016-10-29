@@ -29,8 +29,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.BooleanUtils}.
- *
- * @version $Id: BooleanUtilsTest.java 1632874 2014-10-19 05:52:37Z djones $
  */
 public class BooleanUtilsTest {
 
@@ -321,7 +319,7 @@ public class BooleanUtilsTest {
         assertFalse(BooleanUtils.toBoolean("false"));
         assertFalse(BooleanUtils.toBoolean("a"));
         assertTrue(BooleanUtils.toBoolean("true")); // interned handled differently
-        assertTrue(BooleanUtils.toBoolean(new StringBuffer("tr").append("ue").toString()));
+        assertTrue(BooleanUtils.toBoolean(new StringBuilder("tr").append("ue").toString()));
         assertTrue(BooleanUtils.toBoolean("truE"));
         assertTrue(BooleanUtils.toBoolean("trUe"));
         assertTrue(BooleanUtils.toBoolean("trUE"));

@@ -30,7 +30,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Note that the semi-colon is optional.
  * 
  * @since 3.0
- * @version $Id: NumericEntityUnescaper.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 public class NumericEntityUnescaper extends CharSequenceTranslator {
 

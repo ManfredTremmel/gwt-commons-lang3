@@ -25,7 +25,6 @@ package org.apache.commons.lang3.tuple;
  * @param <R> the right element type
  *
  * @since Lang 3.0
- * @version $Id: MutablePair.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class MutablePair<L, R> extends Pair<L, R> {
 

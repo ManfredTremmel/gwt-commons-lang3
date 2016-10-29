@@ -32,7 +32,6 @@ import org.apache.commons.lang3.Validate;
  * </p>
  *
  * @since 3.0
- * @version $Id: ConcurrentUtils.java 1593668 2014-05-10 05:58:17Z djones $
  */
 @GwtIncompatible("incompatible class")
 public class ConcurrentUtils {

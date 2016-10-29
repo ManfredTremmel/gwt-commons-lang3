@@ -29,8 +29,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.CharSet}.
- *
- * @version $Id: CharSetTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class CharSetTest  {
 
@@ -466,4 +464,14 @@ public class CharSetTest  {
         assertTrue(ArrayUtils.contains(array, CharRange.isIn('0', '9')));
     }
     
+    @Test
+    public void testJavadocExamples() throws Exception {
+        assertFalse(CharSet.getInstance("^a-c").contains('a'));
+        assertTrue(CharSet.getInstance("^a-c").contains('d'));
+        assertTrue(CharSet.getInstance("^^a-c").contains('a'));
+        assertFalse(CharSet.getInstance("^^a-c").contains('^'));
+        assertTrue(CharSet.getInstance("^a-cd-f").contains('d'));
+        assertTrue(CharSet.getInstance("a-c^").contains('^'));
+        assertTrue(CharSet.getInstance("^", "a-c").contains('^'));        
+    }
 }

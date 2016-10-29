@@ -60,7 +60,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  * 
  * @since 3.3
- * @version $Id: DiffBuilder.java 1669782 2015-03-28 15:05:04Z britter $
  * @see Diffable
  * @see Diff
  * @see DiffResult
@@ -836,10 +835,14 @@ public class DiffBuilder implements Builder<DiffResult> {
      * @param rhs
      *            the right hand {@code Object}
      * @return this
+     * @throws IllegalArgumentException
+     *             if field name is {@code null}
      */
     public DiffBuilder append(final String fieldName, final Object lhs,
             final Object rhs) {
-
+        if (fieldName == null) {
+            throw new IllegalArgumentException("Field name cannot be null");
+        }
         if (objectsTriviallyEqual) {
             return this;
         }
@@ -918,9 +921,14 @@ public class DiffBuilder implements Builder<DiffResult> {
      * @param rhs
      *            the right hand {@code Object[]}
      * @return this
+     * @throws IllegalArgumentException
+     *             if field name is {@code null}
      */
     public DiffBuilder append(final String fieldName, final Object[] lhs,
             final Object[] rhs) {
+        if (fieldName == null) {
+            throw new IllegalArgumentException("Field name cannot be null");
+        }
         if (objectsTriviallyEqual) {
             return this;
         }
@@ -939,6 +947,62 @@ public class DiffBuilder implements Builder<DiffResult> {
                     return rhs;
                 }
             });
+        }
+
+        return this;
+    }
+
+    /**
+     * <p>
+     * Append diffs from another {@code DiffResult}.
+     * </p>
+     * 
+     * <p>
+     * This method is useful if you want to compare properties which are
+     * themselves Diffable and would like to know which specific part of
+     * it is different.
+     * </p>
+     * 
+     * <pre>
+     * public class Person implements Diffable&lt;Person&gt; {
+     *   String name;
+     *   Address address; // implements Diffable&lt;Address&gt;
+     *   
+     *   ...
+     *   
+     *   public DiffResult diff(Person obj) {
+     *     return new DiffBuilder(this, obj, ToStringStyle.SHORT_PREFIX_STYLE)
+     *       .append("name", this.name, obj.name)
+     *       .append("address", this.address.diff(obj.address))
+     *       .build();
+     *   }
+     * }
+     * </pre>
+     * 
+     * @param fieldName
+     *            the field name
+     * @param diffResult
+     *            the {@code DiffResult} to append
+     * @return this
+     * @throws IllegalArgumentException
+     *             if field name is {@code null}
+     * @since 3.5
+     */
+    public DiffBuilder append(final String fieldName,
+            final DiffResult diffResult) {
+        if (fieldName == null) {
+            throw new IllegalArgumentException("Field name cannot be null");
+        }
+        if (diffResult == null) {
+            throw new IllegalArgumentException("Diff result cannot be null");
+        }
+        if (objectsTriviallyEqual) {
+            return this;
+        }
+
+        for (Diff<?> diff : diffResult.getDiffs()) {
+            append(fieldName + "." + diff.getFieldName(),
+                   diff.getLeft(), diff.getRight());
         }
 
         return this;

@@ -32,7 +32,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>#ThreadSafe#</p>
  *
  * @since 3.0
- * @version $Id: EnumUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class EnumUtils {
 
@@ -147,7 +146,7 @@ public class EnumUtils {
         long total = 0;
         for (final E constant : values) {
             Validate.isTrue(constant != null, NULL_ELEMENTS_NOT_PERMITTED);
-            total |= 1 << constant.ordinal();
+            total |= 1L << constant.ordinal();
         }
         return total;
     }
@@ -178,7 +177,7 @@ public class EnumUtils {
         }
         final long[] result = new long[(enumClass.getEnumConstants().length - 1) / Long.SIZE + 1];
         for (final E value : condensed) {
-            result[value.ordinal() / Long.SIZE] |= 1 << (value.ordinal() % Long.SIZE);
+            result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE);
         }
         ArrayUtils.reverse(result);
         return result;
@@ -231,7 +230,7 @@ public class EnumUtils {
         Collections.addAll(condensed, values);
         final long[] result = new long[(enumClass.getEnumConstants().length - 1) / Long.SIZE + 1];
         for (final E value : condensed) {
-            result[value.ordinal() / Long.SIZE] |= 1 << (value.ordinal() % Long.SIZE);
+            result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE);
         }
         ArrayUtils.reverse(result);
         return result;
@@ -274,7 +273,7 @@ public class EnumUtils {
         ArrayUtils.reverse(lvalues);
         for (final E constant : enumClass.getEnumConstants()) {
             final int block = constant.ordinal() / Long.SIZE;
-            if (block < lvalues.length && (lvalues[block] & 1 << (constant.ordinal() % Long.SIZE)) != 0) {
+            if (block < lvalues.length && (lvalues[block] & 1L << (constant.ordinal() % Long.SIZE)) != 0) {
                 results.add(constant);
             }
         }

@@ -29,8 +29,6 @@ import org.junit.Test;
 
 /**
  * Tests ArrayUtils remove and removeElement methods.
- * 
- * @version $Id: ArrayUtilsRemoveMultipleTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class ArrayUtilsRemoveMultipleTest {
 

@@ -17,7 +17,6 @@
 package org.apache.commons.lang3.reflect.testbed;
 
 /**
- * @version $Id: PrivatelyShadowedChild.java 1562017 2014-01-28 09:31:53Z djones $
  */
 @SuppressWarnings({ "unused" }) // deliberate re-use of variable names
 public class PrivatelyShadowedChild extends Parent {

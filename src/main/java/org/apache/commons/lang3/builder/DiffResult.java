@@ -34,7 +34,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  * 
  * @since 3.3
- * @version $Id: DiffResult.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class DiffResult implements Iterable<Diff<?>> {
@@ -193,7 +192,8 @@ public class DiffResult implements Iterable<Diff<?>> {
             rhsBuilder.append(diff.getFieldName(), diff.getRight());
         }
 
-        return lhsBuilder.build() + " " + DIFFERS_STRING + " " + rhsBuilder.build();
+        return String.format("%s %s %s", lhsBuilder.build(), DIFFERS_STRING,
+                rhsBuilder.build());
     }
 
     /**

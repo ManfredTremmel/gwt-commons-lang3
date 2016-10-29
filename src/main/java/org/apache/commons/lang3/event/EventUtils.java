@@ -33,7 +33,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Provides some useful event-based utility methods.
  *
  * @since 3.0
- * @version $Id: EventUtils.java 1606082 2014-06-27 13:03:36Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class EventUtils {

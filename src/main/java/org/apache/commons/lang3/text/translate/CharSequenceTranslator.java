@@ -29,7 +29,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * is completely contextual, the API does not present two separate signatures.
  * 
  * @since 3.0
- * @version $Id: CharSequenceTranslator.java 1666535 2015-03-13 18:18:59Z britter $
  */
 public abstract class CharSequenceTranslator {
 
@@ -47,7 +46,7 @@ public abstract class CharSequenceTranslator {
      * @return int count of codepoints consumed
      * @throws IOException if and only if the Writer produces an IOException
      */
-	@GwtIncompatible("incompatible method")
+    @GwtIncompatible("incompatible method")
     public abstract int translate(CharSequence input, int index, Writer out) throws IOException;
 
     /**

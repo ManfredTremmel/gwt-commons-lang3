@@ -31,7 +31,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>FormatCache is a cache and factory for {@link Format}s.</p>
  * 
  * @since 3.0
- * @version $Id: FormatCache 892161 2009-12-18 07:21:10Z  $
  */
 // TODO: Before making public move from getDateTimeInstance(Integer,...) to int; or some other approach.
 @GwtIncompatible("incompatible class")

@@ -434,7 +434,5 @@
  * There are some other methods for querying the internal state of a timed semaphore.
  * Also some statistical data is available, e.g. the average number of <code>acquire()</code> calls per time frame.
  * When a timed semaphore is no more needed, its <code>shutdown()</code> method has to be called.</p>
- *
- * @version $Id: package-info.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 package org.apache.commons.lang3.concurrent;

@@ -33,8 +33,6 @@ import org.junit.Test;
 
 /**
  * Test class for {@link MultiBackgroundInitializer}.
- *
- * @version $Id: MultiBackgroundInitializerTest.java 1669310 2015-03-26 10:21:24Z britter $
  */
 public class MultiBackgroundInitializerTest {
     /** Constant for the names of the child initializers. */

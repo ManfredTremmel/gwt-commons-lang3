@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.Builder;
 
 import com.google.gwt.core.shared.GwtIncompatible;
@@ -73,7 +74,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * the interface. 
  *
  * @since 2.2
- * @version $Id: StrBuilder.java 1666669 2015-03-14 12:25:06Z britter $
  */
 public class StrBuilder implements CharSequence, Appendable, Serializable, Builder<String> {
 
@@ -1496,7 +1496,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
             ensureCapacity(size + width);
             String str = (obj == null ? getNullText() : obj.toString());
             if (str == null) {
-                str = "";
+                str = StringUtils.EMPTY;
             }
             final int strLen = str.length();
             if (strLen >= width) {
@@ -1543,7 +1543,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
             ensureCapacity(size + width);
             String str = (obj == null ? getNullText() : obj.toString());
             if (str == null) {
-                str = "";
+                str = StringUtils.EMPTY;
             }
             final int strLen = str.length();
             if (strLen >= width) {
@@ -2287,7 +2287,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     public String leftString(final int length) {
         if (length <= 0) {
-            return "";
+            return StringUtils.EMPTY;
         } else if (length >= size) {
             return new String(buffer, 0, size);
         } else {
@@ -2309,7 +2309,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     public String rightString(final int length) {
         if (length <= 0) {
-            return "";
+            return StringUtils.EMPTY;
         } else if (length >= size) {
             return new String(buffer, 0, size);
         } else {
@@ -2338,7 +2338,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
             index = 0;
         }
         if (length <= 0 || index >= size) {
-            return "";
+            return StringUtils.EMPTY;
         }
         if (size <= index + length) {
             return new String(buffer, index, size - index);
@@ -2816,6 +2816,9 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (this == other) {
             return true;
         }
+        if (other == null) {
+            return false;
+        }
         if (this.size != other.size) {
             return false;
         }
@@ -2838,10 +2841,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     @Override
     public boolean equals(final Object obj) {
-        if (obj instanceof StrBuilder) {
-            return equals((StrBuilder) obj);
-        }
-        return false;
+        return obj instanceof StrBuilder && equals((StrBuilder) obj);
     }
 
     /**
@@ -2979,7 +2979,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     /**
      * Inner class to allow StrBuilder to operate as a reader.
      */
-    @GwtIncompatible("incompatible class")
+    @GwtIncompatible("incompatible method")
     class StrBuilderReader extends Reader {
         /** The current stream position. */
         private int pos;
@@ -3071,7 +3071,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     /**
      * Inner class to allow StrBuilder to operate as a writer.
      */
-    @GwtIncompatible("incompatible class")
+    @GwtIncompatible("incompatible method")
     class StrBuilderWriter extends Writer {
 
         /**

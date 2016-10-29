@@ -18,7 +18,6 @@ package org.apache.commons.lang3.reflect.testbed;
 
 /**
  * Class declaring a parameter variable.
- * @version $Id: GenericParent.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class GenericParent<T> implements GenericConsumer<T> {
 

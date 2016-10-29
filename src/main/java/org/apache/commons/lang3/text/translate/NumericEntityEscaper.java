@@ -25,7 +25,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Translates codepoints to their XML numeric entity escaped value.
  *
  * @since 3.0
- * @version $Id: NumericEntityEscaper.java 1436768 2013-01-22 07:07:42Z ggregory $
  */
 public class NumericEntityEscaper extends CodePointTranslator {
 

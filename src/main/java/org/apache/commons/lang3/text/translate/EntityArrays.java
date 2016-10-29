@@ -22,7 +22,6 @@ package org.apache.commons.lang3.text.translate;
  * All arrays are of length [*][2].
  *
  * @since 3.0
- * @version $Id: EntityArrays.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class EntityArrays {
 
@@ -42,12 +41,12 @@ public class EntityArrays {
         {"\u00A6", "&brvbar;"}, // broken bar = broken vertical bar
         {"\u00A7", "&sect;"}, // section sign
         {"\u00A8", "&uml;"}, // diaeresis = spacing diaeresis
-        {"\u00A9", "&copy;"}, // © - copyright sign
+        {"\u00A9", "&copy;"}, // Â© - copyright sign
         {"\u00AA", "&ordf;"}, // feminine ordinal indicator
         {"\u00AB", "&laquo;"}, // left-pointing double angle quotation mark = left pointing guillemet
         {"\u00AC", "&not;"}, // not sign
         {"\u00AD", "&shy;"}, // soft hyphen = discretionary hyphen
-        {"\u00AE", "&reg;"}, // ® - registered trademark sign
+        {"\u00AE", "&reg;"}, // Â® - registered trademark sign
         {"\u00AF", "&macr;"}, // macron = spacing macron = overline = APL overbar
         {"\u00B0", "&deg;"}, // degree sign
         {"\u00B1", "&plusmn;"}, // plus-minus sign = plus-or-minus sign
@@ -65,70 +64,70 @@ public class EntityArrays {
         {"\u00BD", "&frac12;"}, // vulgar fraction one half = fraction one half
         {"\u00BE", "&frac34;"}, // vulgar fraction three quarters = fraction three quarters
         {"\u00BF", "&iquest;"}, // inverted question mark = turned question mark
-        {"\u00C0", "&Agrave;"}, // À - uppercase A, grave accent
-        {"\u00C1", "&Aacute;"}, // Á - uppercase A, acute accent
-        {"\u00C2", "&Acirc;"}, // Â - uppercase A, circumflex accent
-        {"\u00C3", "&Atilde;"}, // Ã - uppercase A, tilde
-        {"\u00C4", "&Auml;"}, // Ä - uppercase A, umlaut
-        {"\u00C5", "&Aring;"}, // Å - uppercase A, ring
-        {"\u00C6", "&AElig;"}, // Æ - uppercase AE
-        {"\u00C7", "&Ccedil;"}, // Ç - uppercase C, cedilla
-        {"\u00C8", "&Egrave;"}, // È - uppercase E, grave accent
-        {"\u00C9", "&Eacute;"}, // É - uppercase E, acute accent
-        {"\u00CA", "&Ecirc;"}, // Ê - uppercase E, circumflex accent
-        {"\u00CB", "&Euml;"}, // Ë - uppercase E, umlaut
-        {"\u00CC", "&Igrave;"}, // Ì - uppercase I, grave accent
-        {"\u00CD", "&Iacute;"}, // Í - uppercase I, acute accent
-        {"\u00CE", "&Icirc;"}, // Î - uppercase I, circumflex accent
-        {"\u00CF", "&Iuml;"}, // Ï - uppercase I, umlaut
-        {"\u00D0", "&ETH;"}, // Ğ - uppercase Eth, Icelandic
-        {"\u00D1", "&Ntilde;"}, // Ñ - uppercase N, tilde
-        {"\u00D2", "&Ograve;"}, // Ò - uppercase O, grave accent
-        {"\u00D3", "&Oacute;"}, // Ó - uppercase O, acute accent
-        {"\u00D4", "&Ocirc;"}, // Ô - uppercase O, circumflex accent
-        {"\u00D5", "&Otilde;"}, // Õ - uppercase O, tilde
-        {"\u00D6", "&Ouml;"}, // Ö - uppercase O, umlaut
+        {"\u00C0", "&Agrave;"}, // Ã€ - uppercase A, grave accent
+        {"\u00C1", "&Aacute;"}, // Ã - uppercase A, acute accent
+        {"\u00C2", "&Acirc;"}, // Ã‚ - uppercase A, circumflex accent
+        {"\u00C3", "&Atilde;"}, // Ãƒ - uppercase A, tilde
+        {"\u00C4", "&Auml;"}, // Ã„ - uppercase A, umlaut
+        {"\u00C5", "&Aring;"}, // Ã… - uppercase A, ring
+        {"\u00C6", "&AElig;"}, // Ã† - uppercase AE
+        {"\u00C7", "&Ccedil;"}, // Ã‡ - uppercase C, cedilla
+        {"\u00C8", "&Egrave;"}, // Ãˆ - uppercase E, grave accent
+        {"\u00C9", "&Eacute;"}, // Ã‰ - uppercase E, acute accent
+        {"\u00CA", "&Ecirc;"}, // ÃŠ - uppercase E, circumflex accent
+        {"\u00CB", "&Euml;"}, // Ã‹ - uppercase E, umlaut
+        {"\u00CC", "&Igrave;"}, // ÃŒ - uppercase I, grave accent
+        {"\u00CD", "&Iacute;"}, // Ã - uppercase I, acute accent
+        {"\u00CE", "&Icirc;"}, // Ã - uppercase I, circumflex accent
+        {"\u00CF", "&Iuml;"}, // Ã - uppercase I, umlaut
+        {"\u00D0", "&ETH;"}, // Ã - uppercase Eth, Icelandic
+        {"\u00D1", "&Ntilde;"}, // Ã‘ - uppercase N, tilde
+        {"\u00D2", "&Ograve;"}, // Ã’ - uppercase O, grave accent
+        {"\u00D3", "&Oacute;"}, // Ã“ - uppercase O, acute accent
+        {"\u00D4", "&Ocirc;"}, // Ã” - uppercase O, circumflex accent
+        {"\u00D5", "&Otilde;"}, // Ã• - uppercase O, tilde
+        {"\u00D6", "&Ouml;"}, // Ã– - uppercase O, umlaut
         {"\u00D7", "&times;"}, // multiplication sign
-        {"\u00D8", "&Oslash;"}, // Ø - uppercase O, slash
-        {"\u00D9", "&Ugrave;"}, // Ù - uppercase U, grave accent
-        {"\u00DA", "&Uacute;"}, // Ú - uppercase U, acute accent
-        {"\u00DB", "&Ucirc;"}, // Û - uppercase U, circumflex accent
-        {"\u00DC", "&Uuml;"}, // Ü - uppercase U, umlaut
-        {"\u00DD", "&Yacute;"}, // İ - uppercase Y, acute accent
-        {"\u00DE", "&THORN;"}, // Ş - uppercase THORN, Icelandic
-        {"\u00DF", "&szlig;"}, // ß - lowercase sharps, German
-        {"\u00E0", "&agrave;"}, // à - lowercase a, grave accent
-        {"\u00E1", "&aacute;"}, // á - lowercase a, acute accent
-        {"\u00E2", "&acirc;"}, // â - lowercase a, circumflex accent
-        {"\u00E3", "&atilde;"}, // ã - lowercase a, tilde
-        {"\u00E4", "&auml;"}, // ä - lowercase a, umlaut
-        {"\u00E5", "&aring;"}, // å - lowercase a, ring
-        {"\u00E6", "&aelig;"}, // æ - lowercase ae
-        {"\u00E7", "&ccedil;"}, // ç - lowercase c, cedilla
-        {"\u00E8", "&egrave;"}, // è - lowercase e, grave accent
-        {"\u00E9", "&eacute;"}, // é - lowercase e, acute accent
-        {"\u00EA", "&ecirc;"}, // ê - lowercase e, circumflex accent
-        {"\u00EB", "&euml;"}, // ë - lowercase e, umlaut
-        {"\u00EC", "&igrave;"}, // ì - lowercase i, grave accent
-        {"\u00ED", "&iacute;"}, // í - lowercase i, acute accent
-        {"\u00EE", "&icirc;"}, // î - lowercase i, circumflex accent
-        {"\u00EF", "&iuml;"}, // ï - lowercase i, umlaut
-        {"\u00F0", "&eth;"}, // ğ - lowercase eth, Icelandic
-        {"\u00F1", "&ntilde;"}, // ñ - lowercase n, tilde
-        {"\u00F2", "&ograve;"}, // ò - lowercase o, grave accent
-        {"\u00F3", "&oacute;"}, // ó - lowercase o, acute accent
-        {"\u00F4", "&ocirc;"}, // ô - lowercase o, circumflex accent
-        {"\u00F5", "&otilde;"}, // õ - lowercase o, tilde
-        {"\u00F6", "&ouml;"}, // ö - lowercase o, umlaut
+        {"\u00D8", "&Oslash;"}, // Ã˜ - uppercase O, slash
+        {"\u00D9", "&Ugrave;"}, // Ã™ - uppercase U, grave accent
+        {"\u00DA", "&Uacute;"}, // Ãš - uppercase U, acute accent
+        {"\u00DB", "&Ucirc;"}, // Ã› - uppercase U, circumflex accent
+        {"\u00DC", "&Uuml;"}, // Ãœ - uppercase U, umlaut
+        {"\u00DD", "&Yacute;"}, // Ã - uppercase Y, acute accent
+        {"\u00DE", "&THORN;"}, // Ã - uppercase THORN, Icelandic
+        {"\u00DF", "&szlig;"}, // ÃŸ - lowercase sharps, German
+        {"\u00E0", "&agrave;"}, // Ã  - lowercase a, grave accent
+        {"\u00E1", "&aacute;"}, // Ã¡ - lowercase a, acute accent
+        {"\u00E2", "&acirc;"}, // Ã¢ - lowercase a, circumflex accent
+        {"\u00E3", "&atilde;"}, // Ã£ - lowercase a, tilde
+        {"\u00E4", "&auml;"}, // Ã¤ - lowercase a, umlaut
+        {"\u00E5", "&aring;"}, // Ã¥ - lowercase a, ring
+        {"\u00E6", "&aelig;"}, // Ã¦ - lowercase ae
+        {"\u00E7", "&ccedil;"}, // Ã§ - lowercase c, cedilla
+        {"\u00E8", "&egrave;"}, // Ã¨ - lowercase e, grave accent
+        {"\u00E9", "&eacute;"}, // Ã© - lowercase e, acute accent
+        {"\u00EA", "&ecirc;"}, // Ãª - lowercase e, circumflex accent
+        {"\u00EB", "&euml;"}, // Ã« - lowercase e, umlaut
+        {"\u00EC", "&igrave;"}, // Ã¬ - lowercase i, grave accent
+        {"\u00ED", "&iacute;"}, // Ã­ - lowercase i, acute accent
+        {"\u00EE", "&icirc;"}, // Ã® - lowercase i, circumflex accent
+        {"\u00EF", "&iuml;"}, // Ã¯ - lowercase i, umlaut
+        {"\u00F0", "&eth;"}, // Ã° - lowercase eth, Icelandic
+        {"\u00F1", "&ntilde;"}, // Ã± - lowercase n, tilde
+        {"\u00F2", "&ograve;"}, // Ã² - lowercase o, grave accent
+        {"\u00F3", "&oacute;"}, // Ã³ - lowercase o, acute accent
+        {"\u00F4", "&ocirc;"}, // Ã´ - lowercase o, circumflex accent
+        {"\u00F5", "&otilde;"}, // Ãµ - lowercase o, tilde
+        {"\u00F6", "&ouml;"}, // Ã¶ - lowercase o, umlaut
         {"\u00F7", "&divide;"}, // division sign
-        {"\u00F8", "&oslash;"}, // ø - lowercase o, slash
-        {"\u00F9", "&ugrave;"}, // ù - lowercase u, grave accent
-        {"\u00FA", "&uacute;"}, // ú - lowercase u, acute accent
-        {"\u00FB", "&ucirc;"}, // û - lowercase u, circumflex accent
-        {"\u00FC", "&uuml;"}, // ü - lowercase u, umlaut
-        {"\u00FD", "&yacute;"}, // ı - lowercase y, acute accent
-        {"\u00FE", "&thorn;"}, // ş - lowercase thorn, Icelandic
-        {"\u00FF", "&yuml;"}, // ÿ - lowercase y, umlaut
+        {"\u00F8", "&oslash;"}, // Ã¸ - lowercase o, slash
+        {"\u00F9", "&ugrave;"}, // Ã¹ - lowercase u, grave accent
+        {"\u00FA", "&uacute;"}, // Ãº - lowercase u, acute accent
+        {"\u00FB", "&ucirc;"}, // Ã» - lowercase u, circumflex accent
+        {"\u00FC", "&uuml;"}, // Ã¼ - lowercase u, umlaut
+        {"\u00FD", "&yacute;"}, // Ã½ - lowercase y, acute accent
+        {"\u00FE", "&thorn;"}, // Ã¾ - lowercase thorn, Icelandic
+        {"\u00FF", "&yuml;"}, // Ã¿ - lowercase y, umlaut
     };
 
     /**
@@ -277,8 +276,8 @@ public class EntityArrays {
         {"\u2283", "&sup;"}, // superset of, U+2283 ISOtech -->
         // <!-- note that nsup, 'not a superset of, U+2283' is not covered by the
         // Symbol font encoding and is not included. Should it be, for symmetry?
-        // It is in ISOamsn --> <!ENTITY nsub", "8836"},
-        // not a subset of, U+2284 ISOamsn -->
+        // It is in ISOamsn -->,
+        {"\u2284", "&nsub;"}, // not a subset of, U+2284 ISOamsn -->
         {"\u2286", "&sube;"}, // subset of or equal to, U+2286 ISOtech -->
         {"\u2287", "&supe;"}, // superset of or equal to,U+2287 ISOtech -->
         {"\u2295", "&oplus;"}, // circled plus = direct sum,U+2295 ISOamsb -->
@@ -435,5 +434,4 @@ public class EntityArrays {
         }
         return newarray;
     }
-
 }

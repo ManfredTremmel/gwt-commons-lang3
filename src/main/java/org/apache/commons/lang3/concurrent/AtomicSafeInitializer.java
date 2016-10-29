@@ -52,7 +52,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 3.0
- * @version $Id: AtomicSafeInitializer.java 1662379 2015-02-26 08:13:58Z britter $
  * @param <T> the type of the object managed by this initializer class
  */
 @GwtIncompatible("incompatible class")

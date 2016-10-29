@@ -94,7 +94,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 3.0
- * @version $Id: MultiBackgroundInitializer.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 @GwtIncompatible("incompatible class")
 public class MultiBackgroundInitializer

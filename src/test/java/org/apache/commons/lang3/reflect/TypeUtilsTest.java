@@ -25,6 +25,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,7 +43,6 @@ import org.junit.Test;
 
 /**
  * Test TypeUtils
- * @version $Id: TypeUtilsTest.java 1606052 2014-06-27 12:24:06Z ggregory $
  */
 @SuppressWarnings({ "unchecked", "unused" , "rawtypes" })
 //raw types, where used, are used purposely
@@ -96,6 +96,8 @@ public class TypeUtilsTest<B> {
     public static Comparable<Integer> intComparable;
 
     public static Comparable<Long> longComparable;
+
+    public static Comparable<?> wildcardComparable;
 
     public static URI uri;
 
@@ -723,6 +725,15 @@ public class TypeUtilsTest<B> {
     }
 
     @Test
+    public void testLang1114() throws Exception {
+        final Type nonWildcardType = getClass().getDeclaredField("wildcardComparable").getGenericType();
+        final Type wildcardType = ((ParameterizedType)nonWildcardType).getActualTypeArguments()[0];
+
+        Assert.assertFalse(TypeUtils.equals(wildcardType, nonWildcardType));
+        Assert.assertFalse(TypeUtils.equals(nonWildcardType, wildcardType));
+    }
+
+    @Test
     public void testGenericArrayType() throws Exception {
         final Type expected = getClass().getField("intWildcardComparable").getGenericType();
         final GenericArrayType actual =
@@ -743,6 +754,22 @@ public class TypeUtilsTest<B> {
         Assert.assertTrue(TypeUtils.equals(t, TypeUtils.wrap(t).getType()));
 
         Assert.assertEquals(String.class, TypeUtils.wrap(String.class).getType());
+    }
+
+    public static class ClassWithSuperClassWithGenericType extends ArrayList<Object> {
+        private static final long serialVersionUID = 1L;
+
+        public static <U> Iterable<U> methodWithGenericReturnType() {
+            return null;
+        }
+    }
+
+    @Test
+    public void testLANG1190() throws Exception {
+        Type fromType = ClassWithSuperClassWithGenericType.class.getDeclaredMethod("methodWithGenericReturnType").getGenericReturnType();
+        Type failingToType = TypeUtils.wildcardType().withLowerBounds(ClassWithSuperClassWithGenericType.class).build();
+
+        Assert.assertTrue(TypeUtils.isAssignable(fromType, failingToType));
     }
 
     public Iterable<? extends Map<Integer, ? extends Collection<?>>> iterable;

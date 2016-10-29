@@ -42,12 +42,15 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </pre>
  *
  * <p>#ThreadSafe#</p>
- * @version $Id: Validate.java 1606051 2014-06-27 12:22:17Z ggregory $
  * @see java.lang.String#format(String, Object...)
  * @since 2.0
  */
 public class Validate {
 
+    private static final String DEFAULT_NOT_NAN_EX_MESSAGE =
+        "The validated value is not a number";
+    private static final String DEFAULT_FINITE_EX_MESSAGE =
+        "The value is invalid: %f";
     private static final String DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE =
         "The value %s is not in the specified exclusive range of %s to %s";
     private static final String DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE =
@@ -882,6 +885,89 @@ public class Validate {
         }
     }
 
+    // notNaN
+    //---------------------------------------------------------------------------------
+
+    /**
+     * <p>Validates that the specified argument is not {@code NaN}; otherwise
+     * throwing an exception.</p>
+     *
+     * <pre>Validate.notNaN(myDouble);</pre>
+     *
+     * <p>The message of the exception is &quot;The validated value is not a
+     * number&quot;.</p>
+     *
+     * @param value  the value to validate
+     * @throws IllegalArgumentException if the value is not a number
+     * @see #notNaN(double, java.lang.String, java.lang.Object...)
+     *
+     * @since 3.5
+     */
+    public static void notNaN(final double value) {
+        notNaN(value, DEFAULT_NOT_NAN_EX_MESSAGE);
+    }
+
+    /**
+     * <p>Validates that the specified argument is not {@code NaN}; otherwise
+     * throwing an exception with the specified message.</p>
+     *
+     * <pre>Validate.notNaN(myDouble, "The value must be a number");</pre>
+     *
+     * @param value  the value to validate
+     * @param message  the {@link String#format(String, Object...)} exception message if invalid, not null
+     * @param values  the optional values for the formatted exception message
+     * @throws IllegalArgumentException if the value is not a number
+     * @see #notNaN(double)
+     *
+     * @since 3.5
+     */
+    public static void notNaN(final double value, final String message, final Object... values) {
+        if (Double.isNaN(value)) {
+            throw new IllegalArgumentException(StringUtils.simpleFormat(message, values));
+        }
+    }
+
+    // finite
+    //---------------------------------------------------------------------------------
+
+    /**
+     * <p>Validates that the specified argument is not infinite or {@code NaN};
+     * otherwise throwing an exception.</p>
+     *
+     * <pre>Validate.finite(myDouble);</pre>
+     *
+     * <p>The message of the exception is &quot;The value is invalid: %f&quot;.</p>
+     *
+     * @param value  the value to validate
+     * @throws IllegalArgumentException if the value is infinite or {@code NaN}
+     * @see #finite(double, java.lang.String, java.lang.Object...)
+     *
+     * @since 3.5
+     */
+    public static void finite(final double value) {
+        finite(value, DEFAULT_FINITE_EX_MESSAGE, value);
+    }
+
+    /**
+     * <p>Validates that the specified argument is not infinite or {@code NaN};
+     * otherwise throwing an exception with the specified message.</p>
+     *
+     * <pre>Validate.finite(myDouble, "The argument must contain a numeric value");</pre>
+     *
+     * @param value the value to validate
+     * @param message  the {@link String#format(String, Object...)} exception message if invalid, not null
+     * @param values  the optional values for the formatted exception message
+     * @throws IllegalArgumentException if the value is infinite or {@code NaN}
+     * @see #finite(double)
+     *
+     * @since 3.5
+     */
+    public static void finite(final double value, final String message, final Object... values) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            throw new IllegalArgumentException(StringUtils.simpleFormat(message, values));
+        }
+    }
+
     // inclusiveBetween
     //---------------------------------------------------------------------------------
 
@@ -1163,7 +1249,7 @@ public class Validate {
 
     /**
      * Validates that the argument is an instance of the specified class, if not throws an exception.
-     *  
+     *
      * <p>This method is useful when validating according to an arbitrary class</p>
      *
      * <pre>Validate.isInstanceOf(OkClass.class, object);</pre>
@@ -1191,7 +1277,7 @@ public class Validate {
      * throwing an exception with the specified message. This method is useful when
      * validating according to an arbitrary class</p>
      *
-     * <pre>Validate.isInstanceOf(OkClass.classs, object, "Wrong class, object is of class %s",
+     * <pre>Validate.isInstanceOf(OkClass.class, object, "Wrong class, object is of class %s",
      *   object.getClass().getName());</pre>
      *
      * @param type  the class the object must be validated against, not null
@@ -1216,7 +1302,7 @@ public class Validate {
 
     /**
      * Validates that the argument can be converted to the specified class, if not, throws an exception.
-     * 
+     *
      * <p>This method is useful when validating that there will be no casting errors.</p>
      *
      * <pre>Validate.isAssignableFrom(SuperClass.class, object.getClass());</pre>
@@ -1241,7 +1327,7 @@ public class Validate {
 
     /**
      * Validates that the argument can be converted to the specified class, if not throws an exception.
-     *  
+     *
      * <p>This method is useful when validating if there will be no casting errors.</p>
      *
      * <pre>Validate.isAssignableFrom(SuperClass.class, object.getClass());</pre>

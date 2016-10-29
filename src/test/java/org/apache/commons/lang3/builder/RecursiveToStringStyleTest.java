@@ -27,8 +27,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.builder.RecursiveToStringStyleTest}.
- *
- * @version $Id: RecursiveToStringStyleTest.java 1569053 2014-02-17 16:41:27Z britter $
  */
 public class RecursiveToStringStyleTest {
 

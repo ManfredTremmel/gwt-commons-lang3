@@ -22,6 +22,5 @@
  * and examination routines.</p>
  *
  * @since 1.0
- * @version $Id: package-info.java 1558546 2014-01-15 19:38:15Z britter $
  */
 package org.apache.commons.lang3.exception;

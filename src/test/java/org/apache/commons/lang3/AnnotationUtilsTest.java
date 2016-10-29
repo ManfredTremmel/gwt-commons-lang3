@@ -41,7 +41,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * @version $Id: AnnotationUtilsTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class AnnotationUtilsTest {
     @TestAnnotation(

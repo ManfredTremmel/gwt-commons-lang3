@@ -17,13 +17,14 @@
 package org.apache.commons.lang3.reflect;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -56,7 +57,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * If this call fails then the method may fail.</p>
  *
  * @since 2.5
- * @version $Id: MethodUtils.java 1630277 2014-10-09 04:37:38Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class MethodUtils {
@@ -96,6 +96,29 @@ public class MethodUtils {
             IllegalAccessException, InvocationTargetException {
         return invokeMethod(object, methodName, ArrayUtils.EMPTY_OBJECT_ARRAY, null);
     }
+    
+    /**
+     * <p>Invokes a named method without parameters.</p>
+     *
+     * <p>This is a convenient wrapper for
+     * {@link #invokeMethod(Object object,boolean forceAccess,String methodName, Object[] args, Class[] parameterTypes)}.
+     * </p>
+     *
+     * @param object invoke method on this object
+     * @param forceAccess force access to invoke method even if it's not accessible
+     * @param methodName get method with this name
+     * @return The value returned by the invoked method
+     *
+     * @throws NoSuchMethodException if there is no such accessible method
+     * @throws InvocationTargetException wraps an exception thrown by the method invoked
+     * @throws IllegalAccessException if the requested method is not accessible via reflection
+     *
+     * @since 3.5
+     */
+    public static Object invokeMethod(final Object object, final boolean forceAccess, final String methodName)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        return invokeMethod(object, forceAccess, methodName, ArrayUtils.EMPTY_OBJECT_ARRAY, null);
+    }
 
     /**
      * <p>Invokes a named method whose parameter type matches the object type.</p>
@@ -126,6 +149,103 @@ public class MethodUtils {
         final Class<?>[] parameterTypes = ClassUtils.toClass(args);
         return invokeMethod(object, methodName, args, parameterTypes);
     }
+    
+    /**
+     * <p>Invokes a named method whose parameter type matches the object type.</p>
+     *
+     * <p>This method supports calls to methods taking primitive parameters 
+     * via passing in wrapping classes. So, for example, a {@code Boolean} object
+     * would match a {@code boolean} primitive.</p>
+     *
+     * <p>This is a convenient wrapper for
+     * {@link #invokeMethod(Object object,boolean forceAccess,String methodName, Object[] args, Class[] parameterTypes)}.
+     * </p>
+     *
+     * @param object invoke method on this object
+     * @param forceAccess force access to invoke method even if it's not accessible
+     * @param methodName get method with this name
+     * @param args use these arguments - treat null as empty array
+     * @return The value returned by the invoked method
+     *
+     * @throws NoSuchMethodException if there is no such accessible method
+     * @throws InvocationTargetException wraps an exception thrown by the method invoked
+     * @throws IllegalAccessException if the requested method is not accessible via reflection
+     *
+     * @since 3.5
+     */
+    public static Object invokeMethod(final Object object, final boolean forceAccess, final String methodName,
+            Object... args) throws NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException {
+        args = ArrayUtils.nullToEmpty(args);
+        final Class<?>[] parameterTypes = ClassUtils.toClass(args);
+        return invokeMethod(object, forceAccess, methodName, args, parameterTypes);
+    }
+
+    /**
+     * <p>Invokes a named method whose parameter type matches the object type.</p>
+     *
+     * <p>This method supports calls to methods taking primitive parameters 
+     * via passing in wrapping classes. So, for example, a {@code Boolean} object
+     * would match a {@code boolean} primitive.</p>
+     *
+     * @param object invoke method on this object
+     * @param forceAccess force access to invoke method even if it's not accessible
+     * @param methodName get method with this name
+     * @param args use these arguments - treat null as empty array
+     * @param parameterTypes match these parameters - treat null as empty array
+     * @return The value returned by the invoked method
+     *
+     * @throws NoSuchMethodException if there is no such accessible method
+     * @throws InvocationTargetException wraps an exception thrown by the method invoked
+     * @throws IllegalAccessException if the requested method is not accessible via reflection
+     * @since 3.5
+     */
+    public static Object invokeMethod(final Object object, final boolean forceAccess, final String methodName,
+            Object[] args, Class<?>[] parameterTypes)
+            throws NoSuchMethodException, IllegalAccessException,
+            InvocationTargetException {
+        parameterTypes = ArrayUtils.nullToEmpty(parameterTypes);
+        args = ArrayUtils.nullToEmpty(args);
+
+        final String messagePrefix;
+        Method method = null;
+        boolean isOriginallyAccessible = false;
+        Object result = null;
+
+        try {
+            if (forceAccess) {
+                messagePrefix = "No such method: ";
+                method = getMatchingMethod(object.getClass(),
+                        methodName, parameterTypes);
+                if (method != null) {
+                    isOriginallyAccessible = method.isAccessible();
+                    if (!isOriginallyAccessible) {
+                        method.setAccessible(true);
+                    }
+                }
+            } else {
+                messagePrefix = "No such accessible method: ";
+                method = getMatchingAccessibleMethod(object.getClass(),
+                        methodName, parameterTypes);
+            }
+
+            if (method == null) {
+                throw new NoSuchMethodException(messagePrefix
+                        + methodName + "() on object: "
+                        + object.getClass().getName());
+            }
+            args = toVarArgs(method, args);
+
+            result = method.invoke(object, args);
+        }
+        finally {
+            if (method != null && forceAccess && method.isAccessible() != isOriginallyAccessible) {
+                method.setAccessible(isOriginallyAccessible);
+            }
+        }
+
+        return result;
+    }
 
     /**
      * <p>Invokes a named method whose parameter type matches the object type.</p>
@@ -146,20 +266,11 @@ public class MethodUtils {
      * @throws InvocationTargetException wraps an exception thrown by the method invoked
      * @throws IllegalAccessException if the requested method is not accessible via reflection
      */
-    public static Object invokeMethod(final Object object, final String methodName,
+    public static Object invokeMethod(final Object object, final String methodName, 
             Object[] args, Class<?>[] parameterTypes)
             throws NoSuchMethodException, IllegalAccessException,
             InvocationTargetException {
-        parameterTypes = ArrayUtils.nullToEmpty(parameterTypes);
-        args = ArrayUtils.nullToEmpty(args);
-        final Method method = getMatchingAccessibleMethod(object.getClass(),
-                methodName, parameterTypes);
-        if (method == null) {
-            throw new NoSuchMethodException("No such accessible method: "
-                    + methodName + "() on object: "
-                    + object.getClass().getName());
-        }
-        return method.invoke(object, args);
+        return invokeMethod(object, false, methodName, args, parameterTypes);
     }
 
     /**
@@ -178,8 +289,8 @@ public class MethodUtils {
      *  method invoked
      * @throws IllegalAccessException if the requested method is not accessible
      *  via reflection
-     *  
-     *  @since 3.4
+     *
+     * @since 3.4
      */
     public static Object invokeExactMethod(final Object object, final String methodName) throws NoSuchMethodException,
             IllegalAccessException, InvocationTargetException {
@@ -345,7 +456,59 @@ public class MethodUtils {
             throw new NoSuchMethodException("No such accessible method: "
                     + methodName + "() on class: " + cls.getName());
         }
+        args = toVarArgs(method, args);
         return method.invoke(null, args);
+    }
+
+    private static Object[] toVarArgs(Method method, Object[] args) {
+        if (method.isVarArgs()) {
+            Class<?>[] methodParameterTypes = method.getParameterTypes();
+            args = getVarArgs(args, methodParameterTypes);
+        }
+        return args;
+    }
+
+    /**
+     * <p>Given an arguments array passed to a varargs method, return an array of arguments in the canonical form,
+     * i.e. an array with the declared number of parameters, and whose last parameter is an array of the varargs type.
+     * </p>
+     *
+     * @param args the array of arguments passed to the varags method
+     * @param methodParameterTypes the declared array of method parameter types
+     * @return an array of the variadic arguments passed to the method
+     * @since 3.5
+     */
+    static Object[] getVarArgs(Object[] args, Class<?>[] methodParameterTypes) {
+        if (args.length == methodParameterTypes.length
+                && args[args.length - 1].getClass().equals(methodParameterTypes[methodParameterTypes.length - 1])) {
+            // The args array is already in the canonical form for the method.
+            return args;
+        }
+
+        // Construct a new array matching the method's declared parameter types.
+        Object[] newArgs = new Object[methodParameterTypes.length];
+
+        // Copy the normal (non-varargs) parameters
+        System.arraycopy(args, 0, newArgs, 0, methodParameterTypes.length - 1);
+
+        // Construct a new array for the variadic parameters
+        Class<?> varArgComponentType = methodParameterTypes[methodParameterTypes.length - 1].getComponentType();
+        int varArgLength = args.length - methodParameterTypes.length + 1;
+
+        Object varArgsArray = Array.newInstance(ClassUtils.primitiveToWrapper(varArgComponentType), varArgLength);
+        // Copy the variadic arguments into the varargs array.
+        System.arraycopy(args, methodParameterTypes.length - 1, varArgsArray, 0, varArgLength);
+
+        if(varArgComponentType.isPrimitive()) {
+            // unbox from wrapper type to primitive type
+            varArgsArray = ArrayUtils.toPrimitive(varArgsArray);
+        }
+
+        // Store the varargs array in the last position of the array to return
+        newArgs[methodParameterTypes.length - 1] = varArgsArray;
+
+        // Return the canonical varargs array.
+        return newArgs;
     }
 
     /**
@@ -537,21 +700,91 @@ public class MethodUtils {
         final Method[] methods = cls.getMethods();
         for (final Method method : methods) {
             // compare name and parameters
-            if (method.getName().equals(methodName) && ClassUtils.isAssignable(parameterTypes, method.getParameterTypes(), true)) {
+            if (method.getName().equals(methodName) &&
+                    MemberUtils.isMatchingMethod(method, parameterTypes)) {
                 // get accessible version of method
                 final Method accessibleMethod = getAccessibleMethod(method);
-                if (accessibleMethod != null && (bestMatch == null || MemberUtils.compareParameterTypes(
-                            accessibleMethod.getParameterTypes(),
-                            bestMatch.getParameterTypes(),
+                if (accessibleMethod != null && (bestMatch == null || MemberUtils.compareMethodFit(
+                            accessibleMethod,
+                            bestMatch,
                             parameterTypes) < 0)) {
-                        bestMatch = accessibleMethod;
-                 }
+                    bestMatch = accessibleMethod;
+                }
             }
         }
         if (bestMatch != null) {
             MemberUtils.setAccessibleWorkaround(bestMatch);
         }
         return bestMatch;
+    }
+    
+    /**
+     * <p>Retrieves a method whether or not it's accessible. If no such method
+     * can be found, return {@code null}.</p>
+     * @param cls The class that will be subjected to the method search
+     * @param methodName The method that we wish to call
+     * @param parameterTypes Argument class types
+     * @return The method
+     * 
+     * @since 3.5
+     */
+    public static Method getMatchingMethod(final Class<?> cls, final String methodName,
+            final Class<?>... parameterTypes) {
+        Validate.notNull(cls, "Null class not allowed.");
+        Validate.notEmpty(methodName, "Null or blank methodName not allowed.");
+
+        // Address methods in superclasses
+        Method[] methodArray = cls.getDeclaredMethods();
+        List<Class<?>> superclassList = ClassUtils.getAllSuperclasses(cls);
+        for (Class<?> klass : superclassList) {
+            methodArray = ArrayUtils.addAll(methodArray, klass.getDeclaredMethods());
+        }
+
+        Method inexactMatch = null;
+        for (Method method : methodArray) {
+            if (methodName.equals(method.getName()) &&
+                    ArrayUtils.isEquals(parameterTypes, method.getParameterTypes())) {
+                return method;
+            } else if (methodName.equals(method.getName()) &&
+                    ClassUtils.isAssignable(parameterTypes, method.getParameterTypes(), true)) {
+                if (inexactMatch == null) {
+                    inexactMatch = method;
+                } else if (distance(parameterTypes, method.getParameterTypes())
+                        < distance(parameterTypes, inexactMatch.getParameterTypes())) {
+                    inexactMatch = method;
+                }
+            }
+
+        }
+        return inexactMatch;
+    }
+    
+    /**
+     * <p>Returns the aggregate number of inheritance hops between assignable argument class types.  Returns -1
+     * if the arguments aren't assignable.  Fills a specific purpose for getMatchingMethod and is not generalized.</p>
+     * @param classArray
+     * @param toClassArray
+     * @return the aggregate number of inheritance hops between assignable argument class types.
+     */
+    private static int distance(Class<?>[] classArray, Class<?>[] toClassArray) {
+        int answer = 0;
+
+        if (!ClassUtils.isAssignable(classArray, toClassArray, true)) {
+            return -1;
+        }
+        for (int offset = 0; offset < classArray.length; offset++) {
+            // Note InheritanceUtils.distance() uses different scoring system.
+            if (classArray[offset].equals(toClassArray[offset])) {
+                continue;
+            } else if (ClassUtils.isAssignable(classArray[offset], toClassArray[offset], true)
+                    && !ClassUtils.isAssignable(classArray[offset], toClassArray[offset], false)) {
+                answer++;
+            } else {
+                answer = answer + 2;
+            }
+        }
+
+        return answer;
     }
 
     /**

@@ -54,10 +54,9 @@ run_inlined_CharUtils_isAsciiNumeric: 709 milliseconds.
 run_inlined_CharUtils_isAsciiNumeric: 84,420 milliseconds.
 
 
- * @version $Id: CharUtilsPerfRun.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class CharUtilsPerfRun {
-    final static String VERSION = "$Id: CharUtilsPerfRun.java 1436770 2013-01-22 07:09:45Z ggregory $";
+    final static String VERSION = "$Id$";
 
     final static int WARM_UP = 100;
 

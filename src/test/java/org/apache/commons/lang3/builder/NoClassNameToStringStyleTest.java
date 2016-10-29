@@ -28,8 +28,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Unit tests {@link ToStringStyle#NO_CLASS_NAME_STYLE}.
- *
- * @version $Id: NoClassNameToStringStyleTest.java 1648730 2014-12-31 16:34:49Z britter $
  */
 public class NoClassNameToStringStyleTest {
 

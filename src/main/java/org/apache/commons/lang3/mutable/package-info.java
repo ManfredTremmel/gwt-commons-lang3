@@ -20,6 +20,5 @@
  * These classes are not thread-safe.</p>
  *
  * @since 2.1
- * @version $Id: package-info.java 1559146 2014-01-17 15:23:19Z britter $
  */
 package org.apache.commons.lang3.mutable;

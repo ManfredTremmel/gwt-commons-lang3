@@ -46,7 +46,6 @@ import org.junit.Test;
  * @see <a href="https://issues.apache.org/jira/browse/LANG-762">[LANG-762] Handle or document ReflectionToStringBuilder
  *      and ToStringBuilder for collections that are not thread safe</a>
  * @since 3.1
- * @version $Id: ReflectionToStringBuilderConcurrencyTest.java 1669310 2015-03-26 10:21:24Z britter $
  */
 public class ReflectionToStringBuilderConcurrencyTest {
 

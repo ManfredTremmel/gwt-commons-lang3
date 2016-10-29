@@ -17,7 +17,6 @@
 package org.apache.commons.lang3.reflect.testbed;
 
 /**
- * @version $Id: StaticContainerChild.java 1088899 2011-04-05 05:31:27Z bayard $
  */
 public class StaticContainerChild extends StaticContainer {
 

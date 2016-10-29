@@ -67,7 +67,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @param <L> the type of event listener that is supported by this proxy.
  *
  * @since 3.0
- * @version $Id: EventListenerSupport.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 @GwtIncompatible("incompatible class")
 public class EventListenerSupport<L> implements Serializable {
@@ -109,7 +108,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @throws IllegalArgumentException if <code>listenerInterface</code> is
      *         not an interface.
      */
-    @GwtIncompatible("incompatible method")
     public static <T> EventListenerSupport<T> create(final Class<T> listenerInterface) {
         return new EventListenerSupport<T>(listenerInterface);
     }
@@ -126,7 +124,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @throws IllegalArgumentException if <code>listenerInterface</code> is
      *         not an interface.
      */
-    @GwtIncompatible("incompatible method")
     public EventListenerSupport(final Class<L> listenerInterface) {
         this(listenerInterface, Thread.currentThread().getContextClassLoader());
     }
@@ -144,7 +141,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @throws IllegalArgumentException if <code>listenerInterface</code> is
      *         not an interface.
      */
-    @GwtIncompatible("incompatible method")
     public EventListenerSupport(final Class<L> listenerInterface, final ClassLoader classLoader) {
         this();
         Validate.notNull(listenerInterface, "Listener interface cannot be null.");
@@ -186,8 +182,27 @@ public class EventListenerSupport<L> implements Serializable {
      *         <code>null</code>.
      */
     public void addListener(final L listener) {
+        addListener(listener, true);
+    }
+
+    /**
+     * Registers an event listener.  Will not add a pre-existing listener
+     * object to the list if <code>allowDuplicate</code> is false.
+     *
+     * @param listener the event listener (may not be <code>null</code>).
+     * @param allowDuplicate the flag for determining if duplicate listener
+     * objects are allowed to be registered.
+     *
+     * @throws NullPointerException if <code>listener</code> is <code>null</code>.
+     * @since 3.5
+     */
+    public void addListener(final L listener, boolean allowDuplicate) {
         Validate.notNull(listener, "Listener object cannot be null.");
-        listeners.add(listener);
+        if (allowDuplicate) {
+            listeners.add(listener);
+        } else if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
     }
 
     /**
@@ -227,7 +242,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @param objectOutputStream the output stream
      * @throws IOException if an IO error occurs
      */
-    @GwtIncompatible("incompatible method")
     private void writeObject(final ObjectOutputStream objectOutputStream) throws IOException {
         final ArrayList<L> serializableListeners = new ArrayList<L>();
 
@@ -255,7 +269,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @throws IOException if an IO error occurs
      * @throws ClassNotFoundException if the class cannot be resolved
      */
-    @GwtIncompatible("incompatible method")
     private void readObject(final ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException {
         @SuppressWarnings("unchecked") // Will throw CCE here if not correct
         final
@@ -275,7 +288,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @param listenerInterface the class of the listener interface
      * @param classLoader the class loader to be used
      */
-    @GwtIncompatible("incompatible method")
     private void initializeTransientFields(final Class<L> listenerInterface, final ClassLoader classLoader) {
         @SuppressWarnings("unchecked") // Will throw CCE here if not correct
         final
@@ -289,7 +301,6 @@ public class EventListenerSupport<L> implements Serializable {
      * @param listenerInterface the class of the listener interface
      * @param classLoader the class loader to be used
      */
-    @GwtIncompatible("incompatible method")
     private void createProxy(final Class<L> listenerInterface, final ClassLoader classLoader) {
         proxy = listenerInterface.cast(Proxy.newProxyInstance(classLoader,
                 new Class[] { listenerInterface }, createInvocationHandler()));

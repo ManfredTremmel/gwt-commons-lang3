@@ -16,10 +16,17 @@
  */
 package org.apache.commons.lang3.text;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.gwt.core.shared.GwtIncompatible;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 
 /**
  * <p>Operations on Strings that contain words.</p>
@@ -29,7 +36,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Each method documents its behaviour in more detail.</p>
  * 
  * @since 2.0
- * @version $Id: WordUtils.java 1586649 2014-04-11 13:28:30Z britter $
  */
 public class WordUtils {
 
@@ -95,6 +101,7 @@ public class WordUtils {
      * @param wrapLength  the column to wrap the words at, less than 1 is treated as 1
      * @return a line with newlines inserted, <code>null</code> if null input
      */
+    @GwtIncompatible("incompatible method")
     public static String wrap(final String str, final int wrapLength) {
         return wrap(str, wrapLength, null, false);
     }
@@ -171,37 +178,146 @@ public class WordUtils {
      * @param wrapLongWords  true if long words (such as URLs) should be wrapped
      * @return a line with newlines inserted, <code>null</code> if null input
      */
+    @GwtIncompatible("incompatible method")
     public static String wrap(final String str, int wrapLength, String newLineStr, final boolean wrapLongWords) {
+        return wrap(str, wrapLength, newLineStr, wrapLongWords, " ");
+    }
+
+    /**
+     * <p>Wraps a single line of text, identifying words by <code>wrapOn</code>.</p>
+     *
+     * <p>Leading spaces on a new line are stripped.
+     * Trailing spaces are not stripped.</p>
+     *
+     * <table border="1" summary="Wrap Results">
+     *  <tr>
+     *   <th>input</th>
+     *   <th>wrapLenght</th>
+     *   <th>newLineString</th>
+     *   <th>wrapLongWords</th>
+     *   <th>wrapOn</th>
+     *   <th>result</th>
+     *  </tr>
+     *  <tr>
+     *   <td>null</td>
+     *   <td>*</td>
+     *   <td>*</td>
+     *   <td>true/false</td>
+     *   <td>*</td>
+     *   <td>null</td>
+     *  </tr>
+     *  <tr>
+     *   <td>""</td>
+     *   <td>*</td>
+     *   <td>*</td>
+     *   <td>true/false</td>
+     *   <td>*</td>
+     *   <td>""</td>
+     *  </tr>
+     *  <tr>
+     *   <td>"Here is one line of text that is going to be wrapped after 20 columns."</td>
+     *   <td>20</td>
+     *   <td>"\n"</td>
+     *   <td>true/false</td>
+     *   <td>" "</td>
+     *   <td>"Here is one line of\ntext that is going\nto be wrapped after\n20 columns."</td>
+     *  </tr>
+     *  <tr>
+     *   <td>"Here is one line of text that is going to be wrapped after 20 columns."</td>
+     *   <td>20</td>
+     *   <td>"&lt;br /&gt;"</td>
+     *   <td>true/false</td>
+     *   <td>" "</td>
+     *   <td>"Here is one line of&lt;br /&gt;text that is going&lt;br /&gt;to be wrapped after&lt;br /&gt;20 columns."</td>
+     *  </tr>
+     *  <tr>
+     *   <td>"Here is one line of text that is going to be wrapped after 20 columns."</td>
+     *   <td>20</td>
+     *   <td>null</td>
+     *   <td>true/false</td>
+     *   <td>" "</td>
+     *   <td>"Here is one line of" + systemNewLine + "text that is going" + systemNewLine + "to be wrapped after" + systemNewLine + "20 columns."</td>
+     *  </tr>
+     *  <tr>
+     *   <td>"Click here to jump to the commons website - http://commons.apache.org"</td>
+     *   <td>20</td>
+     *   <td>"\n"</td>
+     *   <td>false</td>
+     *   <td>" "</td>
+     *   <td>"Click here to jump\nto the commons\nwebsite -\nhttp://commons.apache.org"</td>
+     *  </tr>
+     *  <tr>
+     *   <td>"Click here to jump to the commons website - http://commons.apache.org"</td>
+     *   <td>20</td>
+     *   <td>"\n"</td>
+     *   <td>true</td>
+     *   <td>" "</td>
+     *   <td>"Click here to jump\nto the commons\nwebsite -\nhttp://commons.apach\ne.org"</td>
+     *  </tr>
+     *  <tr>
+     *   <td>"flammable/inflammable"</td>
+     *   <td>20</td>
+     *   <td>"\n"</td>
+     *   <td>true</td>
+     *   <td>"/"</td>
+     *   <td>"flammable\ninflammable"</td>
+     *  </tr>
+     * </table>
+     * @param str  the String to be word wrapped, may be null
+     * @param wrapLength  the column to wrap the words at, less than 1 is treated as 1
+     * @param newLineStr  the string to insert for a new line,
+     *  <code>null</code> uses the system property line separator
+     * @param wrapLongWords  true if long words (such as URLs) should be wrapped
+     * @param wrapOn regex expression to be used as a breakable characters,
+     *               if blank string is provided a space character will be used
+     * @return a line with newlines inserted, <code>null</code> if null input
+     */
+    @GwtIncompatible("incompatible method")
+    public static String wrap(final String str, int wrapLength, String newLineStr, final boolean wrapLongWords, String wrapOn) {
         if (str == null) {
             return null;
         }
         if (newLineStr == null) {
-            newLineStr = "\n";
+            newLineStr = SystemUtils.LINE_SEPARATOR;
         }
         if (wrapLength < 1) {
             wrapLength = 1;
         }
+        if (StringUtils.isBlank(wrapOn)) {
+            wrapOn = " ";
+        }
+        Pattern patternToWrapOn = Pattern.compile(wrapOn);
         final int inputLineLength = str.length();
         int offset = 0;
         final StringBuilder wrappedLine = new StringBuilder(inputLineLength + 32);
-        
+
         while (offset < inputLineLength) {
-            if (str.charAt(offset) == ' ') {
-                offset++;
-                continue;
+            int spaceToWrapAt = -1;
+            Matcher matcher = patternToWrapOn.matcher(str.substring(offset, Math.min(offset + wrapLength + 1, inputLineLength)));
+            if (matcher.find()) {
+                if (matcher.start() == 0) {
+                    offset += matcher.end();
+                    continue;
+                }else {
+                    spaceToWrapAt = matcher.start();
+                }
             }
+
             // only last line without leading spaces is left
             if(inputLineLength - offset <= wrapLength) {
                 break;
             }
-            int spaceToWrapAt = str.lastIndexOf(' ', wrapLength + offset);
+
+            while(matcher.find()){
+                spaceToWrapAt = matcher.start() + offset;
+            }
 
             if (spaceToWrapAt >= offset) {
                 // normal case
                 wrappedLine.append(str.substring(offset, spaceToWrapAt));
                 wrappedLine.append(newLineStr);
                 offset = spaceToWrapAt + 1;
-                
+
             } else {
                 // really long word or URL
                 if (wrapLongWords) {
@@ -211,7 +327,11 @@ public class WordUtils {
                     offset += wrapLength;
                 } else {
                     // do not wrap really long word, just extend beyond limit
-                    spaceToWrapAt = str.indexOf(' ', wrapLength + offset);
+                    matcher = patternToWrapOn.matcher(str.substring(offset + wrapLength));
+                    if (matcher.find()) {
+                        spaceToWrapAt = matcher.start() + offset + wrapLength;
+                    }
+
                     if (spaceToWrapAt >= 0) {
                         wrappedLine.append(str.substring(offset, spaceToWrapAt));
                         wrappedLine.append(newLineStr);
@@ -234,7 +354,7 @@ public class WordUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Capitalizes all the whitespace separated words in a String.
-     * Only the first letter of each word is changed. To convert the 
+     * Only the first character of each word is changed. To convert the 
      * rest of each word to lowercase at the same time, 
      * use {@link #capitalizeFully(String)}.</p>
      *
@@ -261,7 +381,7 @@ public class WordUtils {
 
     /**
      * <p>Capitalizes all the delimiter separated words in a String.
-     * Only the first letter of each word is changed. To convert the 
+     * Only the first character of each word is changed. To convert the 
      * rest of each word to lowercase at the same time, 
      * use {@link #capitalizeFully(String, char[])}.</p>
      *
@@ -372,7 +492,7 @@ public class WordUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Uncapitalizes all the whitespace separated words in a String.
-     * Only the first letter of each word is changed.</p>
+     * Only the first character of each word is changed.</p>
      *
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.
      * A <code>null</code> input String returns <code>null</code>.</p>
@@ -393,7 +513,7 @@ public class WordUtils {
 
     /**
      * <p>Uncapitalizes all the whitespace separated words in a String.
-     * Only the first letter of each word is changed.</p>
+     * Only the first character of each word is changed.</p>
      *
      * <p>The delimiters represent a set of characters understood to separate words.
      * The first string character and the first non-delimiter character after a
@@ -491,10 +611,9 @@ public class WordUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * <p>Extracts the initial letters from each word in the String.</p>
+     * <p>Extracts the initial characters from each word in the String.</p>
      * 
-     * <p>The first letter of the string and all first letters after
-     * whitespace are returned as a new string.
+     * <p>All first characters after whitespace are returned as a new string.
      * Their case is not changed.</p>
      *
      * <p>Whitespace is defined by {@link Character#isWhitespace(char)}.
@@ -517,10 +636,9 @@ public class WordUtils {
     }
 
     /**
-     * <p>Extracts the initial letters from each word in the String.</p>
+     * <p>Extracts the initial characters from each word in the String.</p>
      * 
-     * <p>The first letter of the string and all first letters after the
-     * defined delimiters are returned as a new string.
+     * <p>All first characters after the defined delimiters are returned as a new string.
      * Their case is not changed.</p>
      *
      * <p>If the delimiters array is null, then Whitespace is used.
@@ -539,7 +657,7 @@ public class WordUtils {
      * 
      * @param str  the String to get initials from, may be null
      * @param delimiters  set of characters to determine words, null means whitespace
-     * @return String of initial letters, <code>null</code> if null String input
+     * @return String of initial characters, <code>null</code> if null String input
      * @see #initials(String)
      * @since 2.2
      */
@@ -548,7 +666,7 @@ public class WordUtils {
             return str;
         }
         if (delimiters != null && delimiters.length == 0) {
-            return "";
+            return StringUtils.EMPTY;
         }
         final int strLen = str.length();
         final char[] buf = new char[strLen / 2 + 1];
@@ -567,6 +685,47 @@ public class WordUtils {
             }
         }
         return new String(buf, 0, count);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * <p>Checks if the String contains all words in the given array.</p>
+     *
+     * <p>
+     * A {@code null} String will return {@code false}. A {@code null}, zero
+     * length search array or if one element of array is null will return {@code false}.
+     * </p>
+     *
+     * <pre>
+     * WordUtils.containsAllWords(null, *)            = false
+     * WordUtils.containsAllWords("", *)              = false
+     * WordUtils.containsAllWords(*, null)            = false
+     * WordUtils.containsAllWords(*, [])              = false
+     * WordUtils.containsAllWords("abcd", "ab", "cd") = false
+     * WordUtils.containsAllWords("abc def", "def", "abc") = true
+     * </pre>
+     *
+     *
+     * @param word The CharSequence to check, may be null
+     * @param words The array of String words to search for, may be null
+     * @return {@code true} if all search words are found, {@code false} otherwise
+     * @since 3.5
+     */
+    public static boolean containsAllWords(CharSequence word, CharSequence... words) {
+        if (StringUtils.isEmpty(word) || ArrayUtils.isEmpty(words)) {
+            return false;
+        }
+        for (CharSequence w : words) {
+            if (StringUtils.isBlank(w)) {
+                return false;
+            }
+            RegExp p = RegExp.compile(".*\\b" + w + "\\b.*");
+            MatchResult m = p.exec(word.toString());
+            if (m == null || m.getGroupCount() == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     //-----------------------------------------------------------------------

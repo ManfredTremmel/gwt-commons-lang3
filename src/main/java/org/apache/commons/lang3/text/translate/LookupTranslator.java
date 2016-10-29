@@ -27,7 +27,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Translates a value using a lookup table.
  *
  * @since 3.0
- * @version $Id: LookupTranslator.java 1669520 2015-03-27 08:03:41Z britter $
  */
 public class LookupTranslator extends CharSequenceTranslator {
 

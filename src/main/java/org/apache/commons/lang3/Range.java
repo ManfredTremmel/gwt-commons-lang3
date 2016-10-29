@@ -30,7 +30,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>#ThreadSafe# if the objects and comparator are thread-safe</p>
  * 
  * @since 3.0
- * @version $Id: Range.java 1565243 2014-02-06 13:37:12Z sebb $
  */
 public final class Range<T> implements Serializable {
 
@@ -252,7 +251,7 @@ public final class Range<T> implements Serializable {
     }
 
     /**
-     * <p>Checks whether this range starts with the specified element.</p>
+     * <p>Checks whether this range ends with the specified element.</p>
      *
      * @param element  the element to check for, null returns false
      * @return true if the specified element occurs within this range
@@ -448,18 +447,10 @@ public final class Range<T> implements Serializable {
      */
     @Override
     public String toString() {
-        String result = toString;
-        if (result == null) {
-            final StringBuilder buf = new StringBuilder(32);
-            buf.append('[');
-            buf.append(minimum);
-            buf.append("..");
-            buf.append(maximum);
-            buf.append(']');
-            result = buf.toString();
-            toString = result;
+        if (toString == null) {
+            toString = "[" + minimum + ".." + maximum + "]";
         }
-        return result;
+        return toString;
     }
 
     /**

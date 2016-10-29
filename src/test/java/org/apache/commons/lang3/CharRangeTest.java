@@ -32,8 +32,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.CharRange}.
- *
- * @version $Id: CharRangeTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class CharRangeTest  {
 

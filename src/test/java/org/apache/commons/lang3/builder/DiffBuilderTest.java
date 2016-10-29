@@ -30,8 +30,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link DiffBuilder}.
- *
- * @version $Id: DiffBuilderTest.java 1654137 2015-01-23 08:25:43Z britter $
  */
 public class DiffBuilderTest {
     
@@ -413,6 +411,18 @@ public class DiffBuilderTest {
         assertEquals(0, list.getNumberOfDiffs());
     }
     
+    @Test
+    public void testDiffResult() {
+        final TypeTestClass class1 = new TypeTestClass();
+        final TypeTestClass class2 = new TypeTestClass();
+        class2.intField = 2;
+
+        final DiffResult list = new DiffBuilder(class1, class2, SHORT_STYLE)
+            .append("prop1", class1.diff(class2))
+            .build();
+        assertEquals(1, list.getNumberOfDiffs());
+        assertEquals("prop1.int", list.getDiffs().get(0).getFieldName());
+    }
 
     @Test(expected=IllegalArgumentException.class)
     public void testNullLhs() {      

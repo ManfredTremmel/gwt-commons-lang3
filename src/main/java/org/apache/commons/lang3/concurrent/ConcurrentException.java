@@ -32,7 +32,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 3.0
- * @version $Id: ConcurrentException.java 1436768 2013-01-22 07:07:42Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class ConcurrentException extends Exception {

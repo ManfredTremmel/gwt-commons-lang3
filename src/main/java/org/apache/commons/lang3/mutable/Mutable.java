@@ -28,7 +28,6 @@ package org.apache.commons.lang3.mutable;
  * 
  * @param <T> the type to set and get 
  * @since 2.1
- * @version $Id: Mutable.java 1478488 2013-05-02 19:05:44Z ggregory $
  */
 public interface Mutable<T> {
 

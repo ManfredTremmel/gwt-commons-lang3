@@ -37,7 +37,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 3.0
- * @version $Id: ConcurrentInitializer.java 1088899 2011-04-05 05:31:27Z bayard $
  * @param <T> the type of the object managed by this initializer class
  */
 @GwtIncompatible("incompatible class")

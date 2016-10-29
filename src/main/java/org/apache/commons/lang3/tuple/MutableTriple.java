@@ -25,7 +25,6 @@ package org.apache.commons.lang3.tuple;
  * @param <M> the middle element type
  * @param <R> the right element type
  *
- * @version $Id: MutableTriple.java 1552635 2013-12-20 13:02:03Z britter $
  * @since 3.2
  */
 public class MutableTriple<L, M, R> extends Triple<L, M, R> {

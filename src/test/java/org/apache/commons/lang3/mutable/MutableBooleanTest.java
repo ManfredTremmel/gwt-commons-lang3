@@ -25,7 +25,6 @@ import static org.junit.Assert.*;
  * 
  * @since 2.2
  * @see MutableBoolean
- * @version $Id: MutableBooleanTest.java 1565915 2014-02-08 04:35:17Z ggregory $
  */
 public class MutableBooleanTest {
 

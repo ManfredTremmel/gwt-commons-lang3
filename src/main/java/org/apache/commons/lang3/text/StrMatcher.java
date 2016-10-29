@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
  * If these do not suffice, you can subclass and implement your own matcher.
  *
  * @since 2.2
- * @version $Id: StrMatcher.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public abstract class StrMatcher {
 
@@ -227,7 +226,7 @@ public abstract class StrMatcher {
      * The API guarantees that <code>pos</code> is a valid index for <code>buffer</code>.
      * <p>
      * The character array may be larger than the active area to be matched.
-     * Only values in the buffer between the specifed indices may be accessed.
+     * Only values in the buffer between the specified indices may be accessed.
      * <p>
      * The matching code may check one character or many.
      * It may check characters preceding <code>pos</code> as well as those
@@ -285,7 +284,7 @@ public abstract class StrMatcher {
             super();
             this.chars = new char[chars.length];
             for (int i = 0; i < chars.length; i++) {
-            	this.chars[i] = chars[i];
+                this.chars[i] = chars[i];
             }
             Arrays.sort(this.chars);
         }
@@ -378,6 +377,12 @@ public abstract class StrMatcher {
             }
             return len;
         }
+        
+        @Override
+        public String toString() {
+            return super.toString() + ' ' + Arrays.toString(chars);
+        }
+
     }
 
     //-----------------------------------------------------------------------

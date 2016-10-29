@@ -42,7 +42,6 @@ import org.apache.commons.lang3.SystemUtils;
  * Test case for {@link ExtendedMessageFormat}.
  *
  * @since 2.4
- * @version $Id: ExtendedMessageFormatTest.java 1666679 2015-03-14 12:46:02Z britter $
  */
 public class ExtendedMessageFormatTest {
 

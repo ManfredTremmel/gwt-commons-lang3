@@ -44,7 +44,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * fails then a warning will be logged and the method may fail.</p>
  *
  * @since 2.5
- * @version $Id: ConstructorUtils.java 1559779 2014-01-20 17:19:02Z mbenson $
  */
 @GwtIncompatible("incompatible class")
 public class ConstructorUtils {
@@ -117,6 +116,10 @@ public class ConstructorUtils {
         if (ctor == null) {
             throw new NoSuchMethodException(
                 "No such accessible constructor on object: " + cls.getName());
+        }
+        if (ctor.isVarArgs()) {
+            Class<?>[] methodParameterTypes = ctor.getParameterTypes();
+            args = MethodUtils.getVarArgs(args, methodParameterTypes);
         }
         return ctor.newInstance(args);
     }
@@ -262,14 +265,12 @@ public class ConstructorUtils {
         // return best match:
         for (Constructor<?> ctor : ctors) {
             // compare parameters
-            if (ClassUtils.isAssignable(parameterTypes, ctor.getParameterTypes(), true)) {
+            if (MemberUtils.isMatchingConstructor(ctor, parameterTypes)) {
                 // get accessible version of constructor
                 ctor = getAccessibleConstructor(ctor);
                 if (ctor != null) {
                     MemberUtils.setAccessibleWorkaround(ctor);
-                    if (result == null
-                            || MemberUtils.compareParameterTypes(ctor.getParameterTypes(), result
-                                    .getParameterTypes(), parameterTypes) < 0) {
+                    if (result == null || MemberUtils.compareConstructorFit(ctor, result, parameterTypes) < 0) {
                         // temporary variable for annotation, see comment above (1)
                         @SuppressWarnings("unchecked")
                         final

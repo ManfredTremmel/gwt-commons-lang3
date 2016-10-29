@@ -29,6 +29,5 @@
  * @see java.lang.Comparable#compareTo(Object)
  *
  * @since 1.0
- * @version $Id: package-info.java 1559146 2014-01-17 15:23:19Z britter $
  */
 package org.apache.commons.lang3.builder;

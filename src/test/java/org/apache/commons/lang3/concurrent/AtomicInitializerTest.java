@@ -18,8 +18,6 @@ package org.apache.commons.lang3.concurrent;
 
 /**
  * Test class for {@code AtomicInitializer}.
- *
- * @version $Id: AtomicInitializerTest.java 1662379 2015-02-26 08:13:58Z britter $
  */
 public class AtomicInitializerTest extends AbstractConcurrentInitializerTest {
     /**

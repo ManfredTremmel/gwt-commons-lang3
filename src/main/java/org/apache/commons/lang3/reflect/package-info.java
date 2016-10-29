@@ -19,6 +19,5 @@
  * <p>These classes are immutable, and therefore thread-safe.</p>
  *
  * @since 3.0
- * @version $Id: package-info.java 1558546 2014-01-15 19:38:15Z britter $
  */
 package org.apache.commons.lang3.reflect;

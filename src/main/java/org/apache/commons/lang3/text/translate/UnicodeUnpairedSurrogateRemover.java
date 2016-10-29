@@ -23,8 +23,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
  * Helper subclass to CharSequenceTranslator to remove unpaired surrogates.
- * 
- * @version $Id: UnicodeUnpairedSurrogateRemover.java 1606059 2014-06-27 12:32:45Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class UnicodeUnpairedSurrogateRemover extends CodePointTranslator {

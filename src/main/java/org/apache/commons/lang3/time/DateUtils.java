@@ -18,12 +18,12 @@ package org.apache.commons.lang3.time;
 
 import java.text.ParseException;
 import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import com.google.gwt.core.shared.GwtIncompatible;
@@ -50,7 +50,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 2.0
- * @version $Id: DateUtils.java 1627984 2014-09-27 17:33:00Z djones $
  */
 public class DateUtils {
 
@@ -192,9 +191,9 @@ public class DateUtils {
         if (cal1 == null || cal2 == null) {
             throw new IllegalArgumentException("The date must not be null");
         }
-        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+        return cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 
     //-----------------------------------------------------------------------
@@ -251,14 +250,14 @@ public class DateUtils {
         if (cal1 == null || cal2 == null) {
             throw new IllegalArgumentException("The date must not be null");
         }
-        return (cal1.get(Calendar.MILLISECOND) == cal2.get(Calendar.MILLISECOND) &&
+        return cal1.get(Calendar.MILLISECOND) == cal2.get(Calendar.MILLISECOND) &&
                 cal1.get(Calendar.SECOND) == cal2.get(Calendar.SECOND) &&
                 cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE) &&
                 cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
-                cal1.getClass() == cal2.getClass());
+                cal1.getClass() == cal2.getClass();
     }
 
     //-----------------------------------------------------------------------
@@ -346,7 +345,7 @@ public class DateUtils {
      */
     @GwtIncompatible("incompatible method")
     public static Date parseDateStrictly(final String str, final Locale locale, final String... parsePatterns) throws ParseException {
-        return parseDateWithLeniency(str, null, parsePatterns, false);
+        return parseDateWithLeniency(str, locale, parsePatterns, false);
     }    
 
     /**
@@ -372,38 +371,25 @@ public class DateUtils {
         if (str == null || parsePatterns == null) {
             throw new IllegalArgumentException("Date and Patterns must not be null");
         }
-        
-        SimpleDateFormat parser;
-        if (locale == null) {
-            parser = new SimpleDateFormat();
-        } else {
-            parser = new SimpleDateFormat("", locale);
-        }
-        
-        parser.setLenient(lenient);
+
+        final TimeZone tz = TimeZone.getDefault();
+        final Locale lcl = locale==null ?Locale.getDefault() : locale;
         final ParsePosition pos = new ParsePosition(0);
+        final Calendar calendar = Calendar.getInstance(tz, lcl);
+        calendar.setLenient(lenient);
+
         for (final String parsePattern : parsePatterns) {
-
-            String pattern = parsePattern;
-
-            // LANG-530 - need to make sure 'ZZ' output doesn't get passed to SimpleDateFormat
-            if (parsePattern.endsWith("ZZ")) {
-                pattern = pattern.substring(0, pattern.length() - 1);
+            FastDateParser fdp = new FastDateParser(parsePattern, tz, lcl);
+            calendar.clear();
+            try {
+                if (fdp.parse(str, pos, calendar) && pos.getIndex()==str.length()) {
+                    return calendar.getTime();
+                }
             }
-            
-            parser.applyPattern(pattern);
+            catch(IllegalArgumentException ignore) {
+                // leniency is preventing calendar from being set
+            }
             pos.setIndex(0);
-
-            String str2 = str;
-            // LANG-530 - need to make sure 'ZZ' output doesn't hit SimpleDateFormat as it will ParseException
-            if (parsePattern.endsWith("ZZ")) {
-                str2 = str.replaceAll("([-+][0-9][0-9]):([0-9][0-9])$", "$1$2"); 
-            }
-
-            final Date date = parser.parse(str2, pos);
-            if (date != null && pos.getIndex() == str2.length()) {
-                return date;
-            }
         }
         throw new ParseException("Unable to parse the date: " + str, -1);
     }
@@ -634,7 +620,7 @@ public class DateUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Sets the miliseconds field to a date returning a new object.
+     * Sets the milliseconds field to a date returning a new object.
      * The original {@code Date} is unchanged.
      *
      * @param date  the date, not null
@@ -685,6 +671,21 @@ public class DateUtils {
         final Calendar c = Calendar.getInstance();
         c.setTime(date);
         return c;
+    }
+    
+    //-----------------------------------------------------------------------
+    /**
+     * Converts a {@code Date} of a given {@code TimeZone} into a {@code Calendar}
+     * @param date the date to convert to a Calendar
+     * @param tz the time zone of the @{code date}
+     * @return the created Calendar
+     * @throws NullPointerException if {@code date} or {@code tz} is null
+     */
+    @GwtIncompatible("incompatible method")
+    public static Calendar toCalendar(final Date date, final TimeZone tz) {
+    	final Calendar c = Calendar.getInstance(tz);
+    	c.setTime(date);
+    	return c;
     }
     
     //-----------------------------------------------------------------------
@@ -1026,7 +1027,7 @@ public class DateUtils {
             for (final int element : aField) {
                 if (element == field) {
                     //This is our field... we stop looping
-                    if (modType == ModifyType.CEILING || (modType == ModifyType.ROUND && roundUp)) {
+                    if (modType == ModifyType.CEILING || modType == ModifyType.ROUND && roundUp) {
                         if (field == DateUtils.SEMI_MONTH) {
                             //This is a special case that's hard to generalize
                             //If the date is 1, we round up to 16, otherwise

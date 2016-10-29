@@ -36,7 +36,6 @@ import java.util.Locale;
  * A month with 31 days will be rounded up from the 17th
  * 
  * @since 3.0
- * @version $Id: DateUtilsRoundingTest.java 1609902 2014-07-12 11:01:37Z britter $
  */
 public class DateUtilsRoundingTest {
 
@@ -52,6 +51,7 @@ public class DateUtilsRoundingTest {
     Date targetMilliSecondDate;
 
     Calendar januaryOneCalendar;
+    @SuppressWarnings("deprecation")
     FastDateFormat fdf = DateFormatUtils.ISO_DATETIME_FORMAT;
 
 

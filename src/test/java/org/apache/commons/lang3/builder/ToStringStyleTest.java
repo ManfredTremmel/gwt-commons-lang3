@@ -22,8 +22,6 @@ import org.junit.Test;
 
 /**
  * Test case for ToStringStyle.
- * 
- * @version $Id: ToStringStyleTest.java 1582699 2014-03-28 11:15:32Z sebb $
  */
 public class ToStringStyleTest {
 

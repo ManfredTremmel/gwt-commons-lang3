@@ -37,7 +37,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @param <M> the middle element type
  * @param <R> the right element type
  *
- * @version $Id: Triple.java 1557584 2014-01-12 18:26:49Z britter $
  * @since 3.2
  */
 public abstract class Triple<L, M, R> implements Comparable<Triple<L, M, R>>, Serializable {
@@ -141,8 +140,7 @@ public abstract class Triple<L, M, R> implements Comparable<Triple<L, M, R>>, Se
      */
     @Override
     public String toString() {
-        return new StringBuilder().append('(').append(getLeft()).append(',').append(getMiddle()).append(',')
-            .append(getRight()).append(')').toString();
+        return "(" + getLeft() + "," + getMiddle() + "," + getRight() + ")";
     }
 
     /**

@@ -39,11 +39,9 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.Validate}.
- *
- * @version $Id: ValidateTest.java 1600868 2014-06-06 12:33:44Z ggregory $
  */
 public class ValidateTest  {
-    
+
     //-----------------------------------------------------------------------
     @Test
     public void testIsTrue1() {
@@ -116,7 +114,7 @@ public class ValidateTest  {
         } catch (final NullPointerException ex) {
             assertEquals("The validated object is null", ex.getMessage());
         }
-        
+
         final String str = "Hi";
         final String testStr = Validate.notNull(str);
         assertSame(str, testStr);
@@ -133,7 +131,7 @@ public class ValidateTest  {
         } catch (final NullPointerException ex) {
             assertEquals("MSG", ex.getMessage());
         }
-        
+
         final String str = "Hi";
         final String testStr = Validate.notNull(str, "Message");
         assertSame(str, testStr);
@@ -156,7 +154,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("The validated array is empty", ex.getMessage());
         }
-        
+
         final String[] array = new String[] {"hi"};
         final String[] test = Validate.notEmpty(array);
         assertSame(array, test);
@@ -178,7 +176,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("MSG", ex.getMessage());
         }
-        
+
         final String[] array = new String[] {"hi"};
         final String[] test = Validate.notEmpty(array, "Message");
         assertSame(array, test);
@@ -203,7 +201,7 @@ public class ValidateTest  {
         }
         coll.add(Integer.valueOf(8));
         Validate.notEmpty(coll);
-        
+
         final Collection<Integer> test = Validate.notEmpty(coll);
         assertSame(coll, test);
     }
@@ -226,7 +224,7 @@ public class ValidateTest  {
         }
         coll.add(Integer.valueOf(8));
         Validate.notEmpty(coll, "MSG");
-        
+
         final Collection<Integer> test = Validate.notEmpty(coll, "Message");
         assertSame(coll, test);
     }
@@ -250,7 +248,7 @@ public class ValidateTest  {
         }
         map.put("ll", Integer.valueOf(8));
         Validate.notEmpty(map);
-        
+
         final Map<String, Integer> test = Validate.notEmpty(map);
         assertSame(map, test);
     }
@@ -273,7 +271,7 @@ public class ValidateTest  {
         }
         map.put("ll", Integer.valueOf(8));
         Validate.notEmpty(map, "MSG");
-        
+
         final Map<String, Integer> test = Validate.notEmpty(map, "Message");
         assertSame(map, test);
     }
@@ -295,7 +293,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("The validated character sequence is empty", ex.getMessage());
         }
-        
+
         final String str = "Hi";
         final String testStr = Validate.notEmpty(str);
         assertSame(str, testStr);
@@ -317,7 +315,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("MSG", ex.getMessage());
         }
-        
+
         final String str = "Hi";
         final String testStr = Validate.notEmpty(str, "Message");
         assertSame(str, testStr);
@@ -558,7 +556,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("The validated array contains null element at index: 1", ex.getMessage());
         }
-        
+
         array = new String[] {"a", "b"};
         final String[] test = Validate.noNullElements(array);
         assertSame(array, test);
@@ -582,7 +580,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("MSG", ex.getMessage());
         }
-        
+
         array = new String[] {"a", "b"};
         final String[] test = Validate.noNullElements(array, "Message");
         assertSame(array, test);
@@ -609,7 +607,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("The validated collection contains null element at index: 1", ex.getMessage());
         }
-        
+
         coll.set(1, "b");
         final List<String> test = Validate.noNullElements(coll);
         assertSame(coll, test);
@@ -635,7 +633,7 @@ public class ValidateTest  {
         } catch (final IllegalArgumentException ex) {
             assertEquals("MSG", ex.getMessage());
         }
-        
+
         coll.set(1, "b");
         final List<String> test = Validate.noNullElements(coll, "Message");
         assertSame(coll, test);
@@ -672,7 +670,7 @@ public class ValidateTest  {
         } catch (final IndexOutOfBoundsException ex) {
             assertEquals("Broken: ", ex.getMessage());
         }
-        
+
         final String[] strArray = new String[] {"Hi"};
         final String[] test = Validate.noNullElements(strArray, "Message");
         assertSame(strArray, test);
@@ -695,7 +693,7 @@ public class ValidateTest  {
         } catch (final IndexOutOfBoundsException ex) {
             assertEquals("The validated array index is invalid: 2", ex.getMessage());
         }
-        
+
         final String[] strArray = new String[] {"Hi"};
         final String[] test = Validate.noNullElements(strArray);
         assertSame(strArray, test);
@@ -722,7 +720,7 @@ public class ValidateTest  {
         } catch (final IndexOutOfBoundsException ex) {
             assertEquals("Broken: ", ex.getMessage());
         }
-        
+
         final List<String> strColl = Arrays.asList(new String[] {"Hi"});
         final List<String> test = Validate.validIndex(strColl, 0, "Message");
         assertSame(strColl, test);
@@ -747,7 +745,7 @@ public class ValidateTest  {
         } catch (final IndexOutOfBoundsException ex) {
             assertEquals("The validated collection index is invalid: 2", ex.getMessage());
         }
-        
+
         final List<String> strColl = Arrays.asList(new String[] {"Hi"});
         final List<String> test = Validate.validIndex(strColl, 0);
         assertSame(strColl, test);
@@ -772,7 +770,7 @@ public class ValidateTest  {
         } catch (final IndexOutOfBoundsException ex) {
             assertEquals("Broken: ", ex.getMessage());
         }
-        
+
         final String input = "Hi";
         final String test = Validate.validIndex(input, 0, "Message");
         assertSame(input, test);
@@ -795,12 +793,12 @@ public class ValidateTest  {
         } catch (final IndexOutOfBoundsException ex) {
             assertEquals("The validated character sequence index is invalid: 2", ex.getMessage());
         }
-        
+
         final String input = "Hi";
         final String test = Validate.validIndex(input, 0);
         assertSame(input, test);
     }
-    
+
     @Test
     public void testMatchesPattern()
     {
@@ -816,7 +814,7 @@ public class ValidateTest  {
             assertEquals("The string hi does not match the pattern [0-9]*", e.getMessage());
         }
     }
-    
+
     @Test
     public void testMatchesPattern_withMessage()
     {
@@ -832,7 +830,88 @@ public class ValidateTest  {
             assertEquals("Does not match", e.getMessage());
         }
     }
-    
+
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+
+    @Test
+    public void testNotNaN1() {
+        Validate.notNaN(0.0);
+        Validate.notNaN(Double.POSITIVE_INFINITY);
+        Validate.notNaN(Double.NEGATIVE_INFINITY);
+        try {
+            Validate.notNaN(Double.NaN);
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("The validated value is not a number", ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotNaN2() {
+        Validate.notNaN(0.0, "MSG");
+        Validate.notNaN(Double.POSITIVE_INFINITY, "MSG");
+        Validate.notNaN(Double.NEGATIVE_INFINITY, "MSG");
+        try {
+            Validate.notNaN(Double.NaN, "MSG");
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("MSG", ex.getMessage());
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+
+    @Test
+    public void testFinite1() {
+        Validate.finite(0.0);
+        try {
+            Validate.finite(Double.POSITIVE_INFINITY);
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("The value is invalid: Infinity", ex.getMessage());
+        }
+        try {
+            Validate.finite(Double.NEGATIVE_INFINITY);
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("The value is invalid: -Infinity", ex.getMessage());
+        }
+        try {
+            Validate.finite(Double.NaN);
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("The value is invalid: NaN", ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testFinite2() {
+        Validate.finite(0.0, "MSG");
+        try {
+            Validate.finite(Double.POSITIVE_INFINITY, "MSG");
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("MSG", ex.getMessage());
+        }
+        try {
+            Validate.finite(Double.NEGATIVE_INFINITY, "MSG");
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("MSG", ex.getMessage());
+        }
+        try {
+            Validate.finite(Double.NaN, "MSG");
+            fail("Expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException ex) {
+            assertEquals("MSG", ex.getMessage());
+        }
+    }
+
+    //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
+
     @Test
     public void testInclusiveBetween()
     {
@@ -844,7 +923,7 @@ public class ValidateTest  {
             assertEquals("The value 6 is not in the specified inclusive range of 0 to 5", e.getMessage());
         }
     }
-    
+
     @Test
     public void testInclusiveBetween_withMessage()
     {
@@ -908,7 +987,7 @@ public class ValidateTest  {
             assertEquals("Error", e.getMessage());
         }
     }
-    
+
     @Test
     public void testExclusiveBetween()
     {
@@ -926,7 +1005,7 @@ public class ValidateTest  {
             assertEquals("The value 5 is not in the specified exclusive range of 0 to 5", e.getMessage());
         }
     }
-    
+
     @Test
     public void testExclusiveBetween_withMessage()
     {
@@ -1022,7 +1101,7 @@ public class ValidateTest  {
         Validate.isInstanceOf(String.class, "hi");
         Validate.isInstanceOf(Integer.class, 1);
     }
-    
+
     @Test
     public void testIsInstanceOfExceptionMessage() {
         try {
@@ -1032,7 +1111,7 @@ public class ValidateTest  {
             assertEquals("Expected type: java.util.List, actual: java.lang.String", e.getMessage());
         }
     }
-    
+
     @Test
     public void testIsInstanceOf_withMessage() {
         Validate.isInstanceOf(String.class, "hi", "Error");
@@ -1044,7 +1123,7 @@ public class ValidateTest  {
             assertEquals("Error", e.getMessage());
         }
     }
-    
+
     @Test
     public void testIsInstanceOf_withMessageArgs() {
         Validate.isInstanceOf(String.class, "hi", "Error %s=%s", "Name", "Value");
@@ -1068,13 +1147,13 @@ public class ValidateTest  {
             assertEquals("Error interface java.util.List=null", e.getMessage());
         }
     }
-    
+
     @Test
     public void testIsAssignable() {
         Validate.isAssignableFrom(CharSequence.class, String.class);
         Validate.isAssignableFrom(AbstractList.class, ArrayList.class);
     }
-    
+
     @Test
     public void testIsAssignableExceptionMessage() {
         try {
@@ -1084,7 +1163,7 @@ public class ValidateTest  {
             assertEquals("Cannot assign a java.lang.String to a java.util.List", e.getMessage());
         }
     }
-    
+
     @Test
     public void testIsAssignable_withMessage() {
         Validate.isAssignableFrom(CharSequence.class, String.class, "Error");

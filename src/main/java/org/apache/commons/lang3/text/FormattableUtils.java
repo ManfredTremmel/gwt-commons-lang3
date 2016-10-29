@@ -35,7 +35,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * and padding, and is not designed to allow generalised alternate formats.</p>
  * 
  * @since Lang 3.0
- * @version $Id: FormattableUtils.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class FormattableUtils {
 
@@ -66,7 +65,7 @@ public class FormattableUtils {
      */
     @GwtIncompatible("incompatible method")
     public static String toString(final Formattable formattable) {
-        return StringUtils.simpleFormat(SIMPLEST_FORMAT, formattable);
+        return String.format(SIMPLEST_FORMAT, formattable);
     }
 
     /**

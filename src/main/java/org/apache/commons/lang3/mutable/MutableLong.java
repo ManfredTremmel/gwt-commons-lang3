@@ -25,7 +25,6 @@ import org.apache.commons.lang3.math.NumberUtils;
  * 
  * @see Long
  * @since 2.1
- * @version $Id: MutableLong.java 1669791 2015-03-28 15:22:59Z britter $
  */
 public class MutableLong extends Number implements Comparable<MutableLong>, Mutable<Number> {
 
@@ -121,12 +120,62 @@ public class MutableLong extends Number implements Comparable<MutableLong>, Muta
     }
 
     /**
+     * Increments this instance's value by 1; this method returns the value associated with the instance
+     * immediately prior to the increment operation. This method is not thread safe.
+     *
+     * @return the value associated with the instance before it was incremented
+     * @since 3.5
+     */
+    public long getAndIncrement() {
+        long last = value;
+        value++;
+        return last;
+    }
+
+    /**
+     * Increments this instance's value by 1; this method returns the value associated with the instance
+     * immediately after the increment operation. This method is not thread safe.
+     *
+     * @return the value associated with the instance after it is incremented
+     * @since 3.5
+     */
+    public long incrementAndGet() {
+        value++;
+        return value;
+    }
+
+    /**
      * Decrements the value.
      *
      * @since Commons Lang 2.2
      */
     public void decrement() {
         value--;
+    }
+
+    /**
+     * Decrements this instance's value by 1; this method returns the value associated with the instance
+     * immediately prior to the decrement operation. This method is not thread safe.
+     *
+     * @return the value associated with the instance before it was decremented
+     * @since 3.5
+     */
+    public long getAndDecrement() {
+        long last = value;
+        value--;
+        return last;
+    }
+
+    /**
+     * Decrements this instance's value by 1; this method returns the value associated with the instance
+     * immediately after the decrement operation. This method is not thread safe.
+     *
+     * @return the value associated with the instance after it is decremented
+     * @since 3.5
+     */
+    public long decrementAndGet() {
+        value--;
+        return value;
     }
 
     //-----------------------------------------------------------------------
@@ -170,6 +219,62 @@ public class MutableLong extends Number implements Comparable<MutableLong>, Muta
      */
     public void subtract(final Number operand) {
         this.value -= operand.longValue();
+    }
+
+    /**
+     * Increments this instance's value by {@code operand}; this method returns the value associated with the instance
+     * immediately after the addition operation. This method is not thread safe.
+     *
+     * @param operand the quantity to add, not null
+     * @return the value associated with this instance after adding the operand
+     * @since 3.5
+     */
+    public long addAndGet(final long operand) {
+        this.value += operand;
+        return value;
+    }
+
+    /**
+     * Increments this instance's value by {@code operand}; this method returns the value associated with the instance
+     * immediately after the addition operation. This method is not thread safe.
+     *
+     * @param operand the quantity to add, not null
+     * @throws NullPointerException if {@code operand} is null
+     * @return the value associated with this instance after adding the operand
+     * @since 3.5
+     */
+    public long addAndGet(final Number operand) {
+        this.value += operand.longValue();
+        return value;
+    }
+
+    /**
+     * Increments this instance's value by {@code operand}; this method returns the value associated with the instance
+     * immediately prior to the addition operation. This method is not thread safe.
+     *
+     * @param operand the quantity to add, not null
+     * @return the value associated with this instance immediately before the operand was added
+     * @since 3.5
+     */
+    public long getAndAdd(final long operand) {
+        long last = value;
+        this.value += operand;
+        return last;
+    }
+
+    /**
+     * Increments this instance's value by {@code operand}; this method returns the value associated with the instance
+     * immediately prior to the addition operation. This method is not thread safe.
+     *
+     * @param operand the quantity to add, not null
+     * @throws NullPointerException if {@code operand} is null
+     * @return the value associated with this instance immediately before the operand was added
+     * @since 3.5
+     */
+    public long getAndAdd(final Number operand) {
+        long last = value;
+        this.value += operand.longValue();
+        return last;
     }
 
     //-----------------------------------------------------------------------

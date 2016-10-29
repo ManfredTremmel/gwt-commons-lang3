@@ -87,7 +87,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </pre>
  *
  * @since 3.0
- * @version $Id: BasicThreadFactory.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 @GwtIncompatible("incompatible class")
 public class BasicThreadFactory implements ThreadFactory {
@@ -252,7 +251,6 @@ public class BasicThreadFactory implements ThreadFactory {
      * BasicThreadFactory} for a usage example.
      * </p>
      *
-     * @version $Id: BasicThreadFactory.java 1583482 2014-03-31 22:54:57Z niallp $
      */
     public static class Builder 
         implements org.apache.commons.lang3.builder.Builder<BasicThreadFactory> {

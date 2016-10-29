@@ -29,8 +29,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link Conversion}.
- * 
- * @version $Id: ConversionTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class ConversionTest {
 

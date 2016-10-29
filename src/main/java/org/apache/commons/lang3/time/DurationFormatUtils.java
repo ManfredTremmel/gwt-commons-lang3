@@ -48,7 +48,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * A token character can be repeated to ensure that the field occupies a certain minimum
  * size. Values will be left-padded with 0 unless padding is disabled in the method invocation.
  * @since 2.1
- * @version $Id: DurationFormatUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible method")
 public class DurationFormatUtils {
@@ -162,7 +161,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats an elapsed time into a plurialization correct string.</p>
+     * <p>Formats an elapsed time into a pluralization correct string.</p>
      * 
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
@@ -178,23 +177,23 @@ public class DurationFormatUtils {
         final boolean suppressLeadingZeroElements,
         final boolean suppressTrailingZeroElements) {
 
-        // This method is generally replacable by the format method, but 
+        // This method is generally replaceable by the format method, but
         // there are a series of tweaks and special cases that require 
         // trickery to replicate.
         String duration = formatDuration(durationMillis, "d' days 'H' hours 'm' minutes 's' seconds'");
         if (suppressLeadingZeroElements) {
             // this is a temporary marker on the front. Like ^ in regexp.
             duration = " " + duration;
-            String tmp = StringUtils.replaceOnce(duration, " 0 days", "");
+            String tmp = StringUtils.replaceOnce(duration, " 0 days", StringUtils.EMPTY);
             if (tmp.length() != duration.length()) {
                 duration = tmp;
-                tmp = StringUtils.replaceOnce(duration, " 0 hours", "");
+                tmp = StringUtils.replaceOnce(duration, " 0 hours", StringUtils.EMPTY);
                 if (tmp.length() != duration.length()) {
                     duration = tmp;
-                    tmp = StringUtils.replaceOnce(duration, " 0 minutes", "");
+                    tmp = StringUtils.replaceOnce(duration, " 0 minutes", StringUtils.EMPTY);
                     duration = tmp;
                     if (tmp.length() != duration.length()) {
-                        duration = StringUtils.replaceOnce(tmp, " 0 seconds", "");
+                        duration = StringUtils.replaceOnce(tmp, " 0 seconds", StringUtils.EMPTY);
                     }
                 }
             }
@@ -204,15 +203,15 @@ public class DurationFormatUtils {
             }
         }
         if (suppressTrailingZeroElements) {
-            String tmp = StringUtils.replaceOnce(duration, " 0 seconds", "");
+            String tmp = StringUtils.replaceOnce(duration, " 0 seconds", StringUtils.EMPTY);
             if (tmp.length() != duration.length()) {
                 duration = tmp;
-                tmp = StringUtils.replaceOnce(duration, " 0 minutes", "");
+                tmp = StringUtils.replaceOnce(duration, " 0 minutes", StringUtils.EMPTY);
                 if (tmp.length() != duration.length()) {
                     duration = tmp;
-                    tmp = StringUtils.replaceOnce(duration, " 0 hours", "");
+                    tmp = StringUtils.replaceOnce(duration, " 0 hours", StringUtils.EMPTY);
                     if (tmp.length() != duration.length()) {
-                        duration = StringUtils.replaceOnce(tmp, " 0 days", "");
+                        duration = StringUtils.replaceOnce(tmp, " 0 days", StringUtils.EMPTY);
                     }
                 }
             }
@@ -436,25 +435,25 @@ public class DurationFormatUtils {
             if (value instanceof StringBuilder) {
                 buffer.append(value.toString());
             } else {
-                if (value == y) {
+                if (value.equals(y)) {
                     buffer.append(paddedValue(years, padWithZeros, count));
                     lastOutputSeconds = false;
-                } else if (value == M) {
+                } else if (value.equals(M)) {
                     buffer.append(paddedValue(months, padWithZeros, count));
                     lastOutputSeconds = false;
-                } else if (value == d) {
+                } else if (value.equals(d)) {
                     buffer.append(paddedValue(days, padWithZeros, count));
                     lastOutputSeconds = false;
-                } else if (value == H) {
+                } else if (value.equals(H)) {
                     buffer.append(paddedValue(hours, padWithZeros, count));
                     lastOutputSeconds = false;
-                } else if (value == m) {
+                } else if (value.equals(m)) {
                     buffer.append(paddedValue(minutes, padWithZeros, count));
                     lastOutputSeconds = false;
-                } else if (value == s) {
+                } else if (value.equals(s)) {
                     buffer.append(paddedValue(seconds, padWithZeros, count));
                     lastOutputSeconds = true;
-                } else if (value == S) {
+                } else if (value.equals(S)) {
                     if (lastOutputSeconds) {
                         // ensure at least 3 digits are displayed even if padding is not selected
                         final int width = padWithZeros ? Math.max(3, count) : 3;
@@ -554,7 +553,7 @@ public class DurationFormatUtils {
             }
 
             if (value != null) {
-                if (previous != null && previous.getValue() == value) {
+                if (previous != null && previous.getValue().equals(value)) {
                     previous.increment();
                 } else {
                     final Token token = new Token(value);

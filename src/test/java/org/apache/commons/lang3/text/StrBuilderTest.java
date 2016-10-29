@@ -32,8 +32,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Unit tests for {@link org.apache.commons.lang3.text.StrBuilder}.
- * 
- * @version $Id: StrBuilderTest.java 1666669 2015-03-14 12:25:06Z britter $
  */
 public class StrBuilderTest {
 
@@ -1848,6 +1846,13 @@ public class StrBuilderTest {
         
         assertFalse(sb1.equals(Integer.valueOf(1)));
         assertFalse(sb1.equals("abc"));
+    }
+
+    @Test
+    public void test_LANG_1131_EqualsWithNullStrBuilder() throws Exception {
+        final StrBuilder sb = new StrBuilder();
+        final StrBuilder other = null;
+        assertFalse(sb.equals(other));
     }
 
     //-----------------------------------------------------------------------

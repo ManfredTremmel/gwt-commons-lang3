@@ -77,7 +77,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @param <T> the type of object that the builder will construct or compute.
  * 
  * @since 3.0
- * @version $Id: Builder.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 public interface Builder<T> {
 
@@ -87,6 +86,6 @@ public interface Builder<T> {
      * 
      * @return the object constructed or result calculated by the builder.
      */
-	@GwtIncompatible("incompatible method")
+    @GwtIncompatible("incompatible method")
     T build();
 }

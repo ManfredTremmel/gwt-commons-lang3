@@ -71,7 +71,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   &lt;T&gt; T obtain(Typed&lt;T&gt; typed, ...);
  * </pre>
  *
- * @version $Id: TypeLiteral.java 1606051 2014-06-27 12:22:17Z ggregory $
  * @since 3.2
  */
 @GwtIncompatible("incompatible class")

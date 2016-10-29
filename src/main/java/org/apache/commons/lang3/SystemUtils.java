@@ -33,7 +33,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  *
  * @since 1.0
- * @version $Id: SystemUtils.java 1671043 2015-04-03 12:09:07Z britter $
  */
 @GwtIncompatible("incompatible class")
 public class SystemUtils {
@@ -133,8 +132,11 @@ public class SystemUtils {
      * sync with that System property.
      * </p>
      *
+     * @deprecated Use {@link File#separator}, since it is guaranteed to be a
+     *             string containing a single character and it does not require a privilege check.
      * @since Java 1.1
      */
+    @Deprecated
     public static final String FILE_SEPARATOR = getSystemProperty("file.separator");
 
     /**
@@ -737,8 +739,11 @@ public class SystemUtils {
      * sync with that System property.
      * </p>
      *
+     * @deprecated Use {@link File#pathSeparator}, since it is guaranteed to be a
+     *             string containing a single character and it does not require a privilege check.
      * @since Java 1.1
      */
+    @Deprecated
     public static final String PATH_SEPARATOR = getSystemProperty("path.separator");
 
     /**
@@ -951,8 +956,23 @@ public class SystemUtils {
      * </p>
      *
      * @since 3.4
+     * 
+     * @deprecated As of release 3.5, replaced by {@link #IS_JAVA_9}
      */
-    public static final boolean IS_JAVA_1_9 = getJavaVersionMatches("1.9");
+    @Deprecated
+    public static final boolean IS_JAVA_1_9 = getJavaVersionMatches("9");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Java version 9 (also 9.x versions).
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@link #JAVA_VERSION} is {@code null}.
+     * </p>
+     *
+     * @since 3.5
+     */
+    public static final boolean IS_JAVA_9 = getJavaVersionMatches("9");
 
     // Operating system checks
     // -----------------------------------------------------------------------
@@ -1177,6 +1197,18 @@ public class SystemUtils {
      * @since 3.4
      */
     public static final boolean IS_OS_MAC_OSX_YOSEMITE = getOSMatches("Mac OS X", "10.10");
+
+    /**
+     * <p>
+     * Is {@code true} if this is Mac OS X El Capitan.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.5
+     */
+    public static final boolean IS_OS_MAC_OSX_EL_CAPITAN = getOSMatches("Mac OS X", "10.11");
 
     /**
      * <p>
@@ -1422,6 +1454,35 @@ public class SystemUtils {
 
     /**
      * <p>
+     * Is {@code true} if this is Windows 10.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.5
+     */
+    public static final boolean IS_OS_WINDOWS_10 = getOSMatchesName(OS_NAME_WINDOWS_PREFIX + " 10");
+
+    /**
+     * <p>
+     * Is {@code true} if this is z/OS.
+     * </p>
+     * <p>
+     * The field will return {@code false} if {@code OS_NAME} is {@code null}.
+     * </p>
+     *
+     * @since 3.5
+     */
+    // Values on a z/OS system I tested (Gary Gregory - 2016-03-12)
+    // os.arch = s390x
+    // os.encoding = ISO8859_1
+    // os.name = z/OS
+    // os.version = 02.02.00
+    public static final boolean IS_OS_ZOS = getOSMatchesName("z/OS");
+
+    /**
+     * <p>
      * Gets the Java home directory as a {@code File}.
      * </p>
      *
@@ -1546,7 +1607,7 @@ public class SystemUtils {
      * @since Java 1.4
      */
     public static boolean isJavaAwtHeadless() {
-        return JAVA_AWT_HEADLESS != null ? JAVA_AWT_HEADLESS.equals(Boolean.TRUE.toString()) : false;
+        return Boolean.TRUE.toString().equals(JAVA_AWT_HEADLESS);
     }
 
     /**

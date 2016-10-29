@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.knightsoft-net</groupId>
   <artifactId>gwt-commons-lang3</artifactId>
-  <version>3.4-3</version>
+  <version>3.5-0</version>
   <name>Apache Commons Lang</name>
 
   <inceptionYear>2001</inceptionYear>
@@ -33,6 +33,7 @@
   This is a port for GWT, which enables program, to use Apache Commons Lang
   also in the frontend compiled by the gwt compiler to java-script.
   </description>
+
   <url>https://github.com/ManfredTremmel/gwt-commons-lang3</url>
 
   <licenses>
@@ -48,7 +49,7 @@
     <connection>scm:git:git@github.com/ManfredTremmel/gwt-commons-lang3.git</connection>
     <developerConnection>scm:git:git@github.com/ManfredTremmel/gwt-commons-lang3.git</developerConnection>
   </scm>
-  
+
   <repositories>
     <repository>
       <id>sonatype-nexus-snapshots</id>
@@ -204,6 +205,24 @@
       <id>djones</id>
       <email>djones@apache.org</email>
       <timezone>0</timezone>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Loic Guibert</name>
+      <id>lguibert</id>
+      <email>lguibert@apache.org</email>
+      <timezone>+4</timezone>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Rob Tompkins</name>
+      <id>chtompki</id>
+      <email>chtompki@apache.org</email>
+      <timezone>-5</timezone>
       <roles>
         <role>Java Developer</role>
       </roles>
@@ -505,6 +524,12 @@
       <name>Michał Kordas</name>
     </contributor>
     <contributor>
+      <name>Felipe Adorno</name>
+    </contributor>
+    <contributor>
+      <name>Adrian Ber</name>
+    </contributor>
+    <contributor>
       <name>Manfred Tremmel</name>
       <email>Manfred.Tremmel@iiv.de</email>
       <roles>
@@ -512,44 +537,6 @@
       </roles>
     </contributor>
   </contributors>
-
-  <properties>
-    <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <!--
-       This is also  used to generate download_xxx file name.
-       To override this when generating the download page:
-
-       mvn commons:download-page -Dcommons.componentid=lang
-
-       The above seems to change the download page name but not any other
-       properties that depend on the componentid.
-    -->
-    <commons.componentid>lang3</commons.componentid>
-    <!-- Current 3.x release series -->
-    <commons.release.version>3.4</commons.release.version>
-    <commons.release.desc>(Java 6.0+)</commons.release.desc>
-    <!-- Previous 2.x release series -->
-    <commons.release.2.version>2.6</commons.release.2.version>
-    <commons.release.2.desc>(Requires Java 1.2 or later)</commons.release.2.desc>
-    <!-- Override generated name -->
-    <commons.release.2.name>commons-lang-${commons.release.2.version}</commons.release.2.name>
-    <commons.jira.id>LANG</commons.jira.id>
-    <commons.jira.pid>12310481</commons.jira.pid>
-
-    <commons.site.path>lang</commons.site.path>
-    <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-lang</commons.scmPubUrl>
-    <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
-    <gwt.version>2.8.0-rc3</gwt.version>
-    <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-    <wagon-webdav-jackrabbit.version>2.10</wagon-webdav-jackrabbit.version>
-    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
-    <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
-    <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-  </properties>
 
   <!-- Lang should depend on very little -->
   <dependencies>
@@ -569,16 +556,17 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.4</version>
+      <version>2.5</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>3.2</version>
+      <version>3.4</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
@@ -586,6 +574,49 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <properties>
+    <argLine>-Xmx512m</argLine>
+    <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <!--
+       This is also  used to generate download_xxx file name.
+       To override this when generating the download page:
+
+       mvn commons:download-page -Dcommons.componentid=lang
+
+       The above seems to change the download page name but not any other
+       properties that depend on the componentid.
+    -->
+    <commons.componentid>lang3</commons.componentid>
+    <!-- Current 3.x release series -->
+    <commons.release.version>3.5</commons.release.version>
+    <commons.release.desc>(Java 6.0+)</commons.release.desc>
+    <!-- Previous 2.x release series -->
+    <commons.release.2.version>2.6</commons.release.2.version>
+    <commons.release.2.desc>(Requires Java 1.2 or later)</commons.release.2.desc>
+    <!-- Override generated name -->
+    <commons.release.2.name>commons-lang-${commons.release.2.version}</commons.release.2.name>
+    <commons.jira.id>LANG</commons.jira.id>
+    <commons.jira.pid>12310481</commons.jira.pid>
+
+    <commons.site.path>lang</commons.site.path>
+    <commons.scmPubUrl>https://svn.apache.org/repos/infra/websites/production/commons/content/proper/commons-lang</commons.scmPubUrl>
+    <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
+    <commons.encoding>utf-8</commons.encoding>
+
+    <!-- Override clirr version to be able to build the site on Java 8 -->
+    <commons.clirr.version>2.8</commons.clirr.version>
+    <gwt.version>2.8.0</gwt.version>
+    <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+    <wagon-webdav-jackrabbit.version>2.10</wagon-webdav-jackrabbit.version>
+    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+    <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+    <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+    <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+  </properties>
 
 
   <build>
@@ -638,7 +669,7 @@
           </ignorePathsToDelete>
         </configuration>
       </plugin>
-
+ 
       <!-- GWT Maven Plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -741,6 +772,7 @@
         </plugin>
       </plugins>
     </pluginManagement>        
+
   </build>
 
   <reporting>
@@ -771,27 +803,11 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>clirr-maven-plugin</artifactId>
-        <version>2.6.1</version>
-        <configuration>
-          <minSeverity>info</minSeverity>
-        </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.4</version>
+        <version>3.5</version>
         <configuration>
           <targetJdk>${maven.compiler.target}</targetJdk>
         </configuration>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>pmd</report>
-              <report>cpd</report>
-            </reports>
-          </reportSet>
-        </reportSets>
       </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -849,6 +865,7 @@
         <configuration>
           <excludes>
             <exclude>site-content/**</exclude>
+            <exclude>src/site/resources/.htaccess</exclude>
             <exclude>src/site/resources/download_lang.cgi</exclude>
             <exclude>src/site/resources/release-notes/RELEASE-NOTES-*.txt</exclude>
             <exclude>src/test/resources/lang-708-input.txt</exclude>

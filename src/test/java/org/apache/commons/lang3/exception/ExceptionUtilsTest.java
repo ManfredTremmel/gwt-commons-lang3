@@ -16,11 +16,15 @@
  */
 package org.apache.commons.lang3.exception;
 
-import org.junit.After;
-import org.junit.Test;
-import org.junit.Before;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -28,25 +32,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import org.apache.commons.lang3.test.NotVisibleExceptionFactory;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
  * Tests {@link org.apache.commons.lang3.exception.ExceptionUtils}.
- * 
- * <h3>Notes</h3>
- * <p>
- * Make sure this exception code does not depend on Java 1.4 nested exceptions. SVN revision 38990 does not compile with
- * Java 1.3.1.
- * </p>
- * <ul>
- * <li>Compiled with Sun Java 1.3.1_15</li>
- * <li>Tested with Sun Java 1.3.1_15</li>
- * <li>Tested with Sun Java 1.4.2_12</li>
- * <li>Tested with Sun Java 1.5.0_08</li>
- * <li>All of the above on Windows XP SP2 + patches.</li>
- * </ul>
- * <p>
- * Gary Gregory; August 16, 2006.
- * </p>
- * 
  * @since 1.0
  */
 public class ExceptionUtilsTest {
@@ -56,6 +49,7 @@ public class ExceptionUtilsTest {
     private Throwable withoutCause;
     private Throwable jdkNoCause;
     private ExceptionWithCause cyclicCause;
+    private Throwable notVisibleException;
 
 
     @Before
@@ -68,6 +62,7 @@ public class ExceptionUtilsTest {
         final ExceptionWithCause b = new ExceptionWithCause(a);
         a.setCause(b);
         cyclicCause = new ExceptionWithCause(a);
+        notVisibleException = NotVisibleExceptionFactory.createException(withoutCause);
     }
 
 
@@ -78,6 +73,7 @@ public class ExceptionUtilsTest {
         withCause = null;
         jdkNoCause = null;
         cyclicCause = null;
+        notVisibleException = null;
     }
 
     //-----------------------------------------------------------------------
@@ -125,6 +121,7 @@ public class ExceptionUtilsTest {
         assertSame(cyclicCause.getCause(), ExceptionUtils.getCause(cyclicCause));
         assertSame(((ExceptionWithCause) cyclicCause.getCause()).getCause(), ExceptionUtils.getCause(cyclicCause.getCause()));
         assertSame(cyclicCause.getCause(), ExceptionUtils.getCause(((ExceptionWithCause) cyclicCause.getCause()).getCause()));
+        assertSame(withoutCause, ExceptionUtils.getCause(notVisibleException));
     }
 
     @SuppressWarnings("deprecation") // Specifically tests the deprecated methods
@@ -535,4 +532,95 @@ public class ExceptionUtilsTest {
         public NestableException(final Throwable t) { super(t); }
     }
 
+    @Test
+    public void testThrow() {
+        Exception expected = new InterruptedException();
+        try {
+            ExceptionUtils.rethrow(expected);
+            Assert.fail("Exception not thrown");
+        }
+        catch(Exception actual) {
+            Assert.assertSame(expected, actual);
+        }
+    }
+
+    @Test
+    public void testCatchTechniques() {
+        try {
+            throwsCheckedException();
+            Assert.fail("Exception not thrown");
+        }
+        catch(Exception ioe) {
+            assertTrue(ioe instanceof IOException);
+            assertEquals(1, ExceptionUtils.getThrowableCount(ioe));
+        }
+        
+        try {
+            redeclareCheckedException();
+            Assert.fail("Exception not thrown");
+        }
+        catch(IOException ioe) {
+            assertEquals(1, ExceptionUtils.getThrowableCount(ioe));
+        }
+    }
+
+    private static int redeclareCheckedException() throws IOException {
+        return throwsCheckedException();
+    }
+
+    private static int throwsCheckedException() {
+        try {
+            throw new IOException();
+        } catch (Exception e) {
+            return ExceptionUtils.<Integer>rethrow(e);
+        }
+    }
+
+    public static class TestThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
+    }
+
+    @Test
+    public void testWrapAndUnwrapError() {
+        try {
+            ExceptionUtils.wrapAndThrow(new OutOfMemoryError());
+            Assert.fail("Error not thrown");
+        }
+        catch(Throwable t) {
+            Assert.assertTrue(ExceptionUtils.hasCause(t, Error.class));
+        }
+    }
+
+    @Test
+    public void testWrapAndUnwrapRuntimeException() {
+        try {
+            ExceptionUtils.wrapAndThrow(new IllegalArgumentException());
+            Assert.fail("RuntimeException not thrown");
+        }
+        catch(Throwable t) {
+            Assert.assertTrue(ExceptionUtils.hasCause(t, RuntimeException.class));
+        }
+    }
+
+    @Test
+    public void testWrapAndUnwrapCheckedException() {
+        try {
+            ExceptionUtils.wrapAndThrow(new IOException());
+            Assert.fail("Checked Exception not thrown");
+        }
+        catch(Throwable t) {
+            Assert.assertTrue(ExceptionUtils.hasCause(t, IOException.class));
+        }
+    }
+
+    @Test
+    public void testWrapAndUnwrapThrowable() {
+        try {
+            ExceptionUtils.wrapAndThrow(new TestThrowable());
+            Assert.fail("Checked Exception not thrown");
+        }
+        catch(Throwable t) {
+            Assert.assertTrue(ExceptionUtils.hasCause(t, TestThrowable.class));
+        }
+    }
 }

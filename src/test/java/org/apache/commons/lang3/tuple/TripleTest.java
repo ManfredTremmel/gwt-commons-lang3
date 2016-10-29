@@ -27,8 +27,6 @@ import org.junit.Test;
 
 /**
  * Test the Triple class.
- *
- * @version $Id: TripleTest.java 1552635 2013-12-20 13:02:03Z britter $
  */
 public class TripleTest {
 

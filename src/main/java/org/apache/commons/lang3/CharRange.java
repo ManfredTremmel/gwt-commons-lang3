@@ -27,7 +27,6 @@ import java.util.NoSuchElementException;
  *
  * <p>#ThreadSafe#</p>
  * @since 1.0
- * @version $Id: CharRange.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 // TODO: This is no longer public and will be removed later as CharSet is moved 
 // to depend on Range.

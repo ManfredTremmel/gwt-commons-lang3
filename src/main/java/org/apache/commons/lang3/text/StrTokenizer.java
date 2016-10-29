@@ -83,7 +83,6 @@ import org.apache.commons.lang3.StringUtils;
  * </table>
  *
  * @since 2.2
- * @version $Id: StrTokenizer.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 public class StrTokenizer implements ListIterator<String>, Cloneable {
 
@@ -432,11 +431,11 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
     public String[] getTokenArray() {
         checkTokenized();
         if (this.tokens == null) {
-        	return null;
+            return null;
         }
         final String[] clone = new String[this.tokens.length];
         for (int i = 0; i < this.tokens.length; i++) {
-        	clone[i] = this.tokens[i];
+            clone[i] = this.tokens[i];
         }        
         return clone;
     }
@@ -654,7 +653,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
             
             // handle case where end of string is a delimiter
             if (pos >= count) {
-                addToken(tokenList, "");
+                addToken(tokenList, StringUtils.EMPTY);
             }
         }
         return tokenList;
@@ -706,14 +705,14 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
         
         // handle reaching end
         if (start >= len) {
-            addToken(tokenList, "");
+            addToken(tokenList, StringUtils.EMPTY);
             return -1;
         }
         
         // handle empty token
         final int delimLen = getDelimiterMatcher().isMatch(srcChars, start, start, len);
         if (delimLen > 0) {
-            addToken(tokenList, "");
+            addToken(tokenList, StringUtils.EMPTY);
             return start + delimLen;
         }
         
@@ -1098,15 +1097,15 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
         final StrTokenizer cloned = new StrTokenizer();
 
         if (this.chars != null) {
-	        cloned.chars = new char[this.chars.length];
-	        for (int i = 0; i < this.chars.length; i++) {
-	        	cloned.chars[i] = this.chars[i];
-	        }
+            cloned.chars = new char[this.chars.length];
+            for (int i = 0; i < this.chars.length; i++) {
+                cloned.chars[i] = this.chars[i];
+            }
         }
         if (this.tokens == null) {
-        	cloned.tokens = null;
+            cloned.tokens = null;
         } else {
-        	cloned.tokens = this.getTokenArray();
+            cloned.tokens = this.getTokenArray();
         }
         cloned.tokenPos = this.tokenPos;
         cloned.emptyAsNull = this.emptyAsNull;

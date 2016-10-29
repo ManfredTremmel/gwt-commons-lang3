@@ -26,7 +26,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * will replace up to one character at a time.
  * 
  * @since 3.0
- * @version $Id: CodePointTranslator.java 1553931 2013-12-28 21:24:44Z ggregory $
  */
 public abstract class CodePointTranslator extends CharSequenceTranslator {
 

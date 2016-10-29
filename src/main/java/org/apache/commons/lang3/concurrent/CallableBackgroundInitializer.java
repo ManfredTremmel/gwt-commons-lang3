@@ -64,7 +64,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *
  *
  * @since 3.0
- * @version $Id: CallableBackgroundInitializer.java 1583482 2014-03-31 22:54:57Z niallp $
  * @param <T> the type of the object managed by this initializer class
  */
 @GwtIncompatible("incompatible class")

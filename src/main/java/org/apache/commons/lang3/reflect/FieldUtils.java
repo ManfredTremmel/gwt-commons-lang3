@@ -20,13 +20,13 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import com.google.gwt.core.shared.GwtIncompatible;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
  * Utilities for working with {@link Field}s by reflection. Adapted and refactored from the dormant [reflect] Commons
@@ -36,7 +36,6 @@ import java.util.List;
  * changed that shouldn't be. This facility should be used with care.
  * 
  * @since 2.5
- * @version $Id: FieldUtils.java 1620579 2014-08-26 11:53:51Z britter $
  */
 @GwtIncompatible("incompatible class")
 public class FieldUtils {

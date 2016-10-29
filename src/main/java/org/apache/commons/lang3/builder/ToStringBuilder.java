@@ -86,7 +86,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * the {@link ToStringStyle} passed into the constructor.</p>
  *
  * @since 1.0
- * @version $Id: ToStringBuilder.java 1533551 2013-10-18 16:49:15Z sebb $
  */
 public class ToStringBuilder implements Builder<String> {
 

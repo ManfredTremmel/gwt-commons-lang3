@@ -42,8 +42,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.SerializationUtils}.
- *
- * @version $Id: SerializationUtilsTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class SerializationUtilsTest {
 

@@ -27,7 +27,6 @@ import org.apache.commons.lang3.math.NumberUtils;
  *
  * <p>#ThreadSafe#</p>
  * @since 2.0
- * @version $Id: BooleanUtils.java 1632874 2014-10-19 05:52:37Z djones $
  */
 public class BooleanUtils {
 
@@ -1099,11 +1098,7 @@ public class BooleanUtils {
         if (x == y) {
             return 0;
         }
-        if (x) {
-            return 1;
-        } else {
-            return -1;
-        }
+        return x ? 1 : -1;
     }
 
 }

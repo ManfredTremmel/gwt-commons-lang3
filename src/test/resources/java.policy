@@ -16,7 +16,7 @@
 //
 
 //
-// $Id: java.policy 1165645 2011-09-06 12:46:39Z ggregory $
+// $Id$
 //
 // Allows unit tests to run with a Java Security Manager
 //

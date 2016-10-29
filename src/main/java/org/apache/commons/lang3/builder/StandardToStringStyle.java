@@ -26,7 +26,6 @@ package org.apache.commons.lang3.builder;
  * program to access.</p>
  *
  * @since 1.0
- * @version $Id: StandardToStringStyle.java 1583482 2014-03-31 22:54:57Z niallp $
  */
 public class StandardToStringStyle extends ToStringStyle {
     

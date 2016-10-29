@@ -69,7 +69,6 @@ package org.apache.commons.lang3;
  *</pre>
  *
  * @since 2.0
- * @version $Id: BitField.java 1592457 2014-05-05 07:05:33Z djones $
  */
 public class BitField {
     
@@ -85,16 +84,7 @@ public class BitField {
      */
     public BitField(final int mask) {
         _mask = mask;
-        int count = 0;
-        int bit_pattern = mask;
-
-        if (bit_pattern != 0) {
-            while ((bit_pattern & 1) == 0) {
-                count++;
-                bit_pattern >>= 1;
-            }
-        }
-        _shift_count = count;
+        _shift_count = mask != 0 ? Integer.numberOfTrailingZeros(mask) : 0;
     }
 
     /**

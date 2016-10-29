@@ -25,7 +25,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Format factory.
  * 
  * @since 2.4
- * @version $Id: FormatFactory.java 1088899 2011-04-05 05:31:27Z bayard $
  */
 public interface FormatFactory {
 
@@ -39,7 +38,7 @@ public interface FormatFactory {
      * @param locale The locale, may be null
      * @return The format instance
      */
-	@GwtIncompatible("incompatible method")
+    @GwtIncompatible("incompatible method")
     Format getFormat(String name, String arguments, Locale locale);
 
 }

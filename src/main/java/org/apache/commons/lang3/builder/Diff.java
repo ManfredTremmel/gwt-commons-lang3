@@ -41,7 +41,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *            between primitive objects are stored as their Object wrapper
  *            equivalent.
  * @since 3.3
- * @version $Id: Diff.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public abstract class Diff<T> extends Pair<T, T> {

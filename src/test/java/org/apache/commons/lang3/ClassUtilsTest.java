@@ -47,8 +47,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.ClassUtils}.
- *
- * @version $Id: ClassUtilsTest.java 1666364 2015-03-13 07:36:25Z britter $
  */
 @SuppressWarnings("boxing") // JUnit4 does not support primitive equality testing apart from long
 public class ClassUtilsTest  {
@@ -888,7 +886,6 @@ public class ClassUtilsTest  {
         final Class<?>[] castNull = ClassUtils.primitivesToWrappers((Class<?>)null); // == new Class<?>[]{null}
         assertTrue("(Class<?>)null -> [null]", Arrays.equals(new Class<?>[]{null}, castNull));
         // test empty array is returned unchanged
-        // TODO this is not documented
         assertArrayEquals("empty -> empty",
                 ArrayUtils.EMPTY_CLASS_ARRAY, ClassUtils.primitivesToWrappers(ArrayUtils.EMPTY_CLASS_ARRAY));
 
@@ -1076,6 +1073,7 @@ public class ClassUtilsTest  {
         assertEquals( float.class, ClassUtils.getClass( "float" ) );
         assertEquals( double.class, ClassUtils.getClass( "double" ) );
         assertEquals( boolean.class, ClassUtils.getClass( "boolean" ) );
+        assertEquals( void.class, ClassUtils.getClass( "void" ) );
     }
 
     private void assertGetClassReturnsClass( final Class<?> c ) throws Exception {

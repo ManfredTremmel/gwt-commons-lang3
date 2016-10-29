@@ -25,7 +25,6 @@ package org.apache.commons.lang3;
  * 
  * <p>#ThreadSafe#</p>
  * @since 2.1
- * @version $Id: CharUtils.java 1531257 2013-10-11 11:25:28Z britter $
  */
 public class CharUtils {
     
@@ -558,8 +557,7 @@ public class CharUtils {
      *        character to test
      * @return true if it is a white space character
      */
-    public static boolean isWhitespace(final char pCharAt)
-    {
+    public static boolean isWhitespace(final char pCharAt) {
       return (pCharAt == '\u0009' || pCharAt == '\n' || pCharAt == '\u000B'
            || pCharAt == '\u000C' || pCharAt == '\r' || pCharAt == '\u001C'
            || pCharAt == '\u001D' || pCharAt == '\u001E' || pCharAt == '\u001F'

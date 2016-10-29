@@ -26,7 +26,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * the first translator consumes codepoints from the input.
  * 
  * @since 3.0
- * @version $Id: AggregateTranslator.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class AggregateTranslator extends CharSequenceTranslator {
 
@@ -40,7 +39,7 @@ public class AggregateTranslator extends CharSequenceTranslator {
     public AggregateTranslator(final CharSequenceTranslator... translators) {
         this.translators = new CharSequenceTranslator[translators.length];
         for (int i = 0; i < translators.length; i++) {
-        	this.translators[i] = translators[i];
+            this.translators[i] = translators[i];
         }
     }
 

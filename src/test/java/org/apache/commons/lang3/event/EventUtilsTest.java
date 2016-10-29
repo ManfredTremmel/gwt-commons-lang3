@@ -40,7 +40,6 @@ import org.junit.Test;
 
 /**
  * @since 3.0
- * @version $Id: EventUtilsTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class EventUtilsTest 
 {

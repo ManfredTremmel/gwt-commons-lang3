@@ -25,7 +25,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Translates codepoints to their Unicode escaped value.
  *
  * @since 3.0
- * @version $Id: UnicodeEscaper.java 1666535 2015-03-13 18:18:59Z britter $
  */
 public class UnicodeEscaper extends CodePointTranslator {
 

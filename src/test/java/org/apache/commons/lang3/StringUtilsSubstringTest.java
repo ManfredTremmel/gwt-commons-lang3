@@ -24,8 +24,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.StringUtils} - Substring methods
- *
- * @version $Id: StringUtilsSubstringTest.java 1616372 2014-08-06 23:46:30Z ggregory $
  */
 public class StringUtilsSubstringTest  {
     private static final String FOO = "foo";

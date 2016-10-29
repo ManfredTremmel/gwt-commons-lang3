@@ -34,8 +34,6 @@ import org.junit.Test;
 
 /**
  * Test class for {@link ConcurrentUtils}.
- *
- * @version $Id: ConcurrentUtilsTest.java 1609902 2014-07-12 11:01:37Z britter $
  */
 public class ConcurrentUtilsTest {
     /**

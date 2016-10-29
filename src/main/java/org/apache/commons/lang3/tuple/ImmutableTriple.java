@@ -30,7 +30,6 @@ package org.apache.commons.lang3.tuple;
  * @param <M> the middle element type
  * @param <R> the right element type
  *
- * @version $Id: ImmutableTriple.java 1592817 2014-05-06 17:57:38Z britter $
  * @since 3.2
  */
 public final class ImmutableTriple<L, M, R> extends Triple<L, M, R> {

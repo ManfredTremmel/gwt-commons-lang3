@@ -26,7 +26,6 @@ import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
 
 /**
- * @version $Id: MultilineRecursiveToStringStyleTest.java 1637671 2014-11-09 12:47:12Z britter $
  */
 public class MultilineRecursiveToStringStyleTest {
 

@@ -28,7 +28,6 @@ import org.apache.commons.lang3.BooleanUtils;
  * 
  * @see Boolean
  * @since 2.2
- * @version $Id: MutableBoolean.java 1669791 2015-03-28 15:22:59Z britter $
  */
 public class MutableBoolean implements Mutable<Boolean>, Serializable, Comparable<MutableBoolean> {
 

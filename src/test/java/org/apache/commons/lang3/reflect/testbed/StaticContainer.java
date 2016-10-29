@@ -17,7 +17,6 @@
 package org.apache.commons.lang3.reflect.testbed;
 
 /**
- * @version $Id: StaticContainer.java 1562017 2014-01-28 09:31:53Z djones $
  */
 public class StaticContainer {
     public static final Object IMMUTABLE_PUBLIC = "public";

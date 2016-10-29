@@ -38,7 +38,6 @@ package org.apache.commons.lang3.builder;
  *
  * @param <T> the type of objects that this object may be differentiated against
  * @since 3.3
- * @version $Id: Diffable.java 1561225 2014-01-24 23:17:29Z djones $
  */
 public interface Diffable<T> {
 

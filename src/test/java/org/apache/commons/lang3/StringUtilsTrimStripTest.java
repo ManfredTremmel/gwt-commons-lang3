@@ -18,58 +18,16 @@ package org.apache.commons.lang3;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 /**
- * Unit tests {@link org.apache.commons.lang3.StringUtils} - Trim/Empty methods
- *
- * @version $Id: StringUtilsTrimEmptyTest.java 1436770 2013-01-22 07:09:45Z ggregory $
+ * Unit tests {@link org.apache.commons.lang3.StringUtils} - Trim/Strip methods
  */
-public class StringUtilsTrimEmptyTest  {
+public class StringUtilsTrimStripTest  {
     private static final String FOO = "foo";
 
-    //-----------------------------------------------------------------------
-    @Test
-    public void testIsEmpty() {
-        assertTrue(StringUtils.isEmpty(null));
-        assertTrue(StringUtils.isEmpty(""));
-        assertFalse(StringUtils.isEmpty(" "));
-        assertFalse(StringUtils.isEmpty("foo"));
-        assertFalse(StringUtils.isEmpty("  foo  "));
-    }
-
-    @Test
-    public void testIsNotEmpty() {
-        assertFalse(StringUtils.isNotEmpty(null));
-        assertFalse(StringUtils.isNotEmpty(""));
-        assertTrue(StringUtils.isNotEmpty(" "));
-        assertTrue(StringUtils.isNotEmpty("foo"));
-        assertTrue(StringUtils.isNotEmpty("  foo  "));
-    }
-
-    @Test
-    public void testIsBlank() {
-        assertTrue(StringUtils.isBlank(null));
-        assertTrue(StringUtils.isBlank(""));
-        assertTrue(StringUtils.isBlank(StringUtilsTest.WHITESPACE));
-        assertFalse(StringUtils.isBlank("foo"));
-        assertFalse(StringUtils.isBlank("  foo  "));
-    }
-
-    @Test
-    public void testIsNotBlank() {
-        assertFalse(StringUtils.isNotBlank(null));
-        assertFalse(StringUtils.isNotBlank(""));
-        assertFalse(StringUtils.isNotBlank(StringUtilsTest.WHITESPACE));
-        assertTrue(StringUtils.isNotBlank("foo"));
-        assertTrue(StringUtils.isNotBlank("  foo  "));
-    }
-
-    //-----------------------------------------------------------------------
     @Test
     public void testTrim() {
         assertEquals(FOO, StringUtils.trim(FOO + "  "));
@@ -275,5 +233,7 @@ public class StringUtilsTrimEmptyTest  {
         assertEquals( "Failed empty String", "", StringUtils.stripAccents("") );
         assertEquals( "Failed to handle non-accented text", "control", StringUtils.stripAccents("control") );
         assertEquals( "Failed to handle easy example", "eclair", StringUtils.stripAccents("\u00E9clair") );
+        assertEquals("ALOSZZCN aloszzcn", StringUtils.stripAccents("\u0104\u0141\u00D3\u015A\u017B\u0179\u0106\u0143 "
+                + "\u0105\u0142\u00F3\u015B\u017C\u017A\u0107\u0144"));
     }
 }

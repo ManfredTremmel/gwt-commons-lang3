@@ -21,17 +21,19 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Locale;
-
+import org.apache.commons.lang3.test.SystemDefaultsSwitch;
 import org.hamcrest.core.IsNot;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * Unit tests {@link org.apache.commons.lang3.StringUtils} - Substring methods
- *
- * @version $Id: StringUtilsEqualsIndexOfTest.java 1648063 2014-12-27 16:20:55Z britter $
+ * Unit tests {@link org.apache.commons.lang3.StringUtils} - Equals/IndexOf methods
  */
 public class StringUtilsEqualsIndexOfTest  {
+
+    @Rule
+    public SystemDefaultsSwitch defaults = new SystemDefaultsSwitch();
+
     private static final String BAR = "bar";
     /**
      * Supplementary character U+20000
@@ -43,438 +45,12 @@ public class StringUtilsEqualsIndexOfTest  {
      * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
      */
     private static final String CharU20001 = "\uD840\uDC01";
-    /**
-     * Incomplete supplementary character U+20000, high surrogate only.
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    private static final String CharUSuppCharHigh = "\uDC00";
-
-    /**
-     * Incomplete supplementary character U+20000, low surrogate only.
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    private static final String CharUSuppCharLow = "\uD840";
 
     private static final String FOO = "foo";
 
     private static final String FOOBAR = "foobar";
 
     private static final String[] FOOBAR_SUB_ARRAY = new String[] {"ob", "ba"};
-
-    @Test
-    public void testContains_Char() {
-        assertFalse(StringUtils.contains(null, ' '));
-        assertFalse(StringUtils.contains("", ' '));
-        assertFalse(StringUtils.contains("", null));
-        assertFalse(StringUtils.contains(null, null));
-        assertTrue(StringUtils.contains("abc", 'a'));
-        assertTrue(StringUtils.contains("abc", 'b'));
-        assertTrue(StringUtils.contains("abc", 'c'));
-        assertFalse(StringUtils.contains("abc", 'z'));
-    }
-
-    @Test
-    public void testContains_String() {
-        assertFalse(StringUtils.contains(null, null));
-        assertFalse(StringUtils.contains(null, ""));
-        assertFalse(StringUtils.contains(null, "a"));
-        assertFalse(StringUtils.contains("", null));
-        assertTrue(StringUtils.contains("", ""));
-        assertFalse(StringUtils.contains("", "a"));
-        assertTrue(StringUtils.contains("abc", "a"));
-        assertTrue(StringUtils.contains("abc", "b"));
-        assertTrue(StringUtils.contains("abc", "c"));
-        assertTrue(StringUtils.contains("abc", "abc"));
-        assertFalse(StringUtils.contains("abc", "z"));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContains_StringWithBadSupplementaryChars() {
-        // Test edge case: 1/2 of a (broken) supplementary char
-        assertFalse(StringUtils.contains(CharUSuppCharHigh, CharU20001));
-        assertFalse(StringUtils.contains(CharUSuppCharLow, CharU20001));
-        assertFalse(StringUtils.contains(CharU20001, CharUSuppCharHigh));
-        assertEquals(0, CharU20001.indexOf(CharUSuppCharLow));
-        assertTrue(StringUtils.contains(CharU20001, CharUSuppCharLow));
-        assertTrue(StringUtils.contains(CharU20001 + CharUSuppCharLow + "a", "a"));
-        assertTrue(StringUtils.contains(CharU20001 + CharUSuppCharHigh + "a", "a"));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContains_StringWithSupplementaryChars() {
-        assertTrue(StringUtils.contains(CharU20000 + CharU20001, CharU20000));
-        assertTrue(StringUtils.contains(CharU20000 + CharU20001, CharU20001));
-        assertTrue(StringUtils.contains(CharU20000, CharU20000));
-        assertFalse(StringUtils.contains(CharU20000, CharU20001));
-    }
-
-    @Test
-    public void testContainsAny_StringCharArray() {
-        assertFalse(StringUtils.containsAny(null, (char[]) null));
-        assertFalse(StringUtils.containsAny(null, new char[0]));
-        assertFalse(StringUtils.containsAny(null, new char[] { 'a', 'b' }));
-
-        assertFalse(StringUtils.containsAny("", (char[]) null));
-        assertFalse(StringUtils.containsAny("", new char[0]));
-        assertFalse(StringUtils.containsAny("", new char[] { 'a', 'b' }));
-
-        assertFalse(StringUtils.containsAny("zzabyycdxx", (char[]) null));
-        assertFalse(StringUtils.containsAny("zzabyycdxx", new char[0]));
-        assertTrue(StringUtils.containsAny("zzabyycdxx", new char[] { 'z', 'a' }));
-        assertTrue(StringUtils.containsAny("zzabyycdxx", new char[] { 'b', 'y' }));
-        assertFalse(StringUtils.containsAny("ab", new char[] { 'z' }));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsAny_StringCharArrayWithBadSupplementaryChars() {
-        // Test edge case: 1/2 of a (broken) supplementary char
-        assertFalse(StringUtils.containsAny(CharUSuppCharHigh, CharU20001.toCharArray()));
-        assertFalse(StringUtils.containsAny("abc" + CharUSuppCharHigh + "xyz", CharU20001.toCharArray()));
-        assertEquals(-1, CharUSuppCharLow.indexOf(CharU20001));
-        assertFalse(StringUtils.containsAny(CharUSuppCharLow, CharU20001.toCharArray()));
-        assertFalse(StringUtils.containsAny(CharU20001, CharUSuppCharHigh.toCharArray()));
-        assertEquals(0, CharU20001.indexOf(CharUSuppCharLow));
-        assertTrue(StringUtils.containsAny(CharU20001, CharUSuppCharLow.toCharArray()));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsAny_StringCharArrayWithSupplementaryChars() {
-        assertTrue(StringUtils.containsAny(CharU20000 + CharU20001, CharU20000.toCharArray()));
-        assertTrue(StringUtils.containsAny("a" + CharU20000 + CharU20001, "a".toCharArray()));
-        assertTrue(StringUtils.containsAny(CharU20000 + "a" + CharU20001, "a".toCharArray()));
-        assertTrue(StringUtils.containsAny(CharU20000 + CharU20001 + "a", "a".toCharArray()));
-        assertTrue(StringUtils.containsAny(CharU20000 + CharU20001, CharU20001.toCharArray()));
-        assertTrue(StringUtils.containsAny(CharU20000, CharU20000.toCharArray()));
-        // Sanity check:
-        assertEquals(-1, CharU20000.indexOf(CharU20001));
-        assertEquals(0, CharU20000.indexOf(CharU20001.charAt(0)));
-        assertEquals(-1, CharU20000.indexOf(CharU20001.charAt(1)));
-        // Test:
-        assertFalse(StringUtils.containsAny(CharU20000, CharU20001.toCharArray()));
-        assertFalse(StringUtils.containsAny(CharU20001, CharU20000.toCharArray()));
-    }
-
-    @Test
-    public void testContainsAny_StringString() {
-        assertFalse(StringUtils.containsAny(null, (String) null));
-        assertFalse(StringUtils.containsAny(null, ""));
-        assertFalse(StringUtils.containsAny(null, "ab"));
-
-        assertFalse(StringUtils.containsAny("", (String) null));
-        assertFalse(StringUtils.containsAny("", ""));
-        assertFalse(StringUtils.containsAny("", "ab"));
-
-        assertFalse(StringUtils.containsAny("zzabyycdxx", (String) null));
-        assertFalse(StringUtils.containsAny("zzabyycdxx", ""));
-        assertTrue(StringUtils.containsAny("zzabyycdxx", "za"));
-        assertTrue(StringUtils.containsAny("zzabyycdxx", "by"));
-        assertFalse(StringUtils.containsAny("ab", "z"));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsAny_StringWithBadSupplementaryChars() {
-        // Test edge case: 1/2 of a (broken) supplementary char
-        assertFalse(StringUtils.containsAny(CharUSuppCharHigh, CharU20001));
-        assertEquals(-1, CharUSuppCharLow.indexOf(CharU20001));
-        assertFalse(StringUtils.containsAny(CharUSuppCharLow, CharU20001));
-        assertFalse(StringUtils.containsAny(CharU20001, CharUSuppCharHigh));
-        assertEquals(0, CharU20001.indexOf(CharUSuppCharLow));
-        assertTrue(StringUtils.containsAny(CharU20001, CharUSuppCharLow));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsAny_StringWithSupplementaryChars() {
-        assertTrue(StringUtils.containsAny(CharU20000 + CharU20001, CharU20000));
-        assertTrue(StringUtils.containsAny(CharU20000 + CharU20001, CharU20001));
-        assertTrue(StringUtils.containsAny(CharU20000, CharU20000));
-        // Sanity check:
-        assertEquals(-1, CharU20000.indexOf(CharU20001));
-        assertEquals(0, CharU20000.indexOf(CharU20001.charAt(0)));
-        assertEquals(-1, CharU20000.indexOf(CharU20001.charAt(1)));
-        // Test:
-        assertFalse(StringUtils.containsAny(CharU20000, CharU20001));
-        assertFalse(StringUtils.containsAny(CharU20001, CharU20000));
-    }
-    
-    @Test
-    public void testContainsAny_StringStringArray() {
-        assertFalse(StringUtils.containsAny(null, (String[]) null));
-        assertFalse(StringUtils.containsAny(null, new String[0]));
-        assertFalse(StringUtils.containsAny(null, new String[] { "hello" }));
-        assertFalse(StringUtils.containsAny("", (String[]) null));
-        assertFalse(StringUtils.containsAny("", new String[0]));
-        assertFalse(StringUtils.containsAny("", new String[] { "hello" }));
-        assertFalse(StringUtils.containsAny("hello, goodbye", (String[]) null));
-        assertFalse(StringUtils.containsAny("hello, goodbye", new String[0]));
-        assertTrue(StringUtils.containsAny("hello, goodbye", new String[] { "hello", "goodbye" }));
-        assertTrue(StringUtils.containsAny("hello, goodbye", new String[] { "hello", "Goodbye" }));
-        assertFalse(StringUtils.containsAny("hello, goodbye", new String[] { "Hello", "Goodbye" }));
-    }
-
-    @Test
-    public void testContainsIgnoreCase_LocaleIndependence() {
-        final Locale orig = Locale.getDefault();
-
-        final Locale[] locales = { Locale.ENGLISH, new Locale("tr"), Locale.getDefault() };
-
-        final String[][] tdata = {
-            { "i", "I" },
-            { "I", "i" },
-            { "\u03C2", "\u03C3" },
-            { "\u03A3", "\u03C2" },
-            { "\u03A3", "\u03C3" },
-        };
-
-        final String[][] fdata = {
-            { "\u00DF", "SS" },
-        };
-
-        try {
-            for (final Locale locale : locales) {
-                Locale.setDefault(locale);
-                for (int j = 0; j < tdata.length; j++) {
-                    assertTrue(Locale.getDefault() + ": " + j + " " + tdata[j][0] + " " + tdata[j][1], StringUtils
-                            .containsIgnoreCase(tdata[j][0], tdata[j][1]));
-                }
-                for (int j = 0; j < fdata.length; j++) {
-                    assertFalse(Locale.getDefault() + ": " + j + " " + fdata[j][0] + " " + fdata[j][1], StringUtils
-                            .containsIgnoreCase(fdata[j][0], fdata[j][1]));
-                }
-            }
-        } finally {
-            Locale.setDefault(orig);
-        }
-    }
-
-    @Test
-    public void testContainsIgnoreCase_StringString() {
-        assertFalse(StringUtils.containsIgnoreCase(null, null));
-
-        // Null tests
-        assertFalse(StringUtils.containsIgnoreCase(null, ""));
-        assertFalse(StringUtils.containsIgnoreCase(null, "a"));
-        assertFalse(StringUtils.containsIgnoreCase(null, "abc"));
-
-        assertFalse(StringUtils.containsIgnoreCase("", null));
-        assertFalse(StringUtils.containsIgnoreCase("a", null));
-        assertFalse(StringUtils.containsIgnoreCase("abc", null));
-
-        // Match len = 0
-        assertTrue(StringUtils.containsIgnoreCase("", ""));
-        assertTrue(StringUtils.containsIgnoreCase("a", ""));
-        assertTrue(StringUtils.containsIgnoreCase("abc", ""));
-
-        // Match len = 1
-        assertFalse(StringUtils.containsIgnoreCase("", "a"));
-        assertTrue(StringUtils.containsIgnoreCase("a", "a"));
-        assertTrue(StringUtils.containsIgnoreCase("abc", "a"));
-        assertFalse(StringUtils.containsIgnoreCase("", "A"));
-        assertTrue(StringUtils.containsIgnoreCase("a", "A"));
-        assertTrue(StringUtils.containsIgnoreCase("abc", "A"));
-
-        // Match len > 1
-        assertFalse(StringUtils.containsIgnoreCase("", "abc"));
-        assertFalse(StringUtils.containsIgnoreCase("a", "abc"));
-        assertTrue(StringUtils.containsIgnoreCase("xabcz", "abc"));
-        assertFalse(StringUtils.containsIgnoreCase("", "ABC"));
-        assertFalse(StringUtils.containsIgnoreCase("a", "ABC"));
-        assertTrue(StringUtils.containsIgnoreCase("xabcz", "ABC"));
-    }
-
-    @Test
-    public void testContainsNone_CharArray() {
-        final String str1 = "a";
-        final String str2 = "b";
-        final String str3 = "ab.";
-        final char[] chars1= {'b'};
-        final char[] chars2= {'.'};
-        final char[] chars3= {'c', 'd'};
-        final char[] emptyChars = new char[0];
-        assertTrue(StringUtils.containsNone(null, (char[]) null));
-        assertTrue(StringUtils.containsNone("", (char[]) null));
-        assertTrue(StringUtils.containsNone(null, emptyChars));
-        assertTrue(StringUtils.containsNone(str1, emptyChars));
-        assertTrue(StringUtils.containsNone("", emptyChars));
-        assertTrue(StringUtils.containsNone("", chars1));
-        assertTrue(StringUtils.containsNone(str1, chars1));
-        assertTrue(StringUtils.containsNone(str1, chars2));
-        assertTrue(StringUtils.containsNone(str1, chars3));
-        assertFalse(StringUtils.containsNone(str2, chars1));
-        assertTrue(StringUtils.containsNone(str2, chars2));
-        assertTrue(StringUtils.containsNone(str2, chars3));
-        assertFalse(StringUtils.containsNone(str3, chars1));
-        assertFalse(StringUtils.containsNone(str3, chars2));
-        assertTrue(StringUtils.containsNone(str3, chars3));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsNone_CharArrayWithBadSupplementaryChars() {
-        // Test edge case: 1/2 of a (broken) supplementary char
-        assertTrue(StringUtils.containsNone(CharUSuppCharHigh, CharU20001.toCharArray()));
-        assertEquals(-1, CharUSuppCharLow.indexOf(CharU20001));
-        assertTrue(StringUtils.containsNone(CharUSuppCharLow, CharU20001.toCharArray()));
-        assertEquals(-1, CharU20001.indexOf(CharUSuppCharHigh));
-        assertTrue(StringUtils.containsNone(CharU20001, CharUSuppCharHigh.toCharArray()));
-        assertEquals(0, CharU20001.indexOf(CharUSuppCharLow));
-        assertFalse(StringUtils.containsNone(CharU20001, CharUSuppCharLow.toCharArray()));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsNone_CharArrayWithSupplementaryChars() {
-        assertFalse(StringUtils.containsNone(CharU20000 + CharU20001, CharU20000.toCharArray()));
-        assertFalse(StringUtils.containsNone(CharU20000 + CharU20001, CharU20001.toCharArray()));
-        assertFalse(StringUtils.containsNone(CharU20000, CharU20000.toCharArray()));
-        // Sanity check:
-        assertEquals(-1, CharU20000.indexOf(CharU20001));
-        assertEquals(0, CharU20000.indexOf(CharU20001.charAt(0)));
-        assertEquals(-1, CharU20000.indexOf(CharU20001.charAt(1)));
-        // Test:
-        assertTrue(StringUtils.containsNone(CharU20000, CharU20001.toCharArray()));
-        assertTrue(StringUtils.containsNone(CharU20001, CharU20000.toCharArray()));
-    }
-
-    @Test
-    public void testContainsNone_String() {
-        final String str1 = "a";
-        final String str2 = "b";
-        final String str3 = "ab.";
-        final String chars1= "b";
-        final String chars2= ".";
-        final String chars3= "cd";
-        assertTrue(StringUtils.containsNone(null, (String) null));
-        assertTrue(StringUtils.containsNone("", (String) null));
-        assertTrue(StringUtils.containsNone(null, ""));
-        assertTrue(StringUtils.containsNone(str1, ""));
-        assertTrue(StringUtils.containsNone("", ""));
-        assertTrue(StringUtils.containsNone("", chars1));
-        assertTrue(StringUtils.containsNone(str1, chars1));
-        assertTrue(StringUtils.containsNone(str1, chars2));
-        assertTrue(StringUtils.containsNone(str1, chars3));
-        assertFalse(StringUtils.containsNone(str2, chars1));
-        assertTrue(StringUtils.containsNone(str2, chars2));
-        assertTrue(StringUtils.containsNone(str2, chars3));
-        assertFalse(StringUtils.containsNone(str3, chars1));
-        assertFalse(StringUtils.containsNone(str3, chars2));
-        assertTrue(StringUtils.containsNone(str3, chars3));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsNone_StringWithBadSupplementaryChars() {
-        // Test edge case: 1/2 of a (broken) supplementary char
-        assertTrue(StringUtils.containsNone(CharUSuppCharHigh, CharU20001));
-        assertEquals(-1, CharUSuppCharLow.indexOf(CharU20001));
-        assertTrue(StringUtils.containsNone(CharUSuppCharLow, CharU20001));
-        assertEquals(-1, CharU20001.indexOf(CharUSuppCharHigh));
-        assertTrue(StringUtils.containsNone(CharU20001, CharUSuppCharHigh));
-        assertEquals(0, CharU20001.indexOf(CharUSuppCharLow));
-        assertFalse(StringUtils.containsNone(CharU20001, CharUSuppCharLow));
-    }
-
-    /**
-     * See http://www.oracle.com/technetwork/articles/javase/supplementary-142654.html
-     */
-    @Test
-    public void testContainsNone_StringWithSupplementaryChars() {
-        assertFalse(StringUtils.containsNone(CharU20000 + CharU20001, CharU20000));
-        assertFalse(StringUtils.containsNone(CharU20000 + CharU20001, CharU20001));
-        assertFalse(StringUtils.containsNone(CharU20000, CharU20000));
-        // Sanity check:
-        assertEquals(-1, CharU20000.indexOf(CharU20001));
-        assertEquals(0, CharU20000.indexOf(CharU20001.charAt(0)));
-        assertEquals(-1, CharU20000.indexOf(CharU20001.charAt(1)));
-        // Test:
-        assertTrue(StringUtils.containsNone(CharU20000, CharU20001));
-        assertTrue(StringUtils.containsNone(CharU20001, CharU20000));
-    }
-
-    @Test
-    public void testContainsOnly_CharArray() {
-        final String str1 = "a";
-        final String str2 = "b";
-        final String str3 = "ab";
-        final char[] chars1= {'b'};
-        final char[] chars2= {'a'};
-        final char[] chars3= {'a', 'b'};
-        final char[] emptyChars = new char[0];
-        assertFalse(StringUtils.containsOnly(null, (char[]) null));
-        assertFalse(StringUtils.containsOnly("", (char[]) null));
-        assertFalse(StringUtils.containsOnly(null, emptyChars));
-        assertFalse(StringUtils.containsOnly(str1, emptyChars));
-        assertTrue(StringUtils.containsOnly("", emptyChars));
-        assertTrue(StringUtils.containsOnly("", chars1));
-        assertFalse(StringUtils.containsOnly(str1, chars1));
-        assertTrue(StringUtils.containsOnly(str1, chars2));
-        assertTrue(StringUtils.containsOnly(str1, chars3));
-        assertTrue(StringUtils.containsOnly(str2, chars1));
-        assertFalse(StringUtils.containsOnly(str2, chars2));
-        assertTrue(StringUtils.containsOnly(str2, chars3));
-        assertFalse(StringUtils.containsOnly(str3, chars1));
-        assertFalse(StringUtils.containsOnly(str3, chars2));
-        assertTrue(StringUtils.containsOnly(str3, chars3));
-    }
-
-    @Test
-    public void testContainsOnly_String() {
-        final String str1 = "a";
-        final String str2 = "b";
-        final String str3 = "ab";
-        final String chars1= "b";
-        final String chars2= "a";
-        final String chars3= "ab";
-        assertFalse(StringUtils.containsOnly(null, (String) null));
-        assertFalse(StringUtils.containsOnly("", (String) null));
-        assertFalse(StringUtils.containsOnly(null, ""));
-        assertFalse(StringUtils.containsOnly(str1, ""));
-        assertTrue(StringUtils.containsOnly("", ""));
-        assertTrue(StringUtils.containsOnly("", chars1));
-        assertFalse(StringUtils.containsOnly(str1, chars1));
-        assertTrue(StringUtils.containsOnly(str1, chars2));
-        assertTrue(StringUtils.containsOnly(str1, chars3));
-        assertTrue(StringUtils.containsOnly(str2, chars1));
-        assertFalse(StringUtils.containsOnly(str2, chars2));
-        assertTrue(StringUtils.containsOnly(str2, chars3));
-        assertFalse(StringUtils.containsOnly(str3, chars1));
-        assertFalse(StringUtils.containsOnly(str3, chars2));
-        assertTrue(StringUtils.containsOnly(str3, chars3));
-    }
-
-    @Test
-    public void testContainsWhitespace() {
-        assertFalse( StringUtils.containsWhitespace("") );
-        assertTrue( StringUtils.containsWhitespace(" ") );
-        assertFalse( StringUtils.containsWhitespace("a") );
-        assertTrue( StringUtils.containsWhitespace("a ") );
-        assertTrue( StringUtils.containsWhitespace(" a") );
-        assertTrue( StringUtils.containsWhitespace("a\t") );
-        assertTrue( StringUtils.containsWhitespace("\n") );
-    }
 
     // The purpose of this class is to test StringUtils#equals(CharSequence, CharSequence)
     // with a CharSequence implementation whose equals(Object) override requires that the
@@ -531,7 +107,7 @@ public class StringUtilsEqualsIndexOfTest  {
 
     @Test
     public void testEquals() {
-        final CharSequence fooCs = FOO, barCs = BAR, foobarCs = FOOBAR;
+        final CharSequence fooCs = new StringBuilder(FOO), barCs = new StringBuilder(BAR), foobarCs = new StringBuilder(FOOBAR);
         assertTrue(StringUtils.equals(null, null));
         assertTrue(StringUtils.equals(fooCs, fooCs));
         assertTrue(StringUtils.equals(fooCs, new StringBuilder(FOO)));
@@ -570,6 +146,128 @@ public class StringUtilsEqualsIndexOfTest  {
         assertFalse(StringUtils.equalsIgnoreCase(null, FOO));
         assertTrue(StringUtils.equalsIgnoreCase("",""));
         assertFalse(StringUtils.equalsIgnoreCase("abcd","abcd "));
+    }
+
+    @Test
+    public void testEqualsAny() {
+        assertFalse(StringUtils.equalsAny(FOO));
+        assertFalse(StringUtils.equalsAny(FOO, new String[]{}));
+
+        assertTrue(StringUtils.equalsAny(FOO, FOO));
+        assertTrue(StringUtils.equalsAny(FOO, BAR, new String(new char[] { 'f', 'o', 'o' })));
+        assertFalse(StringUtils.equalsAny(FOO, BAR, new String(new char[] { 'f', 'O', 'O' })));
+        assertFalse(StringUtils.equalsAny(FOO, BAR));
+        assertFalse(StringUtils.equalsAny(FOO, BAR, null));
+        assertFalse(StringUtils.equalsAny(null, FOO));
+        assertFalse(StringUtils.equalsAny(FOO, FOOBAR));
+        assertFalse(StringUtils.equalsAny(FOOBAR, FOO));
+
+        assertTrue(StringUtils.equalsAny(null, null, null));
+        assertFalse(StringUtils.equalsAny(null, FOO, BAR, FOOBAR));
+        assertFalse(StringUtils.equalsAny(FOO, null, BAR));
+        assertTrue(StringUtils.equalsAny(FOO, BAR, null, "", FOO, BAR));
+        assertFalse(StringUtils.equalsAny(FOO, FOO.toUpperCase()));
+
+        assertFalse(StringUtils.equalsAny(null, (CharSequence[]) null));
+        assertTrue(StringUtils.equalsAny(FOO, new CustomCharSequence("foo")));
+        assertTrue(StringUtils.equalsAny(FOO, new StringBuilder("foo")));
+        assertFalse(StringUtils.equalsAny(FOO, new CustomCharSequence("fOo")));
+        assertFalse(StringUtils.equalsAny(FOO, new StringBuilder("fOo")));
+    }
+
+    @Test
+    public void testEqualsAnyIgnoreCase() {
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOO));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOO, new String[]{}));
+
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, FOO));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, FOO.toUpperCase()));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, FOO, new String(new char[]{'f', 'o', 'o'})));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, BAR, new String(new char[]{'f', 'O', 'O'})));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOO, BAR));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOO, BAR, null));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(null, FOO));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOO, FOOBAR));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOOBAR, FOO));
+
+        assertTrue(StringUtils.equalsAnyIgnoreCase(null, null, null));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(null, FOO, BAR, FOOBAR));
+        assertFalse(StringUtils.equalsAnyIgnoreCase(FOO, null, BAR));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, BAR, null, "", FOO.toUpperCase(), BAR));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, FOO.toUpperCase()));
+
+        assertFalse(StringUtils.equalsAnyIgnoreCase(null, (CharSequence[]) null));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, new CustomCharSequence("fOo")));
+        assertTrue(StringUtils.equalsAnyIgnoreCase(FOO, new StringBuilder("fOo")));
+    }
+
+    //-----------------------------------------------------------------------
+    @Test
+    public void testCompare_StringString() {
+        assertTrue(StringUtils.compare(null, null) == 0);
+        assertTrue(StringUtils.compare(null, "a") < 0);
+        assertTrue(StringUtils.compare("a", null) > 0);
+        assertTrue(StringUtils.compare("abc", "abc") == 0);
+        assertTrue(StringUtils.compare("a", "b") < 0);
+        assertTrue(StringUtils.compare("b", "a") > 0);
+        assertTrue(StringUtils.compare("a", "B") > 0);
+        assertTrue(StringUtils.compare("abc", "abd") < 0);
+        assertTrue(StringUtils.compare("ab", "abc") < 0);
+        assertTrue(StringUtils.compare("ab", "ab ") < 0);
+        assertTrue(StringUtils.compare("abc", "ab ") > 0);
+    }
+
+    @Test
+    public void testCompare_StringStringBoolean() {
+        assertTrue(StringUtils.compare(null, null, false) == 0);
+        assertTrue(StringUtils.compare(null, "a", true) < 0);
+        assertTrue(StringUtils.compare(null, "a", false) > 0);
+        assertTrue(StringUtils.compare("a", null, true) > 0);
+        assertTrue(StringUtils.compare("a", null, false) < 0);
+        assertTrue(StringUtils.compare("abc", "abc", false) == 0);
+        assertTrue(StringUtils.compare("a", "b", false) < 0);
+        assertTrue(StringUtils.compare("b", "a", false) > 0);
+        assertTrue(StringUtils.compare("a", "B", false) > 0);
+        assertTrue(StringUtils.compare("abc", "abd", false) < 0);
+        assertTrue(StringUtils.compare("ab", "abc", false) < 0);
+        assertTrue(StringUtils.compare("ab", "ab ", false) < 0);
+        assertTrue(StringUtils.compare("abc", "ab ", false) > 0);
+    }
+
+    @Test
+    public void testCompareIgnoreCase_StringString() {
+        assertTrue(StringUtils.compareIgnoreCase(null, null) == 0);
+        assertTrue(StringUtils.compareIgnoreCase(null, "a") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", null) > 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "abc") == 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "ABC") == 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", "b") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("b", "a") > 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", "B") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("A", "b") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "ABD") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("ab", "ABC") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("ab", "AB ") < 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "AB ") > 0);
+    }
+
+    @Test
+    public void testCompareIgnoreCase_StringStringBoolean() {
+        assertTrue(StringUtils.compareIgnoreCase(null, null, false) == 0);
+        assertTrue(StringUtils.compareIgnoreCase(null, "a", true) < 0);
+        assertTrue(StringUtils.compareIgnoreCase(null, "a", false) > 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", null, true) > 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", null, false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "abc", false) == 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "ABC", false) == 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", "b", false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("b", "a", false) > 0);
+        assertTrue(StringUtils.compareIgnoreCase("a", "B", false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("A", "b", false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "ABD", false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("ab", "ABC", false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("ab", "AB ", false) < 0);
+        assertTrue(StringUtils.compareIgnoreCase("abc", "AB ", false) > 0);
     }
 
     //-----------------------------------------------------------------------
@@ -647,17 +345,17 @@ public class StringUtilsEqualsIndexOfTest  {
     public void testIndexOfAny_StringCharArray() {
         assertEquals(-1, StringUtils.indexOfAny(null, (char[]) null));
         assertEquals(-1, StringUtils.indexOfAny(null, new char[0]));
-        assertEquals(-1, StringUtils.indexOfAny(null, new char[] {'a','b'}));
+        assertEquals(-1, StringUtils.indexOfAny(null, 'a','b'));
 
         assertEquals(-1, StringUtils.indexOfAny("", (char[]) null));
         assertEquals(-1, StringUtils.indexOfAny("", new char[0]));
-        assertEquals(-1, StringUtils.indexOfAny("", new char[] {'a','b'}));
+        assertEquals(-1, StringUtils.indexOfAny("", 'a','b'));
 
         assertEquals(-1, StringUtils.indexOfAny("zzabyycdxx", (char[]) null));
         assertEquals(-1, StringUtils.indexOfAny("zzabyycdxx", new char[0]));
-        assertEquals(0, StringUtils.indexOfAny("zzabyycdxx", new char[] {'z','a'}));
-        assertEquals(3, StringUtils.indexOfAny("zzabyycdxx", new char[] {'b','y'}));
-        assertEquals(-1, StringUtils.indexOfAny("ab", new char[] {'z'}));
+        assertEquals(0, StringUtils.indexOfAny("zzabyycdxx", 'z','a'));
+        assertEquals(3, StringUtils.indexOfAny("zzabyycdxx", 'b','y'));
+        assertEquals(-1, StringUtils.indexOfAny("ab", 'z'));
     }
 
     /**
@@ -720,19 +418,19 @@ public class StringUtilsEqualsIndexOfTest  {
     @Test
     public void testIndexOfAnyBut_StringCharArray() {
         assertEquals(-1, StringUtils.indexOfAnyBut(null, (char[]) null));
-        assertEquals(-1, StringUtils.indexOfAnyBut(null, new char[0]));
-        assertEquals(-1, StringUtils.indexOfAnyBut(null, new char[] {'a','b'}));
+        assertEquals(-1, StringUtils.indexOfAnyBut(null));
+        assertEquals(-1, StringUtils.indexOfAnyBut(null, 'a','b'));
 
         assertEquals(-1, StringUtils.indexOfAnyBut("", (char[]) null));
-        assertEquals(-1, StringUtils.indexOfAnyBut("", new char[0]));
-        assertEquals(-1, StringUtils.indexOfAnyBut("", new char[] {'a','b'}));
+        assertEquals(-1, StringUtils.indexOfAnyBut(""));
+        assertEquals(-1, StringUtils.indexOfAnyBut("", 'a','b'));
 
         assertEquals(-1, StringUtils.indexOfAnyBut("zzabyycdxx", (char[]) null));
-        assertEquals(-1, StringUtils.indexOfAnyBut("zzabyycdxx", new char[0]));
-        assertEquals(3, StringUtils.indexOfAnyBut("zzabyycdxx", new char[] {'z','a'}));
-        assertEquals(0, StringUtils.indexOfAnyBut("zzabyycdxx", new char[] {'b','y'}));
-        assertEquals(-1, StringUtils.indexOfAnyBut("aba", new char[] {'a', 'b'}));
-        assertEquals(0, StringUtils.indexOfAnyBut("aba", new char[] {'z'}));
+        assertEquals(-1, StringUtils.indexOfAnyBut("zzabyycdxx"));
+        assertEquals(3, StringUtils.indexOfAnyBut("zzabyycdxx", 'z','a'));
+        assertEquals(0, StringUtils.indexOfAnyBut("zzabyycdxx", 'b','y'));
+        assertEquals(-1, StringUtils.indexOfAnyBut("aba", 'a', 'b'));
+        assertEquals(0, StringUtils.indexOfAnyBut("aba", 'z'));
 
     }
 
@@ -800,6 +498,7 @@ public class StringUtilsEqualsIndexOfTest  {
         assertEquals(5, StringUtils.indexOfIgnoreCase("aabaabaa", "", 5));
         assertEquals(-1, StringUtils.indexOfIgnoreCase("ab", "AAB", 0));
         assertEquals(-1, StringUtils.indexOfIgnoreCase("aab", "AAB", 1));
+        assertEquals(-1, StringUtils.indexOfIgnoreCase("abc", "", 9));
     }
 
     @Test
@@ -1022,8 +721,48 @@ public class StringUtilsEqualsIndexOfTest  {
         assertEquals(8, StringUtils.ordinalIndexOf("aaaaaaaaa", "a", 9));
         assertEquals(-1, StringUtils.ordinalIndexOf("aaaaaaaaa", "a", 10));
 
-        assertEquals(3, StringUtils.ordinalIndexOf("aaaaaa", "aa", 2));
-        assertEquals(-1, StringUtils.ordinalIndexOf("aaaaaa", "aa", 3));
+        // match at each possible position
+        assertEquals(0, StringUtils.ordinalIndexOf("aaaaaa", "aa", 1));
+        assertEquals(1, StringUtils.ordinalIndexOf("aaaaaa", "aa", 2));
+        assertEquals(2, StringUtils.ordinalIndexOf("aaaaaa", "aa", 3));
+        assertEquals(3, StringUtils.ordinalIndexOf("aaaaaa", "aa", 4));
+        assertEquals(4, StringUtils.ordinalIndexOf("aaaaaa", "aa", 5));
+        assertEquals(-1, StringUtils.ordinalIndexOf("aaaaaa", "aa", 6));
+
+        assertEquals(0, StringUtils.ordinalIndexOf("ababab", "aba", 1));
+        assertEquals(2, StringUtils.ordinalIndexOf("ababab", "aba", 2));
+        assertEquals(-1, StringUtils.ordinalIndexOf("ababab", "aba", 3));
+
+        assertEquals(0, StringUtils.ordinalIndexOf("abababab", "abab", 1));
+        assertEquals(2, StringUtils.ordinalIndexOf("abababab", "abab", 2));
+        assertEquals(4, StringUtils.ordinalIndexOf("abababab", "abab", 3));
+        assertEquals(-1, StringUtils.ordinalIndexOf("abababab", "abab", 4));
+
+    }
+    
+    @Test
+    public void testLANG1193() {
+        assertEquals(0, StringUtils.ordinalIndexOf("abc", "ab", 1));        
     }
 
+    @Test
+    // Non-overlapping test
+    public void testLANG1241_1() {
+        //                                          0  3  6
+        assertEquals(0, StringUtils.ordinalIndexOf("abaabaab", "ab", 1));
+        assertEquals(3, StringUtils.ordinalIndexOf("abaabaab", "ab", 2));
+        assertEquals(6, StringUtils.ordinalIndexOf("abaabaab", "ab", 3));
+    }
+
+    @Test
+    // Overlapping matching test
+    public void testLANG1241_2() {
+        //                                          0 2 4
+        assertEquals(0, StringUtils.ordinalIndexOf("abababa", "aba", 1));
+        assertEquals(2, StringUtils.ordinalIndexOf("abababa", "aba", 2));
+        assertEquals(4, StringUtils.ordinalIndexOf("abababa", "aba", 3));
+        assertEquals(0, StringUtils.ordinalIndexOf("abababab", "abab", 1));
+        assertEquals(2, StringUtils.ordinalIndexOf("abababab", "abab", 2));
+        assertEquals(4, StringUtils.ordinalIndexOf("abababab", "abab", 3));
+    }
 }

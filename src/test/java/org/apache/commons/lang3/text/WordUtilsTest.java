@@ -24,12 +24,11 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.Test;
 
 /**
  * Unit tests for WordUtils class.
- * 
- * @version $Id: WordUtilsTest.java 1586649 2014-04-11 13:28:30Z britter $
  */
 public class WordUtilsTest {
 
@@ -54,7 +53,7 @@ public class WordUtilsTest {
         assertEquals("", WordUtils.wrap("", -1));
         
         // normal
-        final String systemNewLine = System.getProperty("line.separator");
+        final String systemNewLine = SystemUtils.LINE_SEPARATOR;
         String input = "Here is one line of text that is going to be wrapped after 20 columns.";
         String expected = "Here is one line of" + systemNewLine + "text that is going" 
             + systemNewLine + "to be wrapped after" + systemNewLine + "20 columns.";
@@ -116,7 +115,7 @@ public class WordUtilsTest {
         assertEquals(expected, WordUtils.wrap(input, -1, "\n", false));
 
         // system newline char
-        final String systemNewLine = System.getProperty("line.separator");
+        final String systemNewLine = SystemUtils.LINE_SEPARATOR;
         input = "Here is one line of text that is going to be wrapped after 20 columns.";
         expected = "Here is one line of" + systemNewLine + "text that is going" + systemNewLine 
             + "to be wrapped after" + systemNewLine + "20 columns.";
@@ -155,7 +154,33 @@ public class WordUtilsTest {
         expected = "Click here,\nhttp://commons.apach\ne.org, to jump to\nthe commons website";
         assertEquals(expected, WordUtils.wrap(input, 20, "\n", true));
     }
-    
+
+    @Test
+    public void testWrap_StringIntStringBooleanString() {
+
+        //no changes test
+        String input = "flammable/inflammable";
+        String expected = "flammable/inflammable";
+        assertEquals(expected, WordUtils.wrap(input, 30, "\n", false, "/"));
+
+        // wrap on / and small width
+        expected = "flammable\ninflammable";
+        assertEquals(expected, WordUtils.wrap(input, 2, "\n", false, "/"));
+
+        // wrap long words on / 1
+        expected = "flammable\ninflammab\nle";
+        assertEquals(expected, WordUtils.wrap(input, 9, "\n", true, "/"));
+
+        // wrap long words on / 2
+        expected = "flammable\ninflammable";
+        assertEquals(expected, WordUtils.wrap(input, 15, "\n", true, "/"));
+
+        // wrap long words on / 3
+        input = "flammableinflammable";
+        expected = "flammableinflam\nmable";
+        assertEquals(expected, WordUtils.wrap(input, 15, "\n", true, "/"));
+    }
+
     //-----------------------------------------------------------------------
     @Test
     public void testCapitalize_String() {
@@ -222,6 +247,26 @@ public class WordUtilsTest {
     }
 
     @Test
+    public void testContainsAllWords_StringString() {
+        assertFalse(WordUtils.containsAllWords(null, (String) null));
+        assertFalse(WordUtils.containsAllWords(null, ""));
+        assertFalse(WordUtils.containsAllWords(null, "ab"));
+
+        assertFalse(WordUtils.containsAllWords("", (String) null));
+        assertFalse(WordUtils.containsAllWords("", ""));
+        assertFalse(WordUtils.containsAllWords("", "ab"));
+
+        assertFalse(WordUtils.containsAllWords("foo", (String) null));
+        assertFalse(WordUtils.containsAllWords("bar", ""));
+        assertFalse(WordUtils.containsAllWords("zzabyycdxx", "by"));
+        assertTrue(WordUtils.containsAllWords("lorem ipsum dolor sit amet", "ipsum", "lorem", "dolor"));
+        assertFalse(WordUtils.containsAllWords("lorem ipsum dolor sit amet", "ipsum", null, "lorem", "dolor"));
+        assertFalse(WordUtils.containsAllWords("lorem ipsum null dolor sit amet", "ipsum", null, "lorem", "dolor"));
+        assertFalse(WordUtils.containsAllWords("ab", "b"));
+        assertFalse(WordUtils.containsAllWords("ab", "z"));
+    }
+
+    @Test
     public void testUncapitalize_String() {
         assertEquals(null, WordUtils.uncapitalize(null));
         assertEquals("", WordUtils.uncapitalize(""));
@@ -263,6 +308,7 @@ public class WordUtilsTest {
         assertEquals("I", WordUtils.initials("I"));
         assertEquals("i", WordUtils.initials("i"));
         assertEquals("BJL", WordUtils.initials("Ben John Lee"));
+        assertEquals("BJL", WordUtils.initials("   Ben \n   John\tLee\t"));
         assertEquals("BJ", WordUtils.initials("Ben J.Lee"));
         assertEquals("BJ.L", WordUtils.initials(" Ben   John  . Lee"));
         assertEquals("iah1", WordUtils.initials("i am here 123"));
@@ -279,6 +325,7 @@ public class WordUtilsTest {
         assertEquals("i", WordUtils.initials("i", array));
         assertEquals("S", WordUtils.initials("SJC", array));
         assertEquals("BJL", WordUtils.initials("Ben John Lee", array));
+        assertEquals("BJL", WordUtils.initials("   Ben \n   John\tLee\t", array));
         assertEquals("BJ", WordUtils.initials("Ben J.Lee", array));
         assertEquals("BJ.L", WordUtils.initials(" Ben   John  . Lee", array));
         assertEquals("KO", WordUtils.initials("Kay O'Murphy", array));
@@ -292,6 +339,7 @@ public class WordUtilsTest {
         assertEquals("", WordUtils.initials("i", array));
         assertEquals("", WordUtils.initials("SJC", array));
         assertEquals("", WordUtils.initials("Ben John Lee", array));
+        assertEquals("", WordUtils.initials("   Ben \n   John\tLee\t", array));
         assertEquals("", WordUtils.initials("Ben J.Lee", array));
         assertEquals("", WordUtils.initials(" Ben   John  . Lee", array));
         assertEquals("", WordUtils.initials("Kay O'Murphy", array));
@@ -306,6 +354,7 @@ public class WordUtilsTest {
         assertEquals("S", WordUtils.initials("SJC", array));
         assertEquals("BJL", WordUtils.initials("Ben John Lee", array));
         assertEquals("BJ", WordUtils.initials("Ben J.Lee", array));
+        assertEquals("B\nJ", WordUtils.initials("   Ben \n   John\tLee\t", array));
         assertEquals("BJ.L", WordUtils.initials(" Ben   John  . Lee", array));
         assertEquals("KO", WordUtils.initials("Kay O'Murphy", array));
         assertEquals("iah1", WordUtils.initials("i am here 123", array));

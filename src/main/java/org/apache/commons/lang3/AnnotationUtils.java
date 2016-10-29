@@ -43,7 +43,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>#ThreadSafe#</p>
  *
  * @since 3.0
- * @version $Id: AnnotationUtils.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class AnnotationUtils {
 
@@ -83,7 +82,7 @@ public class AnnotationUtils {
                     break;
                 }
             }
-            return new StringBuilder(annotationType == null ? "" : annotationType.getName())
+            return new StringBuilder(annotationType == null ? StringUtils.EMPTY : annotationType.getName())
                     .insert(0, '@').toString();
         }
 

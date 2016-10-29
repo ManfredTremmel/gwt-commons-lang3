@@ -28,8 +28,6 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.CharSetUtils}.
- *
- * @version $Id: CharSetUtilsTest.java 1470130 2013-04-20 09:05:43Z bayard $
  */
 public class CharSetUtilsTest  {
 

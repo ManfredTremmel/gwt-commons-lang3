@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -67,7 +66,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </ul>
  *
  * @since 2.4
- * @version $Id: ExtendedMessageFormat.java 1669787 2015-03-28 15:12:47Z britter $
  */
 @GwtIncompatible("incompatible class")
 public class ExtendedMessageFormat extends MessageFormat {
@@ -335,7 +333,7 @@ public class ExtendedMessageFormat extends MessageFormat {
         boolean error = false;
         for (; !error && pos.getIndex() < pattern.length(); next(pos)) {
             char c = pattern.charAt(pos.getIndex());
-            if (CharUtils.isWhitespace(c)) {
+            if (Character.isWhitespace(c)) {
                 seekNonWs(pattern, pos);
                 c = pattern.charAt(pos.getIndex());
                 if (c != START_FMT && c != END_FE) {

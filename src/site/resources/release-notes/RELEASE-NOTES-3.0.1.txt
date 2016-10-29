@@ -1,4 +1,4 @@
-$Id: RELEASE-NOTES-3.0.1.txt 1582728 2014-03-28 12:31:18Z sebb $
+$Id$
 
                         Commons Lang Package
                             Version 3.0.1

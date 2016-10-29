@@ -24,7 +24,6 @@ import java.io.Serializable;
  * 
  * @param <T> the type to set and get 
  * @since 2.1
- * @version $Id: MutableObject.java 1562971 2014-01-30 21:23:18Z ggregory $
  */
 public class MutableObject<T> implements Mutable<T>, Serializable {
 

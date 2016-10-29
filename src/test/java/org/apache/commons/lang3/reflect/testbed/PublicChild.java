@@ -17,7 +17,6 @@
 package org.apache.commons.lang3.reflect.testbed;
 
 /**
- * @version $Id: PublicChild.java 1562017 2014-01-28 09:31:53Z djones $
  */
 public class PublicChild extends Parent {
     static final String VALUE = "child";

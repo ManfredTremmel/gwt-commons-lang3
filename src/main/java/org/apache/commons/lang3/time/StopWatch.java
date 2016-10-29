@@ -17,6 +17,8 @@
 
 package org.apache.commons.lang3.time;
 
+import java.util.concurrent.TimeUnit;
+
 import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
@@ -25,7 +27,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  * 
  * <p>
- * To start the watch, call {@link #start()}. At this point you can:
+ * To start the watch, call {@link #start()} or {@link StopWatch#createStarted()}. At this point you can:
  * </p>
  * <ul>
  * <li>{@link #split()} the watch to get the time whilst the watch continues in the background. {@link #unsplit()} will
@@ -55,12 +57,25 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>This class is not thread-safe</p>
  * 
  * @since 2.0
- * @version $Id: StopWatch.java 1591488 2014-04-30 21:49:35Z ggregory $
  */
-@GwtIncompatible("incompatible method")
+@GwtIncompatible("incompatible class")
 public class StopWatch {
 
     private static final long NANO_2_MILLIS = 1000000L;
+
+
+    /**
+     * Provides a started stopwatch for convenience.
+     *
+     * @return StopWatch a stopwatch that's already been started. 
+     *
+     * @since 3.5
+     */
+    public static StopWatch createStarted() {
+        StopWatch sw = new StopWatch();
+        sw.start();
+        return sw;
+    }
     
     /**
      * Enumeration type which indicates the status of stopwatch.
@@ -324,6 +339,27 @@ public class StopWatch {
     public long getTime() {
         return getNanoTime() / NANO_2_MILLIS;
     }
+
+    /**
+     * <p>
+     * Get the time on the stopwatch in the specified TimeUnit.
+     * </p>
+     * 
+     * <p>
+     * This is either the time between the start and the moment this method is called, or the amount of time between
+     * start and stop. The resulting time will be expressed in the desired TimeUnit with any remainder rounded down.
+     * For example, if the specified unit is {@code TimeUnit.HOURS} and the stopwatch time is 59 minutes, then the
+     * result returned will be {@code 0}.
+     * </p>
+     * 
+     * @param timeUnit the unit of time, not null
+     * @return the time in the specified TimeUnit, rounded down
+     * @since 3.5
+     */
+    public long getTime(final TimeUnit timeUnit) {
+        return timeUnit.convert(getNanoTime(), TimeUnit.NANOSECONDS);
+    }
+
     /**
      * <p>
      * Get the time on the stopwatch in nanoseconds.

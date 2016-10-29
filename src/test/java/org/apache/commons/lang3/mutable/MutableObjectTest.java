@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
 /**
  * JUnit tests.
  * 
- * @version $Id: MutableObjectTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  * @see MutableShort
  */
 public class MutableObjectTest {

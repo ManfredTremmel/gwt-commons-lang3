@@ -32,8 +32,6 @@ import org.junit.Test;
 
 /**
  * Unit tests for {@link org.apache.commons.lang3.builder.ToStringBuilder}.
- *
- * @version $Id: ToStringBuilderTest.java 1609902 2014-07-12 11:01:37Z britter $
  */
 public class ToStringBuilderTest {
 
@@ -1043,7 +1041,7 @@ public class ToStringBuilderTest {
         static final int staticInt2 = 67890;
     }
 
-    @Test
+    @Test(expected=IllegalArgumentException.class)
     public void testReflectionNull() {
         assertEquals("<null>", ReflectionToStringBuilder.toString(null));
     }

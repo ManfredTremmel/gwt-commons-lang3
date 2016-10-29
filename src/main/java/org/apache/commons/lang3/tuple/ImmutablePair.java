@@ -30,7 +30,6 @@ package org.apache.commons.lang3.tuple;
  * @param <R> the right element type
  *
  * @since Lang 3.0
- * @version $Id: ImmutablePair.java 1592817 2014-05-06 17:57:38Z britter $
  */
 public final class ImmutablePair<L, R> extends Pair<L, R> {
 

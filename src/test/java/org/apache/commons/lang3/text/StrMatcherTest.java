@@ -25,8 +25,6 @@ import org.junit.Test;
 
 /**
  * Unit tests for {@link org.apache.commons.lang3.text.StrMatcher}.
- *
- * @version $Id: StrMatcherTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class StrMatcherTest  {
 

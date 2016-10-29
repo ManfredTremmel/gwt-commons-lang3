@@ -63,9 +63,8 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </p>
  * 
  * @since 3.4
- * @version $Id: MultilineRecursiveToStringStyle.java 1654142 2015-01-23 08:43:21Z britter $
  */
-class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
+public class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
 
     /**
      * Required for serialization support.
@@ -117,8 +116,8 @@ class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
         return sb;
     }
 
-    @GwtIncompatible("incompatible method")
     @Override
+    @GwtIncompatible("incompatible method")
     public void appendDetail(StringBuffer buffer, String fieldName, Object value) {
         if (!ClassUtils.isPrimitiveWrapper(value.getClass()) && !String.class.equals(value.getClass())
                 && accept(value.getClass())) {
@@ -141,8 +140,8 @@ class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
         resetIndent();
     }
 
-    @GwtIncompatible("incompatible method")
     @Override
+    @GwtIncompatible("incompatible method")
     protected void reflectionAppendArrayDetail(final StringBuffer buffer, final String fieldName, final Object array) {
         spaces += indent;
         resetIndent();

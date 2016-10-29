@@ -39,7 +39,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @param <R> the right element type
  *
  * @since Lang 3.0
- * @version $Id: Pair.java 1557584 2014-01-12 18:26:49Z britter $
  */
 public abstract class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>, Serializable {
 

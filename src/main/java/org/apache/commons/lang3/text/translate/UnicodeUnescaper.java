@@ -27,7 +27,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * without the +.
  * 
  * @since 3.0
- * @version $Id: UnicodeUnescaper.java 1606060 2014-06-27 12:33:07Z ggregory $
  */
 public class UnicodeUnescaper extends CharSequenceTranslator {
 

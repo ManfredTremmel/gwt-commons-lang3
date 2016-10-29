@@ -30,8 +30,6 @@ import org.apache.commons.lang3.SystemUtils;
 
 /**
  * Unit tests for {@link org.apache.commons.lang3.text.StrBuilder}.
- *
- * @version $Id: StrBuilderAppendInsertTest.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class StrBuilderAppendInsertTest {
 

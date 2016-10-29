@@ -30,7 +30,6 @@ import java.math.BigInteger;
  * equivalent, please see the Commons Math BigFraction class. </p>
  *
  * @since 2.0
- * @version $Id: Fraction.java 1606086 2014-06-27 13:09:03Z ggregory $
  */
 public final class Fraction extends Number implements Comparable<Fraction> {
 
@@ -898,7 +897,7 @@ public final class Fraction extends Number implements Comparable<Fraction> {
     @Override
     public String toString() {
         if (toString == null) {
-            toString = new StringBuilder(32).append(getNumerator()).append('/').append(getDenominator()).toString();
+            toString = getNumerator() + "/" + getDenominator();
         }
         return toString;
     }
@@ -929,12 +928,10 @@ public final class Fraction extends Number implements Comparable<Fraction> {
                 if (properNumerator == 0) {
                     toProperString = Integer.toString(getProperWhole());
                 } else {
-                    toProperString = new StringBuilder(32).append(getProperWhole()).append(' ').append(properNumerator)
-                            .append('/').append(getDenominator()).toString();
+                    toProperString = getProperWhole() + " " + properNumerator + "/" + getDenominator();
                 }
             } else {
-                toProperString = new StringBuilder(32).append(getNumerator()).append('/').append(getDenominator())
-                        .toString();
+                toProperString = getNumerator() + "/" + getDenominator();
             }
         }
         return toProperString;

@@ -22,7 +22,6 @@ package org.apache.commons.lang3;
  *
  * @see CharSequence
  * @since 3.0
- * @version $Id: CharSequenceUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 public class CharSequenceUtils {
 
@@ -191,6 +190,20 @@ public class CharSequenceUtils {
         int index1 = thisStart;
         int index2 = start;
         int tmpLen = length;
+
+        // Extract these first so we detect NPEs the same as the java.lang.String version
+        final int srcLen = cs.length() - thisStart;
+        final int otherLen = substring.length() - start;
+
+        // Check for invalid parameters
+        if (thisStart < 0 || start < 0 || length < 0) {
+            return false;
+        }
+
+        // Check that the regions are long enough
+        if (srcLen < length || otherLen < length) {
+            return false;
+        }
 
         while (tmpLen-- > 0) {
             final char c1 = cs.charAt(index1++);

@@ -20,7 +20,6 @@ import java.util.List;
 
 /**
  * Holds generic testbed types.
- * @version $Id: GenericTypeHolder.java 1088899 2011-04-05 05:31:27Z bayard $
  */
 public class GenericTypeHolder {
     public GenericParent<String> stringParent;

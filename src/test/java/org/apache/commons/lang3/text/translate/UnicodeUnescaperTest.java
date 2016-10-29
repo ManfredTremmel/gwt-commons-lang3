@@ -24,7 +24,6 @@ import org.junit.Test;
 
 /**
  * Unit tests for {@link org.apache.commons.lang3.text.translate.UnicodeEscaper}.
- * @version $Id: UnicodeUnescaperTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class UnicodeUnescaperTest {
 

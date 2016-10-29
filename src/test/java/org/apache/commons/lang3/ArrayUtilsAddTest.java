@@ -30,8 +30,6 @@ import org.junit.Test;
 
 /**
  * Tests ArrayUtils add methods.
- *
- * @version $Id: ArrayUtilsAddTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class ArrayUtilsAddTest {
 

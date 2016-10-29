@@ -44,7 +44,6 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * generics. </p>
  *
  * @since 3.0
- * @version $Id: TypeUtils.java 1606051 2014-06-27 12:22:17Z ggregory $
  */
 @GwtIncompatible("incompatible class")
 public class TypeUtils {
@@ -160,7 +159,7 @@ public class TypeUtils {
         private ParameterizedTypeImpl(final Class<?> raw, final Type useOwner, final Type[] typeArguments) {
             this.raw = raw;
             this.useOwner = useOwner;
-            this.typeArguments = typeArguments;
+            this.typeArguments = typeArguments.clone();
         }
 
         /**
@@ -467,6 +466,10 @@ public class TypeUtils {
         for (final TypeVariable<?> var : toTypeVarAssigns.keySet()) {
             final Type toTypeArg = unrollVariableAssignments(var, toTypeVarAssigns);
             final Type fromTypeArg = unrollVariableAssignments(var, fromTypeVarAssigns);
+
+            if (toTypeArg == null && fromTypeArg instanceof Class) {
+                continue;
+            }
 
             // parameters must either be absent from the subject type, within
             // the bounds of the wildcard type, or be an exact match to the
@@ -1503,7 +1506,7 @@ public class TypeUtils {
         }
         Validate.noNullElements(typeArguments, "null type argument at index %s");
         Validate.isTrue(raw.getTypeParameters().length == typeArguments.length,
-            "invalid number of type parameters specified: expected %s, got %s", raw.getTypeParameters().length,
+            "invalid number of type parameters specified: expected %d, got %d", raw.getTypeParameters().length,
             typeArguments.length);
 
         return new ParameterizedTypeImpl(raw, useOwner, typeArguments);
@@ -1629,7 +1632,7 @@ public class TypeUtils {
             return equals(getImplicitLowerBounds(w), getImplicitLowerBounds(other))
                 && equals(getImplicitUpperBounds(w), getImplicitUpperBounds(other));
         }
-        return true;
+        return false;
     }
 
     /**

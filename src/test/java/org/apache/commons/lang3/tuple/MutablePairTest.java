@@ -30,7 +30,6 @@ import org.junit.Test;
 
 /**
  * Test the MutablePair class.
- * @version $Id: MutablePairTest.java 1436770 2013-01-22 07:09:45Z ggregory $
  */
 public class MutablePairTest {
 
