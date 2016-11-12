@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.knightsoft-net</groupId>
   <artifactId>gwt-commons-lang3</artifactId>
-  <version>3.5-0</version>
+  <version>3.5-1</version>
   <name>Apache Commons Lang</name>
 
   <inceptionYear>2001</inceptionYear>

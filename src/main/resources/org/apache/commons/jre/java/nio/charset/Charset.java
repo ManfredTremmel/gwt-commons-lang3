@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 The Guava Authors
+ * Copyright 2015 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -14,58 +14,64 @@
 
 package java.nio.charset;
 
+import javaemul.internal.EmulatedCharset;
+
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * A minimal GWT emulation of {@link Charset}.
- *
- * @author Gregory Kick
+ * A minimal emulation of {@link Charset}.
  */
-public abstract class Charset implements Comparable<Charset> {
-  private static final Charset UTF_8 = new Charset("UTF-8") {};
+public abstract class Charset implements Comparable<Charset> { // NOPMD
 
-  private static final SortedMap<String, Charset> AVAILABLE_CHARSETS = new TreeMap<>();
-  static {
-    Charset.AVAILABLE_CHARSETS.put(Charset.UTF_8.name(), Charset.UTF_8);
+  private static final class AvailableCharsets {
+    private static final SortedMap<String, Charset> CHARSETS;
+
+    static {
+      final SortedMap<String, Charset> map = new TreeMap<>();
+      map.put(EmulatedCharset.ISO_8859_1.name(), EmulatedCharset.ISO_8859_1);
+      map.put(EmulatedCharset.ISO_LATIN_1.name(), EmulatedCharset.ISO_LATIN_1);
+      map.put(EmulatedCharset.UTF_8.name(), EmulatedCharset.UTF_8);
+      CHARSETS = Collections.unmodifiableSortedMap(map);
+    }
   }
 
   public static SortedMap<String, Charset> availableCharsets() {
-    return Collections.unmodifiableSortedMap(Charset.AVAILABLE_CHARSETS);
+    return AvailableCharsets.CHARSETS;
   }
 
-  public static Charset forName(final String charsetName) {
+  /**
+   * get charset for name.
+   *
+   * @param charsetName name of the charset
+   * @return coresponding charset
+   */
+  public static Charset forName(String charsetName) { // NOPMD
     if (charsetName == null) {
       throw new IllegalArgumentException("Null charset name");
     }
-    final int length = charsetName.length();
-    if (length == 0) {
+
+    charsetName = charsetName.toUpperCase();
+    if (EmulatedCharset.ISO_8859_1.name().equals(charsetName)) {
+      return EmulatedCharset.ISO_8859_1;
+    } else if (EmulatedCharset.ISO_LATIN_1.name().equals(charsetName)) {
+      return EmulatedCharset.ISO_LATIN_1;
+    } else if (EmulatedCharset.UTF_8.name().equals(charsetName)) {
+      return EmulatedCharset.UTF_8;
+    }
+
+    if (!charsetName.matches("^[A-Za-z0-9][\\w-:\\.\\+]*$")) { // NOPMD
       throw new IllegalCharsetNameException(charsetName);
+    } else {
+      throw new UnsupportedCharsetException(charsetName);
     }
-    for (int i = 0; i < length; i++) {
-      final char c = charsetName.charAt(i);
-      if (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <= '9' || c == '-' && i != 0
-          || c == ':' && i != 0 || c == '_' && i != 0 || c == '.' && i != 0) {
-        continue;
-      }
-      throw new IllegalCharsetNameException(charsetName);
-    }
-    final Charset charset = Charset.AVAILABLE_CHARSETS.get(charsetName.toUpperCase());
-    if (charset != null) {
-      return charset;
-    }
-    throw new UnsupportedCharsetException(charsetName);
   }
 
-  private final String name;
+  private final String name; // NOPMD
 
-  private Charset(final String name) {
-    this.name = name;
-  }
-
-  protected Charset(final String name, final String[] aliasesIgnored) {
-    this.name = name;
+  protected Charset(final String pname, final String[] paliasesIgnored) { // NOPMD
+    this.name = pname;
   }
 
   public final String name() {
@@ -83,15 +89,15 @@ public abstract class Charset implements Comparable<Charset> {
   }
 
   @Override
-  public final boolean equals(final Object o) {
-    if (o == this) {
+  public final boolean equals(final Object pobject) {
+    if (pobject == this) {
       return true;
-    } else if (o instanceof Charset) {
-      final Charset that = (Charset) o;
-      return this.name.equals(that.name);
-    } else {
+    }
+    if (!(pobject instanceof Charset)) {
       return false;
     }
+    final Charset that = (Charset) pobject;
+    return this.name.equals(that.name);
   }
 
   @Override
@@ -99,7 +105,11 @@ public abstract class Charset implements Comparable<Charset> {
     return this.name;
   }
 
+  public final CharsetEncoder newEncoder() {
+    return new CharsetEncoder(this);
+  }
+
   public static Charset defaultCharset() {
-    return Charset.UTF_8;
+    return EmulatedCharset.UTF_8;
   }
 }
