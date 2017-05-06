@@ -609,7 +609,7 @@
 
     <!-- Override clirr version to be able to build the site on Java 8 -->
     <commons.clirr.version>2.8</commons.clirr.version>
-    <gwt.version>2.8.0</gwt.version>
+    <gwt.version>2.8.1</gwt.version>
     <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     <wagon-webdav-jackrabbit.version>2.12</wagon-webdav-jackrabbit.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
