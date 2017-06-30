@@ -546,7 +546,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     private void reflectionAppend(
         final Object lhs,
         final Object rhs,
-         final Class<?> clazz) {
+        final Class<?> clazz) {
 
         if (isRegistered(lhs, rhs)) {
             return;

@@ -674,7 +674,7 @@ public class DateUtils {
     /**
      * Converts a {@code Date} of a given {@code TimeZone} into a {@code Calendar}
      * @param date the date to convert to a Calendar
-     * @param tz the time zone of the @{code date}
+     * @param tz the time zone of the {@code date}
      * @return the created Calendar
      * @throws NullPointerException if {@code date} or {@code tz} is null
      */
@@ -1338,20 +1338,20 @@ public class DateUtils {
     }
 
     /**
-     * <p>Returns the number of hours within the
+     * <p>Returns the number of minutes within the
      * fragment. All datefields greater than the fragment will be ignored.</p>
      *
      * <p>Asking the minutes of any date will only return the number of minutes
-     * of the current day (resulting in a number between 0 and 23). This
-     * method will retrieve the number of hours for any fragment.
-     * For example, if you want to calculate the number of hours past this month,
-     * your fragment is Calendar.MONTH. The result will be all hours of the
-     * past day(s).</p>
+     * of the current hour (resulting in a number between 0 and 59). This
+     * method will retrieve the number of minutes for any fragment.
+     * For example, if you want to calculate the number of minutes past this month,
+     * your fragment is Calendar.MONTH. The result will be all minutes of the
+     * past day(s) and hour(s).</p>
      *
      * <p>Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
      * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
      * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND
-     * A fragment less than or equal to a HOUR field will return 0.</p>
+     * A fragment less than or equal to a MINUTE field will return 0.</p>
      *
      * <ul>
      *  <li>January 1, 2008 7:15:10.538 with Calendar.HOUR_OF_DAY as fragment will return 15
@@ -1377,20 +1377,20 @@ public class DateUtils {
     }
 
     /**
-     * <p>Returns the number of days within the
+     * <p>Returns the number of hours within the
      * fragment. All datefields greater than the fragment will be ignored.</p>
      *
      * <p>Asking the hours of any date will only return the number of hours
-     * of the current month (resulting in a number between 1 and 31). This
-     * method will retrieve the number of days for any fragment.
-     * For example, if you want to calculate the number of days past this year,
-     * your fragment is Calendar.YEAR. The result will be all days of the
-     * past month(s).</p>
+     * of the current day (resulting in a number between 0 and 23). This
+     * method will retrieve the number of hours for any fragment.
+     * For example, if you want to calculate the number of hours past this month,
+     * your fragment is Calendar.MONTH. The result will be all hours of the
+     * past day(s).</p>
      *
      * <p>Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
      * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
      * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND
-     * A fragment less than or equal to a DAY field will return 0.</p>
+     * A fragment less than or equal to a HOUR field will return 0.</p>
      *
      * <ul>
      *  <li>January 1, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as fragment will return 7
@@ -1404,9 +1404,9 @@ public class DateUtils {
      * </ul>
      *
      * @param date the date to work with, not null
-     * @param fragment the {@code Calendar} field part of date to calculate 
+     * @param fragment the {@code Calendar} field part of date to calculate
      * @return number of hours within the fragment of date
-     * @throws IllegalArgumentException if the date is <code>null</code> or 
+     * @throws IllegalArgumentException if the date is <code>null</code> or
      * fragment is not supported
      * @since 2.4
      */
@@ -1414,23 +1414,23 @@ public class DateUtils {
     public static long getFragmentInHours(final Date date, final int fragment) {
         return getFragment(date, fragment, TimeUnit.HOURS);
     }
-    
+
     /**
-     * <p>Returns the number of days within the 
-     * fragment. All datefields greater than the fragment will be ignored.</p> 
-     * 
+     * <p>Returns the number of days within the
+     * fragment. All datefields greater than the fragment will be ignored.</p>
+     *
      * <p>Asking the days of any date will only return the number of days
-     * of the current month (resulting in a number between 1 and 31). This 
-     * method will retrieve the number of days for any fragment. 
-     * For example, if you want to calculate the number of days past this year, 
-     * your fragment is Calendar.YEAR. The result will be all days of the 
-     * past month(s).</p> 
-     * 
-     * <p>Valid fragments are: Calendar.YEAR, Calendar.MONTH, both 
-     * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY, 
+     * of the current month (resulting in a number between 1 and 31). This
+     * method will retrieve the number of days for any fragment.
+     * For example, if you want to calculate the number of days past this year,
+     * your fragment is Calendar.YEAR. The result will be all days of the
+     * past month(s).</p>
+     *
+     * <p>Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+     * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
      * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND
-     * A fragment less than or equal to a DAY field will return 0.</p> 
-     *  
+     * A fragment less than or equal to a DAY field will return 0.</p>
+     *
      * <ul>
      *  <li>January 28, 2008 with Calendar.MONTH as fragment will return 28
      *   (equivalent to deprecated date.getDay())</li>
