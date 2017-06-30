@@ -57,7 +57,7 @@ public class EnumUtils {
      * @return the modifiable map of enum names to enums, never null
      */
     public static <E extends Enum<E>> Map<String, E> getEnumMap(final Class<E> enumClass) {
-        final Map<String, E> map = new LinkedHashMap<String, E>();
+        final Map<String, E> map = new LinkedHashMap<>();
         for (final E e: enumClass.getEnumConstants()) {
             map.put(e.name(), e);
         }
@@ -74,7 +74,7 @@ public class EnumUtils {
      * @return the modifiable list of enums, never null
      */
     public static <E extends Enum<E>> List<E> getEnumList(final Class<E> enumClass) {
-        return new ArrayList<E>(Arrays.asList(enumClass.getEnumConstants()));
+        return new ArrayList<>(Arrays.asList(enumClass.getEnumConstants()));
     }
 
     /**
@@ -201,9 +201,10 @@ public class EnumUtils {
      * @see #generateBitVectors(Class, Iterable)
      */
     @GwtIncompatible("incompatible method")
+    @SafeVarargs
     public static <E extends Enum<E>> long generateBitVector(final Class<E> enumClass, final E... values) {
         Validate.noNullElements(values);
-        return generateBitVector(enumClass, Arrays.<E> asList(values));
+        return generateBitVector(enumClass, Arrays.asList(values));
     }
 
     /**
@@ -223,6 +224,7 @@ public class EnumUtils {
      * @since 3.2
      */
     @GwtIncompatible("incompatible method")
+    @SafeVarargs
     public static <E extends Enum<E>> long[] generateBitVectors(final Class<E> enumClass, final E... values) {
         asEnum(enumClass);
         Validate.noNullElements(values);
@@ -291,7 +293,7 @@ public class EnumUtils {
      */
     private static <E extends Enum<E>> Class<E> checkBitVectorable(final Class<E> enumClass) {
         final E[] constants = asEnum(enumClass).getEnumConstants();
-        Validate.isTrue(constants.length <= Long.SIZE, CANNOT_STORE_S_S_VALUES_IN_S_BITS, 
+        Validate.isTrue(constants.length <= Long.SIZE, CANNOT_STORE_S_S_VALUES_IN_S_BITS,
             Integer.valueOf(constants.length), enumClass.getSimpleName(), Integer.valueOf(Long.SIZE));
 
         return enumClass;

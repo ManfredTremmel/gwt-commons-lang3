@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,16 +24,20 @@ import java.util.EnumSet;
 import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
- * Translate XML numeric entities of the form &amp;#[xX]?\d+;? to 
+ * Translate XML numeric entities of the form &amp;#[xX]?\d+;? to
  * the specific codepoint.
  *
  * Note that the semi-colon is optional.
- * 
+ *
  * @since 3.0
+ * @deprecated as of 3.6, use commons-text
+ * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/translate/NumericEntityUnescaper.html">
+ * NumericEntityUnescaper</a> instead
  */
+@Deprecated
 public class NumericEntityUnescaper extends CharSequenceTranslator {
 
-    public static enum OPTION { semiColonRequired, semiColonOptional, errorIfNoSemiColon }
+    public enum OPTION { semiColonRequired, semiColonOptional, errorIfNoSemiColon }
 
     // TODO?: Create an OptionsSet class to hide some of the conditional logic below
     private final EnumSet<OPTION> options;
@@ -41,8 +45,8 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
     /**
      * Create a UnicodeUnescaper.
      *
-     * The constructor takes a list of options, only one type of which is currently 
-     * available (whether to allow, error or ignore the semi-colon on the end of a 
+     * The constructor takes a list of options, only one type of which is currently
+     * available (whether to allow, error or ignore the semi-colon on the end of a
      * numeric entity to being missing).
      *
      * For example, to support numeric entities without a ';':
@@ -50,7 +54,7 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
      * and to throw an IllegalArgumentException when they're missing:
      *    new NumericEntityUnescaper(NumericEntityUnescaper.OPTION.errorIfNoSemiColon)
      *
-     * Note that the default behaviour is to ignore them. 
+     * Note that the default behaviour is to ignore them.
      *
      * @param options to apply to this unescaper
      */
@@ -68,8 +72,8 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
      * @param option to check state of
      * @return whether the option is set
      */
-    public boolean isSet(final OPTION option) { 
-        return options == null ? false : options.contains(option);
+    public boolean isSet(final OPTION option) {
+        return options != null && options.contains(option);
     }
 
     /**
@@ -99,8 +103,7 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
             // Note that this supports character codes without a ; on the end
             while(end < seqEnd && ( input.charAt(end) >= '0' && input.charAt(end) <= '9' ||
                                     input.charAt(end) >= 'a' && input.charAt(end) <= 'f' ||
-                                    input.charAt(end) >= 'A' && input.charAt(end) <= 'F' ) )
-            {
+                                    input.charAt(end) >= 'A' && input.charAt(end) <= 'F' ) ) {
                 end++;
             }
 
@@ -127,9 +130,9 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
             }
 
             if(entityValue > 0xFFFF) {
-                final char[] chrs = Character.toChars(entityValue);
-                out.write(chrs[0]);
-                out.write(chrs[1]);
+                final char[] chars = Character.toChars(entityValue);
+                out.write(chars[0]);
+                out.write(chars[1]);
             } else {
                 out.write(entityValue);
             }

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,15 +18,14 @@
 package org.apache.commons.lang3.builder;
 
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.SystemUtils;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
  * <p>Works with {@link ToStringBuilder} to create a "deep" <code>toString</code>.
- * But instead a single line like the {@link RecursiveToStringStyle} this creates a multiline String 
+ * But instead a single line like the {@link RecursiveToStringStyle} this creates a multiline String
  * similar to the {@link ToStringStyle#MULTI_LINE_STYLE}.</p>
- * 
+ *
  * <p>To use this class write code as follows:</p>
  *
  * <pre>
@@ -34,15 +33,15 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   String title;
  *   ...
  * }
- * 
+ *
  * public class Person {
  *   String name;
  *   int age;
  *   boolean smoker;
  *   Job job;
- * 
+ *
  *   ...
- * 
+ *
  *   public String toString() {
  *     return new ReflectionToStringBuilder(this, new MultilineRecursiveToStringStyle()).toString();
  *   }
@@ -61,7 +60,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * ]
  * </code>
  * </p>
- * 
+ *
  * @since 3.4
  */
 public class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
@@ -75,7 +74,7 @@ public class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
     private static final String LINE_SEPARATOR = "\n";
 
     /** Indenting of inner lines. */
-    private int indent = 2;
+    private static final int INDENT = 2;
 
     /** Current indenting. */
     private int spaces = 2;
@@ -89,27 +88,27 @@ public class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
     }
 
     /**
-     * Resets the fields responsible for the line breaks and indenting. 
+     * Resets the fields responsible for the line breaks and indenting.
      * Must be invoked after changing the {@link #spaces} value.
      */
     private void resetIndent() {
         setArrayStart("{" + LINE_SEPARATOR + spacer(spaces));
         setArraySeparator("," + LINE_SEPARATOR + spacer(spaces));
-        setArrayEnd(LINE_SEPARATOR + spacer(spaces - indent) + "}");
+        setArrayEnd(LINE_SEPARATOR + spacer(spaces - INDENT) + "}");
 
         setContentStart("[" + LINE_SEPARATOR + spacer(spaces));
         setFieldSeparator("," + LINE_SEPARATOR + spacer(spaces));
-        setContentEnd(LINE_SEPARATOR + spacer(spaces - indent) + "]");
+        setContentEnd(LINE_SEPARATOR + spacer(spaces - INDENT) + "]");
     }
 
     /**
      * Creates a StringBuilder responsible for the indenting.
-     * 
+     *
      * @param spaces how far to indent
      * @return a StringBuilder with {spaces} leading space characters.
      */
-    private StringBuilder spacer(int spaces) {
-        StringBuilder sb = new StringBuilder();
+    private StringBuilder spacer(final int spaces) {
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < spaces; i++) {
             sb.append(" ");
         }
@@ -118,13 +117,13 @@ public class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
 
     @Override
     @GwtIncompatible("incompatible method")
-    public void appendDetail(StringBuffer buffer, String fieldName, Object value) {
+    public void appendDetail(final StringBuffer buffer, final String fieldName, final Object value) {
         if (!ClassUtils.isPrimitiveWrapper(value.getClass()) && !String.class.equals(value.getClass())
                 && accept(value.getClass())) {
-            spaces += indent;
+            spaces += INDENT;
             resetIndent();
             buffer.append(ReflectionToStringBuilder.toString(value, this));
-            spaces -= indent;
+            spaces -= INDENT;
             resetIndent();
         } else {
             super.appendDetail(buffer, fieldName, value);
@@ -133,92 +132,92 @@ public class MultilineRecursiveToStringStyle extends RecursiveToStringStyle {
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final Object[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     @GwtIncompatible("incompatible method")
     protected void reflectionAppendArrayDetail(final StringBuffer buffer, final String fieldName, final Object array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
-        super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        super.reflectionAppendArrayDetail(buffer, fieldName, array);
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final long[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final int[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final short[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final byte[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final char[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final double[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final float[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 
     @Override
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final boolean[] array) {
-        spaces += indent;
+        spaces += INDENT;
         resetIndent();
         super.appendDetail(buffer, fieldName, array);
-        spaces -= indent;
+        spaces -= INDENT;
         resetIndent();
     }
 

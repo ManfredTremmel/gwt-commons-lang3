@@ -63,7 +63,7 @@ public class ConstructorUtils {
     /**
      * <p>Returns a new instance of the specified class inferring the right constructor
      * from the types of the arguments.</p>
-     * 
+     *
      * <p>This locates and calls a constructor.
      * The constructor signature must match the argument types by assignment compatibility.</p>
      *
@@ -90,7 +90,7 @@ public class ConstructorUtils {
     /**
      * <p>Returns a new instance of the specified class choosing the right constructor
      * from the list of parameter types.</p>
-     * 
+     *
      * <p>This locates and calls a constructor.
      * The constructor signature must match the parameter types by assignment compatibility.</p>
      *
@@ -118,7 +118,7 @@ public class ConstructorUtils {
                 "No such accessible constructor on object: " + cls.getName());
         }
         if (ctor.isVarArgs()) {
-            Class<?>[] methodParameterTypes = ctor.getParameterTypes();
+            final Class<?>[] methodParameterTypes = ctor.getParameterTypes();
             args = MethodUtils.getVarArgs(args, methodParameterTypes);
         }
         return ctor.newInstance(args);
@@ -187,7 +187,7 @@ public class ConstructorUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Finds a constructor given a class and signature, checking accessibility.</p>
-     * 
+     *
      * <p>This finds the constructor and ensures that it is accessible.
      * The constructor signature must match the parameter types exactly.</p>
      *
@@ -211,7 +211,7 @@ public class ConstructorUtils {
 
     /**
      * <p>Checks if the specified constructor is accessible.</p>
-     * 
+     *
      * <p>This simply ensures that the constructor is accessible.</p>
      *
      * @param <T> the constructor type
@@ -228,7 +228,7 @@ public class ConstructorUtils {
 
     /**
      * <p>Finds an accessible constructor with compatible parameters.</p>
-     * 
+     *
      * <p>This checks all the constructor and finds one with compatible parameters
      * This requires that every parameter is assignable from the given parameter types.
      * This is a more flexible search than the normal exact matching algorithm.</p>

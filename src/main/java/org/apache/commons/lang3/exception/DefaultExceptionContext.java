@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,7 +35,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * This implementation is serializable, however this is dependent on the values that
  * are added also being serializable.
  * </p>
- * 
+ *
  * @see ContextedException
  * @see ContextedRuntimeException
  * @since 3.0
@@ -46,14 +46,14 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
     private static final long serialVersionUID = 20110706L;
 
     /** The list storing the label-data pairs. */
-    private final List<Pair<String, Object>> contextValues = new ArrayList<Pair<String,Object>>();
+    private final List<Pair<String, Object>> contextValues = new ArrayList<>();
 
     /**
      * {@inheritDoc}
      */
     @Override
     public DefaultExceptionContext addContextValue(final String label, final Object value) {
-        contextValues.add(new ImmutablePair<String, Object>(label, value));
+        contextValues.add(new ImmutablePair<>(label, value));
         return this;
     }
 
@@ -77,7 +77,7 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
      */
     @Override
     public List<Object> getContextValues(final String label) {
-        final List<Object> values = new ArrayList<Object>();
+        final List<Object> values = new ArrayList<>();
         for (final Pair<String, Object> pair : contextValues) {
             if (StringUtils.equals(label, pair.getKey())) {
                 values.add(pair.getValue());
@@ -104,7 +104,7 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
      */
     @Override
     public Set<String> getContextLabels() {
-        final Set<String> labels = new HashSet<String>();
+        final Set<String> labels = new HashSet<>();
         for (final Pair<String, Object> pair : contextValues) {
             labels.add(pair.getKey());
         }
@@ -121,7 +121,7 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
 
     /**
      * Builds the message containing the contextual information.
-     * 
+     *
      * @param baseMessage  the base exception message <b>without</b> context information appended
      * @return the exception message <b>with</b> context information appended, never null
      */
@@ -132,13 +132,13 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
         if (baseMessage != null) {
             buffer.append(baseMessage);
         }
-        
+
         if (contextValues.size() > 0) {
             if (buffer.length() > 0) {
                 buffer.append('\n');
             }
             buffer.append("Exception Context:\n");
-            
+
             int i = 0;
             for (final Pair<String, Object> pair : contextValues) {
                 buffer.append("\t[");

@@ -11,7 +11,7 @@ gwt-commons-lang3 requires gwt >= 2.7.0, older versions are not supported!
     <dependency>
       <groupId>de.knightsoft-net</groupId>
       <artifactId>gwt-commons-lang3</artifactId>
-      <version>3.5-1</version>
+      <version>3.6-0</version>
     </dependency>
 ```
 

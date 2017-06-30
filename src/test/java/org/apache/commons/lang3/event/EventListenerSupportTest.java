@@ -49,7 +49,7 @@ public class EventListenerSupportTest {
         assertEquals(0, listeners.length);
         assertEquals(VetoableChangeListener.class, listeners.getClass().getComponentType());
         final VetoableChangeListener[] empty = listeners;
-        //for fun, show that the same empty instance is used 
+        //for fun, show that the same empty instance is used
         assertSame(empty, listenerSupport.getListeners());
 
         final VetoableChangeListener listener1 = EasyMock.createNiceMock(VetoableChangeListener.class);
@@ -76,7 +76,7 @@ public class EventListenerSupportTest {
     @Test
     public void testEventDispatchOrder() throws PropertyVetoException {
         final EventListenerSupport<VetoableChangeListener> listenerSupport = EventListenerSupport.create(VetoableChangeListener.class);
-        final List<VetoableChangeListener> calledListeners = new ArrayList<VetoableChangeListener>();
+        final List<VetoableChangeListener> calledListeners = new ArrayList<>();
 
         final VetoableChangeListener listener1 = createListener(calledListeners);
         final VetoableChangeListener listener2 = createListener(calledListeners);
@@ -117,7 +117,7 @@ public class EventListenerSupportTest {
         assertEquals(0, listeners.length);
         assertEquals(VetoableChangeListener.class, listeners.getClass().getComponentType());
         final VetoableChangeListener[] empty = listeners;
-        //for fun, show that the same empty instance is used 
+        //for fun, show that the same empty instance is used
         assertSame(empty, listenerSupport.getListeners());
 
         final VetoableChangeListener listener1 = EasyMock.createNiceMock(VetoableChangeListener.class);

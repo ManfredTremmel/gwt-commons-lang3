@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,17 +30,18 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.Validate;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
- * <p>Provides utilities for manipulating and examining 
+ * <p>Provides utilities for manipulating and examining
  * <code>Throwable</code> objects.</p>
  *
  * @since 1.0
  */
 public class ExceptionUtils {
-    
+
     /**
      * <p>Used when printing stack frames to denote the start of a
      * wrapped exception.</p>
@@ -98,7 +99,7 @@ public class ExceptionUtils {
     /**
      * <p>Introspects the <code>Throwable</code> to obtain the cause.</p>
      *
-     * <p>The method searches for methods with specific names that return a 
+     * <p>The method searches for methods with specific names that return a
      * <code>Throwable</code> object. This will pick up most wrapping exceptions,
      * including those from JDK 1.4.
      *
@@ -113,7 +114,7 @@ public class ExceptionUtils {
      *  <li><code>getCausedByException()</code></li>
      *  <li><code>getNested()</code></li>
      * </ul>
-     * 
+     *
      * <p>If none of the above is found, returns <code>null</code>.</p>
      *
      * @param throwable  the throwable to introspect for a cause, may be null
@@ -189,7 +190,7 @@ public class ExceptionUtils {
     @GwtIncompatible("incompatible method")
     public static Throwable getRootCause(final Throwable throwable) {
         final List<Throwable> list = getThrowableList(throwable);
-        return list.size() < 2 ? null : (Throwable)list.get(list.size() - 1);
+        return list.size() < 2 ? null : list.get(list.size() - 1);
     }
 
     /**
@@ -205,20 +206,14 @@ public class ExceptionUtils {
         Method method = null;
         try {
             method = throwable.getClass().getMethod(methodName);
-        } catch (final NoSuchMethodException ignored) { // NOPMD
-            // exception ignored
-        } catch (final SecurityException ignored) { // NOPMD
+        } catch (final NoSuchMethodException | SecurityException ignored) { // NOPMD
             // exception ignored
         }
 
         if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
             try {
                 return (Throwable) method.invoke(throwable);
-            } catch (final IllegalAccessException ignored) { // NOPMD
-                // exception ignored
-            } catch (final IllegalArgumentException ignored) { // NOPMD
-                // exception ignored
-            } catch (final InvocationTargetException ignored) { // NOPMD
+            } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) { // NOPMD
                 // exception ignored
             }
         }
@@ -293,7 +288,7 @@ public class ExceptionUtils {
      */
     @GwtIncompatible("incompatible method")
     public static List<Throwable> getThrowableList(Throwable throwable) {
-        final List<Throwable> list = new ArrayList<Throwable>();
+        final List<Throwable> list = new ArrayList<>();
         while (throwable != null && list.contains(throwable) == false) {
             list.add(throwable);
             throwable = ExceptionUtils.getCause(throwable);
@@ -478,9 +473,7 @@ public class ExceptionUtils {
         if (throwable == null) {
             return;
         }
-        if (stream == null) {
-            throw new IllegalArgumentException("The PrintStream must not be null");
-        }
+        Validate.isTrue(stream != null, "The PrintStream must not be null");
         final String trace[] = getRootCauseStackTrace(throwable);
         for (final String element : trace) {
             stream.println(element);
@@ -512,9 +505,7 @@ public class ExceptionUtils {
         if (throwable == null) {
             return;
         }
-        if (writer == null) {
-            throw new IllegalArgumentException("The PrintWriter must not be null");
-        }
+        Validate.isTrue(writer != null, "The PrintWriter must not be null");
         final String trace[] = getRootCauseStackTrace(throwable);
         for (final String element : trace) {
             writer.println(element);
@@ -543,7 +534,7 @@ public class ExceptionUtils {
         }
         final Throwable throwables[] = getThrowables(throwable);
         final int count = throwables.length;
-        final List<String> frames = new ArrayList<String>();
+        final List<String> frames = new ArrayList<>();
         List<String> nextTrace = getStackFrameList(throwables[count - 1]);
         for (int i = count; --i >= 0;) {
             final List<String> trace = nextTrace;
@@ -643,9 +634,9 @@ public class ExceptionUtils {
      */
     @GwtIncompatible("incompatible method")
     static String[] getStackFrames(final String stackTrace) {
-        final String linebreak = SystemUtils.LINE_SEPARATOR;
+        final String linebreak = System.lineSeparator();
         final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<>();
         while (frames.hasMoreTokens()) {
             list.add(frames.nextToken());
         }
@@ -660,16 +651,16 @@ public class ExceptionUtils {
      * <p>This works in most cases - it will only fail if the exception
      * message contains a line that starts with:
      * <code>&quot;&nbsp;&nbsp;&nbsp;at&quot;.</code></p>
-     * 
+     *
      * @param t is any throwable
      * @return List of stack frames
      */
     @GwtIncompatible("incompatible method")
     static List<String> getStackFrameList(final Throwable t) {
         final String stackTrace = getStackTrace(t);
-        final String linebreak = SystemUtils.LINE_SEPARATOR;
+        final String linebreak = System.lineSeparator();
         final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<>();
         boolean traceStarted = false;
         while (frames.hasMoreTokens()) {
             final String token = frames.nextToken();
@@ -765,7 +756,7 @@ public class ExceptionUtils {
      * code through a method re-declaring the desired checked exception, or
      * catch Exception and use the instanceof operator. Either of these
      * techniques are required when interacting with non-java jvm code such as
-     * Jyton, Scala, or Groovy, since these languages do not consider any
+     * Jython, Scala, or Groovy, since these languages do not consider any
      * exceptions as checked.
      *
      * @param throwable
@@ -778,7 +769,7 @@ public class ExceptionUtils {
      * @since 3.5
      * @see #wrapAndThrow(Throwable)
      */
-    public static <R> R rethrow(Throwable throwable) {
+    public static <R> R rethrow(final Throwable throwable) {
         // claim that the typeErasure invocation throws a RuntimeException
         return ExceptionUtils.<R, RuntimeException> typeErasure(throwable);
     }
@@ -790,7 +781,7 @@ public class ExceptionUtils {
      * clause.
      */
     @SuppressWarnings("unchecked")
-    private static <R, T extends Throwable> R typeErasure(Throwable throwable) throws T {
+    private static <R, T extends Throwable> R typeErasure(final Throwable throwable) throws T {
         throw (T) throwable;
     }
 
@@ -815,7 +806,7 @@ public class ExceptionUtils {
      * @see #rethrow(Throwable)
      * @see #hasCause(Throwable, Class)
      */
-    public static <R> R wrapAndThrow(Throwable throwable) {
+    public static <R> R wrapAndThrow(final Throwable throwable) {
         if (throwable instanceof RuntimeException) {
             throw (RuntimeException) throwable;
         }
@@ -840,7 +831,7 @@ public class ExceptionUtils {
      */
     @GwtIncompatible("incompatible method")
     public static boolean hasCause(Throwable chain,
-            Class<? extends Throwable> type) {
+            final Class<? extends Throwable> type) {
         if (chain instanceof UndeclaredThrowableException) {
             chain = chain.getCause();
         }

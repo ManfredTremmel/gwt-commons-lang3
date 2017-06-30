@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.Validate;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
@@ -81,7 +82,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * }
  * </pre>
  * <p>
- * Alternatively the {@link ToStringExclude} annotation can be used to exclude fields from being incorporated in the 
+ * Alternatively the {@link ToStringExclude} annotation can be used to exclude fields from being incorporated in the
  * result.
  * </p>
  * <p>
@@ -240,7 +241,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return the String result
      * @throws IllegalArgumentException
      *             if the Object is <code>null</code>
-     * 
+     *
      * @see ToStringExclude
      * @since 2.1
      */
@@ -293,7 +294,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return the String result
      * @throws IllegalArgumentException
      *             if the Object is <code>null</code>
-     * 
+     *
      * @see ToStringExclude
      * @since 2.1
      */
@@ -301,6 +302,64 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
             final T object, final ToStringStyle style, final boolean outputTransients,
             final boolean outputStatics, final Class<? super T> reflectUpToClass) {
         return new ReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics)
+                .toString();
+    }
+
+    /**
+     * <p>
+     * Builds a <code>toString</code> value through reflection.
+     * </p>
+     *
+     * <p>
+     * It uses <code>AccessibleObject.setAccessible</code> to gain access to private fields. This means that it will
+     * throw a security exception if run under a security manager, if the permissions are not set up correctly. It is
+     * also not as efficient as testing explicitly.
+     * </p>
+     *
+     * <p>
+     * If the <code>outputTransients</code> is <code>true</code>, transient fields will be output, otherwise they
+     * are ignored, as they are likely derived fields, and not part of the value of the Object.
+     * </p>
+     *
+     * <p>
+     * If the <code>outputStatics</code> is <code>true</code>, static fields will be output, otherwise they are
+     * ignored.
+     * </p>
+     *
+     * <p>
+     * Superclass fields will be appended up to and including the specified superclass. A null superclass is treated as
+     * <code>java.lang.Object</code>.
+     * </p>
+     *
+     * <p>
+     * If the style is <code>null</code>, the default <code>ToStringStyle</code> is used.
+     * </p>
+     *
+     * @param <T>
+     *            the type of the object
+     * @param object
+     *            the Object to be output
+     * @param style
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
+     * @param outputTransients
+     *            whether to include transient fields
+     * @param outputStatics
+     *            whether to include static fields
+     * @param excludeNullValues
+     *            whether to exclude fields whose values are null
+     * @param reflectUpToClass
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
+     * @return the String result
+     * @throws IllegalArgumentException
+     *             if the Object is <code>null</code>
+     *
+     * @see ToStringExclude
+     * @since 3.6
+     */
+    public static <T> String toString(
+            final T object, final ToStringStyle style, final boolean outputTransients,
+            final boolean outputStatics, boolean excludeNullValues, final Class<? super T> reflectUpToClass) {
+        return new ReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics, excludeNullValues)
                 .toString();
     }
 
@@ -343,7 +402,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return The given array or a new array without null.
      */
     static String[] toNoNullStringArray(final Object[] array) {
-        final List<String> list = new ArrayList<String>(array.length);
+        final List<String> list = new ArrayList<>(array.length);
         for (final Object e : array) {
             if (e != null) {
                 list.add(e.toString());
@@ -365,11 +424,9 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     public static String toStringExclude(final Object object, final String... excludeFieldNames) {
         return new ReflectionToStringBuilder(object).setExcludeFieldNames(excludeFieldNames).toString();
     }
-    
+
     private static Object checkNotNull(final Object obj) {
-        if (obj == null) {
-            throw new IllegalArgumentException("The Object passed in should not be null.");
-        }
+        Validate.isTrue(obj != null, "The Object passed in should not be null.");
         return obj;
     }
 
@@ -382,6 +439,11 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * Whether or not to append transient fields.
      */
     private boolean appendTransients = false;
+
+    /**
+     * Whether or not to append fields that are null.
+     */
+    private boolean excludeNullValues;
 
     /**
      * Which field names to exclude from output. Intended for fields like <code>"password"</code>.
@@ -488,6 +550,38 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     }
 
     /**
+     * Constructor.
+     *
+     * @param <T>
+     *            the type of the object
+     * @param object
+     *            the Object to build a <code>toString</code> for
+     * @param style
+     *            the style of the <code>toString</code> to create, may be <code>null</code>
+     * @param buffer
+     *            the <code>StringBuffer</code> to populate, may be <code>null</code>
+     * @param reflectUpToClass
+     *            the superclass to reflect up to (inclusive), may be <code>null</code>
+     * @param outputTransients
+     *            whether to include transient fields
+     * @param outputStatics
+     *            whether to include static fields
+     * @param excludeNullValues
+     *            whether to exclude fields who value is null
+     * @since 3.6
+     */
+    public <T> ReflectionToStringBuilder(
+            final T object, final ToStringStyle style, final StringBuffer buffer,
+            final Class<? super T> reflectUpToClass, final boolean outputTransients, final boolean outputStatics,
+            final boolean excludeNullValues) {
+        super(checkNotNull(object), style, buffer);
+        this.setUpToClass(reflectUpToClass);
+        this.setAppendTransients(outputTransients);
+        this.setAppendStatics(outputStatics);
+        this.setExcludeNullValues(excludeNullValues);
+    }
+
+    /**
      * Returns whether or not to append the given <code>Field</code>.
      * <ul>
      * <li>Transient fields are appended only if {@link #isAppendTransients()} returns <code>true</code>.
@@ -517,10 +611,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
             // Reject fields from the getExcludeFieldNames list.
             return false;
         }
-        if(field.isAnnotationPresent(ToStringExclude.class)) {
-            return false;
-        }
-        return true;
+        return !field.isAnnotationPresent(ToStringExclude.class);
     }
 
     /**
@@ -550,7 +641,9 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
                     // Warning: Field.get(Object) creates wrappers objects
                     // for primitive types.
                     final Object fieldValue = this.getValue(field);
-                    this.append(fieldName, fieldValue);
+                    if (!excludeNullValues || fieldValue != null) {
+                        this.append(fieldName, fieldValue);
+                    }
                 } catch (final IllegalAccessException ex) {
                     //this can't happen. Would get a Security exception
                     // instead
@@ -625,6 +718,18 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
 
     /**
      * <p>
+     * Gets whether or not to append fields whose values are null.
+     * </p>
+     *
+     * @return Whether or not to append fields whose values are null.
+     * @since 3.6
+     */
+    public boolean isExcludeNullValues() {
+        return this.excludeNullValues;
+    }
+
+    /**
+     * <p>
      * Append to the <code>toString</code> an <code>Object</code> array.
      * </p>
      *
@@ -660,6 +765,19 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      */
     public void setAppendTransients(final boolean appendTransients) {
         this.appendTransients = appendTransients;
+    }
+
+    /**
+     * <p>
+     * Sets whether or not to append fields whose values are null.
+     * </p>
+     *
+     * @param excludeNullValues
+     *            Whether or not to append fields whose values are null.
+     * @since 3.6
+     */
+    public void setExcludeNullValues(final boolean excludeNullValues) {
+        this.excludeNullValues = excludeNullValues;
     }
 
     /**

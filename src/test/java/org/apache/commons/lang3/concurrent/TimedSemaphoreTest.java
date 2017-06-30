@@ -392,8 +392,8 @@ public class TimedSemaphoreTest {
     public void testTryAcquire() throws InterruptedException {
         final TimedSemaphore semaphore = new TimedSemaphore(PERIOD, TimeUnit.SECONDS,
                 LIMIT);
-        TryAcquireThread[] threads = new TryAcquireThread[3 * LIMIT];
-        CountDownLatch latch = new CountDownLatch(1);
+        final TryAcquireThread[] threads = new TryAcquireThread[3 * LIMIT];
+        final CountDownLatch latch = new CountDownLatch(1);
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new TryAcquireThread(semaphore, latch);
             threads[i].start();
@@ -401,7 +401,7 @@ public class TimedSemaphoreTest {
 
         latch.countDown();
         int permits = 0;
-        for (TryAcquireThread t : threads) {
+        for (final TryAcquireThread t : threads) {
             t.join();
             if (t.acquired) {
                 permits++;
@@ -434,12 +434,12 @@ public class TimedSemaphoreTest {
         /** Counter for the endOfPeriod() invocations. */
         private int periodEnds;
 
-        public TimedSemaphoreTestImpl(final long timePeriod, final TimeUnit timeUnit,
+        TimedSemaphoreTestImpl(final long timePeriod, final TimeUnit timeUnit,
                 final int limit) {
             super(timePeriod, timeUnit, limit);
         }
 
-        public TimedSemaphoreTestImpl(final ScheduledExecutorService service,
+        TimedSemaphoreTestImpl(final ScheduledExecutorService service,
                 final long timePeriod, final TimeUnit timeUnit, final int limit) {
             super(service, timePeriod, timeUnit, limit);
         }
@@ -449,7 +449,7 @@ public class TimedSemaphoreTest {
          *
          * @return the endOfPeriod() invocations
          */
-        public int getPeriodEnds() {
+        int getPeriodEnds() {
             synchronized (this) {
                 return periodEnds;
             }
@@ -504,7 +504,7 @@ public class TimedSemaphoreTest {
         /** The number of invocations of the latch. */
         private final int latchCount;
 
-        public SemaphoreThread(final TimedSemaphore b, final CountDownLatch l, final int c, final int lc) {
+        SemaphoreThread(final TimedSemaphore b, final CountDownLatch l, final int c, final int lc) {
             semaphore = b;
             latch = l;
             count = c;
@@ -546,7 +546,7 @@ public class TimedSemaphoreTest {
         /** Flag whether a permit could be acquired. */
         private boolean acquired;
 
-        public TryAcquireThread(TimedSemaphore s, CountDownLatch l) {
+        TryAcquireThread(final TimedSemaphore s, final CountDownLatch l) {
             semaphore = s;
             latch = l;
         }
@@ -557,7 +557,7 @@ public class TimedSemaphoreTest {
                 if (latch.await(10, TimeUnit.SECONDS)) {
                     acquired = semaphore.tryAcquire();
                 }
-            } catch (InterruptedException iex) {
+            } catch (final InterruptedException iex) {
                 // ignore
             }
         }

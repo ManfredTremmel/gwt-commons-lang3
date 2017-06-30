@@ -147,7 +147,7 @@ public class ConcurrentUtils {
     static Throwable checkedException(final Throwable ex) {
         Validate.isTrue(ex != null && !(ex instanceof RuntimeException)
                 && !(ex instanceof Error), "Not a checked exception: " + ex);
-        
+
         return ex;
     }
 
@@ -325,7 +325,7 @@ public class ConcurrentUtils {
      * @return an instance of Future that will return the value, never null
      */
     public static <T> Future<T> constantFuture(final T value) {
-        return new ConstantFuture<T>(value);
+        return new ConstantFuture<>(value);
     }
 
     /**

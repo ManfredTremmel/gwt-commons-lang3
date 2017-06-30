@@ -60,7 +60,7 @@ public class WeekYearTest {
     final Calendar vulgar;
     final String isoForm;
 
-    public WeekYearTest(int year, int month, int day, String isoForm) {
+    public WeekYearTest(final int year, final int month, final int day, final String isoForm) {
         vulgar = new GregorianCalendar(year, month, day);
         this.isoForm = isoForm;
     }
@@ -69,7 +69,7 @@ public class WeekYearTest {
     public void testParser() throws ParseException {
         final DateParser parser = new FastDateParser("YYYY-'W'ww-u", TimeZone.getDefault(), Locale.getDefault());
 
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.setMinimalDaysInFirstWeek(4);
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         cal.clear();

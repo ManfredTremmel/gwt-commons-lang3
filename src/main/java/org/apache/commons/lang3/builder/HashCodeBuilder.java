@@ -44,7 +44,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * The following is the approach taken. When appending a data field, the current total is multiplied by the
  * multiplier then a relevant value
  * for that data type is added. For example, if the current hashCode is 17, and the multiplier is 37, then
- * appending the integer 45 will create a hashcode of 674, namely 17 * 37 + 45.
+ * appending the integer 45 will create a hash code of 674, namely 17 * 37 + 45.
  * </p>
  *
  * <p>
@@ -96,7 +96,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   return HashCodeBuilder.reflectionHashCode(this);
  * }
  * </pre>
- * 
+ *
  * <p>The {@link HashCodeExclude} annotation can be used to exclude fields from being
  * used by the <code>reflectionHashCode</code> methods.</p>
  *
@@ -107,12 +107,12 @@ public class HashCodeBuilder implements Builder<Integer> {
      * The default initial value to use in reflection hash code building.
      */
     private static final int DEFAULT_INITIAL_VALUE = 17;
-    
+
     /**
      * The default multiplier value to use in reflection hash code building.
      */
     private static final int DEFAULT_MULTIPLIER_VALUE = 37;
-    
+
     /**
      * <p>
      * A registry of objects used by reflection methods to detect cyclical object references and avoid infinite loops.
@@ -121,7 +121,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @since 2.3
      */
     @GwtIncompatible("incompatible method")
-    private static final ThreadLocal<Set<IDKey>> REGISTRY = new ThreadLocal<Set<IDKey>>();
+    private static final ThreadLocal<Set<IDKey>> REGISTRY = new ThreadLocal<>();
 
     /*
      * NOTE: we cannot store the actual objects in a HashSet, as that would use the very hashCode()
@@ -129,7 +129,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      *
      * So we generate a one-to-one mapping from the original object to a new object.
      *
-     * Now HashSet uses equals() to determine if two elements with the same hashcode really
+     * Now HashSet uses equals() to determine if two elements with the same hash code really
      * are equal, so we also need to ensure that the replacement objects are only equal
      * if the original objects are identical.
      *
@@ -363,10 +363,7 @@ public class HashCodeBuilder implements Builder<Integer> {
     @GwtIncompatible("incompatible method")
     public static <T> int reflectionHashCode(final int initialNonZeroOddNumber, final int multiplierNonZeroOddNumber, final T object,
             final boolean testTransients, final Class<? super T> reflectUpToClass, final String... excludeFields) {
-
-        if (object == null) {
-            throw new IllegalArgumentException("The object to build a hash code for must not be null");
-        }
+        Validate.isTrue(object != null, "The object to build a hash code for must not be null");
         final HashCodeBuilder builder = new HashCodeBuilder(initialNonZeroOddNumber, multiplierNonZeroOddNumber);
         Class<?> clazz = object.getClass();
         reflectionAppend(object, clazz, builder, testTransients, excludeFields);
@@ -414,7 +411,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      */
     @GwtIncompatible("incompatible method")
     public static int reflectionHashCode(final Object object, final boolean testTransients) {
-        return reflectionHashCode(DEFAULT_INITIAL_VALUE, DEFAULT_MULTIPLIER_VALUE, object, 
+        return reflectionHashCode(DEFAULT_INITIAL_VALUE, DEFAULT_MULTIPLIER_VALUE, object,
                 testTransients, null);
     }
 
@@ -497,7 +494,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      */
     @GwtIncompatible("incompatible method")
     public static int reflectionHashCode(final Object object, final String... excludeFields) {
-        return reflectionHashCode(DEFAULT_INITIAL_VALUE, DEFAULT_MULTIPLIER_VALUE, object, false, 
+        return reflectionHashCode(DEFAULT_INITIAL_VALUE, DEFAULT_MULTIPLIER_VALUE, object, false,
                 null, excludeFields);
     }
 
@@ -513,7 +510,7 @@ public class HashCodeBuilder implements Builder<Integer> {
     private static void register(final Object value) {
         Set<IDKey> registry = getRegistry();
         if (registry == null) {
-            registry = new HashSet<IDKey>();
+            registry = new HashSet<>();
             REGISTRY.set(registry);
         }
         registry.add(new IDKey(value));
@@ -533,7 +530,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      */
     @GwtIncompatible("incompatible method")
     private static void unregister(final Object value) {
-        Set<IDKey> registry = getRegistry();
+        final Set<IDKey> registry = getRegistry();
         if (registry != null) {
             registry.remove(new IDKey(value));
             if (registry.isEmpty()) {

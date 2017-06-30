@@ -37,16 +37,16 @@ public class FastDatePrinterTimeZonesTest {
     @Parameterized.Parameters
     public static Collection<TimeZone> data() {
         final String[] zoneIds = TimeZone.getAvailableIDs();
-        List<TimeZone> timeZones = new ArrayList<TimeZone>();
-        for (String zoneId : zoneIds) {
+        final List<TimeZone> timeZones = new ArrayList<>();
+        for (final String zoneId : zoneIds) {
             timeZones.add(TimeZone.getTimeZone(zoneId));
         }
         return timeZones;
     }
 
-    private TimeZone timeZone;
+    private final TimeZone timeZone;
 
-    public FastDatePrinterTimeZonesTest(TimeZone timeZone) {
+    public FastDatePrinterTimeZonesTest(final TimeZone timeZone) {
         this.timeZone = timeZone;
     }
 

@@ -22,6 +22,8 @@ import java.util.List;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * <p>
  * A {@code DiffResult} contains a collection of the differences between two
@@ -32,7 +34,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <p>
  * Use a {@link DiffBuilder} to build a {@code DiffResult} comparing two objects.
  * </p>
- * 
+ *
  * @since 3.3
  */
 @GwtIncompatible("incompatible class")
@@ -58,7 +60,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      * Creates a {@link DiffResult} containing the differences between two
      * objects.
      * </p>
-     * 
+     *
      * @param lhs
      *            the left hand object
      * @param rhs
@@ -74,18 +76,9 @@ public class DiffResult implements Iterable<Diff<?>> {
      */
     DiffResult(final Object lhs, final Object rhs, final List<Diff<?>> diffs,
             final ToStringStyle style) {
-        if (lhs == null) {
-            throw new IllegalArgumentException(
-                    "Left hand object cannot be null");
-        }
-        if (rhs == null) {
-            throw new IllegalArgumentException(
-                    "Right hand object cannot be null");
-        }
-        if (diffs == null) {
-            throw new IllegalArgumentException(
-                    "List of differences cannot be null");
-        }
+        Validate.isTrue(lhs != null, "Left hand object cannot be null");
+        Validate.isTrue(rhs != null, "Right hand object cannot be null");
+        Validate.isTrue(diffs != null, "List of differences cannot be null");
 
         this.diffs = diffs;
         this.lhs = lhs;
@@ -103,7 +96,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      * Returns an unmodifiable list of {@code Diff}s. The list may be empty if
      * there were no differences between the objects.
      * </p>
-     * 
+     *
      * @return an unmodifiable list of {@code Diff}s
      */
     public List<Diff<?>> getDiffs() {
@@ -114,7 +107,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      * <p>
      * Returns the number of differences between the two objects.
      * </p>
-     * 
+     *
      * @return the number of differences
      */
     public int getNumberOfDiffs() {
@@ -125,7 +118,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      * <p>
      * Returns the style used by the {@link #toString()} method.
      * </p>
-     * 
+     *
      * @return the style
      */
     public ToStringStyle getToStringStyle() {
@@ -139,28 +132,28 @@ public class DiffResult implements Iterable<Diff<?>> {
      * and the style of the output is governed by the {@code ToStringStyle}
      * passed to the constructor.
      * </p>
-     * 
+     *
      * <p>
      * If there are no differences stored in this list, the method will return
      * {@link #OBJECTS_SAME_STRING}. Otherwise, using the example given in
      * {@link Diffable} and {@link ToStringStyle#SHORT_PREFIX_STYLE}, an output
      * might be:
      * </p>
-     * 
+     *
      * <pre>
      * Person[name=John Doe,age=32] differs from Person[name=Joe Bloggs,age=26]
      * </pre>
-     * 
+     *
      * <p>
      * This indicates that the objects differ in name and age, but not in
      * smoking status.
      * </p>
-     * 
+     *
      * <p>
      * To use a different {@code ToStringStyle} for an instance of this class,
      * use {@link #toString(ToStringStyle)}.
      * </p>
-     * 
+     *
      * @return a {@code String} description of the differences.
      */
     @Override
@@ -173,10 +166,10 @@ public class DiffResult implements Iterable<Diff<?>> {
      * Builds a {@code String} description of the differences contained within
      * this {@code DiffResult}, using the supplied {@code ToStringStyle}.
      * </p>
-     * 
+     *
      * @param style
      *            the {@code ToStringStyle} to use when outputting the objects
-     * 
+     *
      * @return a {@code String} description of the differences.
      */
     public String toString(final ToStringStyle style) {
@@ -200,7 +193,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      * <p>
      * Returns an iterator over the {@code Diff} objects contained in this list.
      * </p>
-     * 
+     *
      * @return the iterator
      */
     @Override

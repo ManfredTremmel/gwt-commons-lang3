@@ -77,7 +77,7 @@ public class ClassUtils {
     /**
      * Maps names of primitives to their corresponding primitive {@code Class}es.
      */
-    private static final Map<String, Class<?>> namePrimitiveMap = new HashMap<String, Class<?>>();
+    private static final Map<String, Class<?>> namePrimitiveMap = new HashMap<>();
     static {
          namePrimitiveMap.put("boolean", Boolean.TYPE);
          namePrimitiveMap.put("byte", Byte.TYPE);
@@ -93,7 +93,7 @@ public class ClassUtils {
     /**
      * Maps primitive {@code Class}es to their corresponding wrapper {@code Class}.
      */
-    private static final Map<Class<?>, Class<?>> primitiveWrapperMap = new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<?>, Class<?>> primitiveWrapperMap = new HashMap<>();
     static {
          primitiveWrapperMap.put(Boolean.TYPE, Boolean.class);
          primitiveWrapperMap.put(Byte.TYPE, Byte.class);
@@ -109,7 +109,7 @@ public class ClassUtils {
     /**
      * Maps wrapper {@code Class}es to their corresponding primitive types.
      */
-    private static final Map<Class<?>, Class<?>> wrapperPrimitiveMap = new HashMap<Class<?>, Class<?>>();
+    private static final Map<Class<?>, Class<?>> wrapperPrimitiveMap = new HashMap<>();
     static {
         for (final Map.Entry<Class<?>, Class<?>> entry : primitiveWrapperMap.entrySet()) {
             final Class<?> primitiveClass = entry.getKey();
@@ -134,7 +134,7 @@ public class ClassUtils {
      * Feed abbreviation maps
      */
     static {
-        final Map<String, String> m = new HashMap<String, String>();
+        final Map<String, String> m = new HashMap<>();
         m.put("int", "I");
         m.put("boolean", "Z");
         m.put("float", "F");
@@ -143,7 +143,7 @@ public class ClassUtils {
         m.put("byte", "B");
         m.put("double", "D");
         m.put("char", "C");
-        final Map<String, String> r = new HashMap<String, String>();
+        final Map<String, String> r = new HashMap<>();
         for (final Map.Entry<String, String> e : m.entrySet()) {
             r.put(e.getValue(), e.getKey());
         }
@@ -343,7 +343,7 @@ public class ClassUtils {
      * @see #getAbbreviatedName(String, int)
      * @since 3.4
      */
-    public static String getAbbreviatedName(final Class<?> cls, int len) {
+    public static String getAbbreviatedName(final Class<?> cls, final int len) {
       if (cls == null) {
         return StringUtils.EMPTY;
       }
@@ -375,7 +375,7 @@ public class ClassUtils {
      * @throws IllegalArgumentException if len &lt;= 0
      * @since 3.4
      */
-    public static String getAbbreviatedName(String className, int len) {
+    public static String getAbbreviatedName(final String className, final int len) {
       if (len <= 0) {
         throw new IllegalArgumentException("len must be > 0");
       }
@@ -384,12 +384,12 @@ public class ClassUtils {
       }
 
       int availableSpace = len;
-      int packageLevels = StringUtils.countMatches(className, '.');
-      String[] output = new String[packageLevels + 1];
+      final int packageLevels = StringUtils.countMatches(className, '.');
+      final String[] output = new String[packageLevels + 1];
       int endIndex = className.length() - 1;
       for (int level = packageLevels; level >= 0; level--) {
-        int startIndex = className.lastIndexOf('.', endIndex);
-        String part = className.substring(startIndex + 1, endIndex + 1);
+        final int startIndex = className.lastIndexOf('.', endIndex);
+        final String part = className.substring(startIndex + 1, endIndex + 1);
         availableSpace -= part.length();
         if (level > 0) {
           // all elements except top level require an additional char space
@@ -425,7 +425,7 @@ public class ClassUtils {
         if (cls == null) {
             return null;
         }
-        final List<Class<?>> classes = new ArrayList<Class<?>>();
+        final List<Class<?>> classes = new ArrayList<>();
         Class<?> superclass = cls.getSuperclass();
         while (superclass != null) {
             classes.add(superclass);
@@ -453,10 +453,10 @@ public class ClassUtils {
             return null;
         }
 
-        final LinkedHashSet<Class<?>> interfacesFound = new LinkedHashSet<Class<?>>();
+        final LinkedHashSet<Class<?>> interfacesFound = new LinkedHashSet<>();
         getAllInterfaces(cls, interfacesFound);
 
-        return new ArrayList<Class<?>>(interfacesFound);
+        return new ArrayList<>(interfacesFound);
     }
 
     /**
@@ -499,7 +499,7 @@ public class ClassUtils {
         if (classNames == null) {
             return null;
         }
-        final List<Class<?>> classes = new ArrayList<Class<?>>(classNames.size());
+        final List<Class<?>> classes = new ArrayList<>(classNames.size());
         for (final String className : classNames) {
             try {
                 classes.add(Class.forName(className));
@@ -526,7 +526,7 @@ public class ClassUtils {
         if (classes == null) {
             return null;
         }
-        final List<String> classNames = new ArrayList<String>(classes.size());
+        final List<String> classNames = new ArrayList<>(classes.size());
         for (final Class<?> cls : classes) {
             if (cls == null) {
                 classNames.add(null);
@@ -1036,7 +1036,7 @@ public class ClassUtils {
             return declaredMethod;
         }
 
-        final List<Class<?>> candidateClasses = new ArrayList<Class<?>>();
+        final List<Class<?>> candidateClasses = new ArrayList<>();
         candidateClasses.addAll(getAllInterfaces(cls));
         candidateClasses.addAll(getAllSuperclasses(cls));
 
@@ -1068,9 +1068,8 @@ public class ClassUtils {
      */
     private static String toCanonicalName(String className) {
         className = StringUtils.deleteWhitespace(className);
-        if (className == null) {
-            throw new NullPointerException("className must not be null.");
-        } else if (className.endsWith("[]")) {
+        Validate.notNull(className, "className must not be null.");
+        if (className.endsWith("[]")) {
             final StringBuilder classNameBuffer = new StringBuilder();
             while (className.endsWith("[]")) {
                 className = className.substring(0, className.length() - 2);
@@ -1270,51 +1269,51 @@ public class ClassUtils {
     @GwtIncompatible("incompatible method")
     public static Iterable<Class<?>> hierarchy(final Class<?> type, final Interfaces interfacesBehavior) {
         final Iterable<Class<?>> classes = new Iterable<Class<?>>() {
-    
+
             @Override
             public Iterator<Class<?>> iterator() {
                 final MutableObject<Class<?>> next = new MutableObject<Class<?>>(type);
                 return new Iterator<Class<?>>() {
-    
+
                     @Override
                     public boolean hasNext() {
                         return next.getValue() != null;
                     }
-    
+
                     @Override
                     public Class<?> next() {
                         final Class<?> result = next.getValue();
                         next.setValue(result.getSuperclass());
                         return result;
                     }
-    
+
                     @Override
                     public void remove() {
                         throw new UnsupportedOperationException();
                     }
-    
+
                 };
             }
-    
+
         };
         if (interfacesBehavior != Interfaces.INCLUDE) {
             return classes;
         }
         return new Iterable<Class<?>>() {
-    
+
             @Override
             public Iterator<Class<?>> iterator() {
-                final Set<Class<?>> seenInterfaces = new HashSet<Class<?>>();
+                final Set<Class<?>> seenInterfaces = new HashSet<>();
                 final Iterator<Class<?>> wrapped = classes.iterator();
-    
+
                 return new Iterator<Class<?>>() {
                     Iterator<Class<?>> interfaces = Collections.<Class<?>> emptySet().iterator();
-    
+
                     @Override
                     public boolean hasNext() {
                         return interfaces.hasNext() || wrapped.hasNext();
                     }
-    
+
                     @Override
                     public Class<?> next() {
                         if (interfaces.hasNext()) {
@@ -1323,12 +1322,12 @@ public class ClassUtils {
                             return nextInterface;
                         }
                         final Class<?> nextSuperclass = wrapped.next();
-                        final Set<Class<?>> currentInterfaces = new LinkedHashSet<Class<?>>();
+                        final Set<Class<?>> currentInterfaces = new LinkedHashSet<>();
                         walkInterfaces(currentInterfaces, nextSuperclass);
                         interfaces = currentInterfaces.iterator();
                         return nextSuperclass;
                     }
-    
+
                     private void walkInterfaces(final Set<Class<?>> addTo, final Class<?> c) {
                         for (final Class<?> iface : c.getInterfaces()) {
                             if (!seenInterfaces.contains(iface)) {
@@ -1337,12 +1336,12 @@ public class ClassUtils {
                             walkInterfaces(addTo, iface);
                         }
                     }
-    
+
                     @Override
                     public void remove() {
                         throw new UnsupportedOperationException();
                     }
-    
+
                 };
             }
         };

@@ -77,12 +77,12 @@ public class ConstructorUtilsTest {
             varArgs = s;
         }
 
-        public TestBean(final Integer i, String... s) {
+        public TestBean(final Integer i, final String... s) {
             toString = "(Integer, String...)";
             varArgs = s;
         }
 
-        public TestBean(final Integer first, int... args) {
+        public TestBean(final Integer first, final int... args) {
             toString = "(Integer, String...)";
             varArgs = new String[args.length];
             for(int i = 0; i< args.length; ++i) {
@@ -101,7 +101,7 @@ public class ConstructorUtilsTest {
         }
     }
 
-    private static class PrivateClass {
+    static class PrivateClass {
         @SuppressWarnings("unused")
         public PrivateClass() {
         }
@@ -116,7 +116,7 @@ public class ConstructorUtilsTest {
     private final Map<Class<?>, Class<?>[]> classCache;
 
     public ConstructorUtilsTest() {
-        classCache = new HashMap<Class<?>, Class<?>[]>();
+        classCache = new HashMap<>();
     }
 
 
@@ -284,7 +284,7 @@ public class ConstructorUtilsTest {
 
     @Test
     public void testVarArgsUnboxing() throws Exception {
-        TestBean testBean = ConstructorUtils.invokeConstructor(
+        final TestBean testBean = ConstructorUtils.invokeConstructor(
                 TestBean.class, Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3));
 
         assertArrayEquals(new String[]{"2", "3"}, testBean.varArgs);

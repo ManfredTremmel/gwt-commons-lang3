@@ -1058,7 +1058,7 @@ public class Validate {
     public static void inclusiveBetween(final long start, final long end, final long value, final String message) {
         // TODO when breaking BC, consider returning value
         if (value < start || value > end) {
-            throw new IllegalArgumentException(StringUtils.simpleFormat(message));
+            throw new IllegalArgumentException(message);
         }
     }
 
@@ -1102,7 +1102,7 @@ public class Validate {
     public static void inclusiveBetween(final double start, final double end, final double value, final String message) {
         // TODO when breaking BC, consider returning value
         if (value < start || value > end) {
-            throw new IllegalArgumentException(StringUtils.simpleFormat(message));
+            throw new IllegalArgumentException(message);
         }
     }
 
@@ -1196,7 +1196,7 @@ public class Validate {
     public static void exclusiveBetween(final long start, final long end, final long value, final String message) {
         // TODO when breaking BC, consider returning value
         if (value <= start || value >= end) {
-            throw new IllegalArgumentException(StringUtils.simpleFormat(message));
+            throw new IllegalArgumentException(message);
         }
     }
 
@@ -1240,7 +1240,7 @@ public class Validate {
     public static void exclusiveBetween(final double start, final double end, final double value, final String message) {
         // TODO when breaking BC, consider returning value
         if (value <= start || value >= end) {
-            throw new IllegalArgumentException(StringUtils.simpleFormat(message));
+            throw new IllegalArgumentException(message);
         }
     }
 

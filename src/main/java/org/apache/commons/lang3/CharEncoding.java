@@ -34,7 +34,11 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *
  * @see <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html">JRE character encoding names</a>
  * @since 2.1
+ * @deprecated Java 7 introduced {@link java.nio.charset.StandardCharsets}, which defines these constants as
+ * {@link Charset} objects. Use {@link Charset#name()} to get the string values provided in this class.
+ * This class will be removed in a future release.
  */
+@Deprecated
 public class CharEncoding {
 
     /**
@@ -90,8 +94,11 @@ public class CharEncoding {
      *
      * @param name  the name of the requested charset; may be either a canonical name or an alias, null returns false
      * @return {@code true} if the charset is available in the current Java virtual machine
+     * @deprecated Please use {@link Charset#isSupported(String)} instead, although be aware that {@code null}
+     * values are not accepted by that method and an {@link IllegalCharsetNameException} may be thrown.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static boolean isSupported(final String name) {
         if (name == null) {
             return false;

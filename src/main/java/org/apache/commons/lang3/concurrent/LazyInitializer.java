@@ -81,8 +81,12 @@ import com.google.gwt.core.shared.GwtIncompatible;
  */
 @GwtIncompatible("incompatible class")
 public abstract class LazyInitializer<T> implements ConcurrentInitializer<T> {
+
+    private static final Object NO_INIT = new Object();
+
+    @SuppressWarnings("unchecked")
     /** Stores the managed object. */
-    private volatile T object;
+    private volatile T object = (T) NO_INIT;
 
     /**
      * Returns the object wrapped by this instance. On first access the object
@@ -98,10 +102,10 @@ public abstract class LazyInitializer<T> implements ConcurrentInitializer<T> {
         // volatile field
         T result = object;
 
-        if (result == null) {
+        if (result == NO_INIT) {
             synchronized (this) {
                 result = object;
-                if (result == null) {
+                if (result == NO_INIT) {
                     object = result = initialize();
                 }
             }

@@ -17,7 +17,15 @@
 package org.apache.commons.lang3.reflect;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.reflect.testbed.*;
+
+import org.apache.commons.lang3.reflect.testbed.Ambig;
+import org.apache.commons.lang3.reflect.testbed.Annotated;
+import org.apache.commons.lang3.reflect.testbed.Foo;
+import org.apache.commons.lang3.reflect.testbed.PrivatelyShadowedChild;
+import org.apache.commons.lang3.reflect.testbed.PublicChild;
+import org.apache.commons.lang3.reflect.testbed.PubliclyShadowedChild;
+import org.apache.commons.lang3.reflect.testbed.StaticContainer;
+import org.apache.commons.lang3.reflect.testbed.StaticContainerChild;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +36,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeNotNull;
 
 /**
@@ -160,7 +174,7 @@ public class FieldUtilsTest {
         final List<Field> fieldsNumber = Arrays.asList(Number.class.getDeclaredFields());
         assertEquals(fieldsNumber, FieldUtils.getAllFieldsList(Number.class));
         final List<Field> fieldsInteger = Arrays.asList(Integer.class.getDeclaredFields());
-        final List<Field> allFieldsInteger = new ArrayList<Field>(fieldsInteger);
+        final List<Field> allFieldsInteger = new ArrayList<>(fieldsInteger);
         allFieldsInteger.addAll(fieldsNumber);
         assertEquals(allFieldsInteger, FieldUtils.getAllFieldsList(Integer.class));
         assertEquals(5, FieldUtils.getAllFieldsList(PublicChild.class).size());
@@ -1318,7 +1332,7 @@ public class FieldUtilsTest {
         assertFalse(Modifier.isFinal(field.getModifiers()));
         assertFalse(field.isAccessible());
     }
-    
+
     @Test
     public void testRemoveFinalModifierWithAccess() throws Exception {
         final Field field = StaticContainer.class.getDeclaredField("IMMUTABLE_PRIVATE_2");

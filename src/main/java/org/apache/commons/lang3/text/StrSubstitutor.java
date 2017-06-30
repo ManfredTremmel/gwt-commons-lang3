@@ -54,13 +54,13 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Map valuesMap = HashMap();
  * valuesMap.put(&quot;animal&quot;, &quot;quick brown fox&quot;);
  * valuesMap.put(&quot;target&quot;, &quot;lazy dog&quot;);
- * String templateString = &quot;The ${animal} jumped over the ${target}.&quot;;
+ * String templateString = &quot;The ${animal} jumps over the ${target}.&quot;;
  * StrSubstitutor sub = new StrSubstitutor(valuesMap);
  * String resolvedString = sub.replace(templateString);
  * </pre>
  * yielding:
  * <pre>
- *      The quick brown fox jumped over the lazy dog.
+ *      The quick brown fox jumps over the lazy dog.
  * </pre>
  * <p>
  * Also, this class allows to set a default value for unresolved variables.
@@ -74,13 +74,13 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Map valuesMap = HashMap();
  * valuesMap.put(&quot;animal&quot;, &quot;quick brown fox&quot;);
  * valuesMap.put(&quot;target&quot;, &quot;lazy dog&quot;);
- * String templateString = &quot;The ${animal} jumped over the ${target}. ${undefined.number:-1234567890}.&quot;;
+ * String templateString = &quot;The ${animal} jumps over the ${target}. ${undefined.number:-1234567890}.&quot;;
  * StrSubstitutor sub = new StrSubstitutor(valuesMap);
  * String resolvedString = sub.replace(templateString);
  * </pre>
  * yielding:
  * <pre>
- *      The quick brown fox jumped over the lazy dog. 1234567890.
+ *      The quick brown fox jumps over the lazy dog. 1234567890.
  * </pre>
  * <p>
  * In addition to this usage pattern there are some static convenience methods that
@@ -120,9 +120,14 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * names, but it has to be enabled explicitly by setting the
  * {@link #setEnableSubstitutionInVariables(boolean) enableSubstitutionInVariables}
  * property to <b>true</b>.
+ * <p>This class is <b>not</b> thread safe.</p>
  *
  * @since 2.2
+ * @deprecated as of 3.6, use commons-text
+ * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StrSubstitutor.html">
+ * StrSubstitutor</a> instead
  */
+@Deprecated
 @GwtIncompatible("incompatible class")
 public class StrSubstitutor {
 
@@ -189,7 +194,7 @@ public class StrSubstitutor {
 
     /**
      * Replaces all the occurrences of variables in the given source object with
-     * their matching values from the map. This method allows to specifiy a
+     * their matching values from the map. This method allows to specify a
      * custom variable prefix and suffix
      *
      * @param <V> the type of the values in the map
@@ -216,7 +221,7 @@ public class StrSubstitutor {
         if (valueProperties == null) {
             return source.toString();
         }
-        final Map<String,String> valueMap = new HashMap<String,String>();
+        final Map<String,String> valueMap = new HashMap<>();
         final Enumeration<?> propNames = valueProperties.propertyNames();
         while (propNames.hasMoreElements()) {
             final String propName = (String)propNames.nextElement();
@@ -243,7 +248,7 @@ public class StrSubstitutor {
      * and the escaping character.
      */
     public StrSubstitutor() {
-        this((StrLookup<?>) null, DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ESCAPE);
+        this(null, DEFAULT_PREFIX, DEFAULT_SUFFIX, DEFAULT_ESCAPE);
     }
 
     /**
@@ -840,7 +845,7 @@ public class StrSubstitutor {
 
                                 // on the first call initialize priorVariables
                                 if (priorVariables == null) {
-                                    priorVariables = new ArrayList<String>();
+                                    priorVariables = new ArrayList<>();
                                     priorVariables.add(new String(chars,
                                             offset, length));
                                 }
@@ -959,7 +964,7 @@ public class StrSubstitutor {
     /**
      * Gets the variable prefix matcher currently in use.
      * <p>
-     * The variable prefix is the characer or characters that identify the
+     * The variable prefix is the character or characters that identify the
      * start of a variable. This prefix is expressed in terms of a matcher
      * allowing advanced prefix matches.
      *
@@ -972,7 +977,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable prefix matcher currently in use.
      * <p>
-     * The variable prefix is the characer or characters that identify the
+     * The variable prefix is the character or characters that identify the
      * start of a variable. This prefix is expressed in terms of a matcher
      * allowing advanced prefix matches.
      *
@@ -1005,7 +1010,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable prefix to use.
      * <p>
-     * The variable prefix is the characer or characters that identify the
+     * The variable prefix is the character or characters that identify the
      * start of a variable. This method allows a string prefix to be easily set.
      *
      * @param prefix  the prefix for variables, not null
@@ -1024,7 +1029,7 @@ public class StrSubstitutor {
     /**
      * Gets the variable suffix matcher currently in use.
      * <p>
-     * The variable suffix is the characer or characters that identify the
+     * The variable suffix is the character or characters that identify the
      * end of a variable. This suffix is expressed in terms of a matcher
      * allowing advanced suffix matches.
      *
@@ -1037,7 +1042,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable suffix matcher currently in use.
      * <p>
-     * The variable suffix is the characer or characters that identify the
+     * The variable suffix is the character or characters that identify the
      * end of a variable. This suffix is expressed in terms of a matcher
      * allowing advanced suffix matches.
      *
@@ -1056,7 +1061,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable suffix to use.
      * <p>
-     * The variable suffix is the characer or characters that identify the
+     * The variable suffix is the character or characters that identify the
      * end of a variable. This method allows a single character suffix to
      * be easily set.
      *
@@ -1089,7 +1094,7 @@ public class StrSubstitutor {
     /**
      * Gets the variable default value delimiter matcher currently in use.
      * <p>
-     * The variable default value delimiter is the characer or characters that delimite the
+     * The variable default value delimiter is the character or characters that delimit the
      * variable name and the variable default value. This delimiter is expressed in terms of a matcher
      * allowing advanced variable default value delimiter matches.
      * <p>
@@ -1105,7 +1110,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable default value delimiter matcher to use.
      * <p>
-     * The variable default value delimiter is the characer or characters that delimite the
+     * The variable default value delimiter is the character or characters that delimit the
      * variable name and the variable default value. This delimiter is expressed in terms of a matcher
      * allowing advanced variable default value delimiter matches.
      * <p>
@@ -1124,7 +1129,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable default value delimiter to use.
      * <p>
-     * The variable default value delimiter is the characer or characters that delimite the
+     * The variable default value delimiter is the character or characters that delimit the
      * variable name and the variable default value. This method allows a single character
      * variable default value delimiter to be easily set.
      *
@@ -1139,7 +1144,7 @@ public class StrSubstitutor {
     /**
      * Sets the variable default value delimiter to use.
      * <p>
-     * The variable default value delimiter is the characer or characters that delimite the
+     * The variable default value delimiter is the character or characters that delimit the
      * variable name and the variable default value. This method allows a string
      * variable default value delimiter to be easily set.
      * <p>
@@ -1207,7 +1212,7 @@ public class StrSubstitutor {
     /**
      * Returns the flag controlling whether escapes are preserved during
      * substitution.
-     * 
+     *
      * @return the preserve escape flag
      * @since 3.5
      */
@@ -1223,7 +1228,7 @@ public class StrSubstitutor {
      * character is removed during substitution (e.g.
      * <code>$${this-is-escaped}</code> becomes
      * <code>${this-is-escaped}</code>).  The default value is <b>false</b>
-     * 
+     *
      * @param preserveEscapes true if escapes are to be preserved
      * @since 3.5
      */

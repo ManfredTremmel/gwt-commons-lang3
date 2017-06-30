@@ -34,14 +34,18 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * key as a primary key, and looked up the value on demand from the database
  *
  * @since 2.2
+ * @deprecated as of 3.6, use commons-text
+ * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StrLookup.html">
+ * StrLookup</a> instead
  */
+@Deprecated
 @GwtIncompatible("incompatible class")
 public abstract class StrLookup<V> {
 
     /**
      * Lookup that always returns null.
      */
-    private static final StrLookup<String> NONE_LOOKUP = new MapStrLookup<String>(null);
+    private static final StrLookup<String> NONE_LOOKUP = new MapStrLookup<>(null);
 
     /**
      * Lookup based on system properties.
@@ -84,7 +88,7 @@ public abstract class StrLookup<V> {
      * @return a lookup using the map, not null
      */
     public static <V> StrLookup<V> mapLookup(final Map<String, V> map) {
-        return new MapStrLookup<V>(map);
+        return new MapStrLookup<>(map);
     }
 
     //-----------------------------------------------------------------------
@@ -169,11 +173,11 @@ public abstract class StrLookup<V> {
          * {@inheritDoc} This implementation directly accesses system properties.
          */
         @Override
-        public String lookup(String key) {
+        public String lookup(final String key) {
             if (key.length() > 0) {
                 try {
                     return System.getProperty(key);
-                } catch (SecurityException scex) {
+                } catch (final SecurityException scex) {
                     // Squelched. All lookup(String) will return null.
                 }
             }

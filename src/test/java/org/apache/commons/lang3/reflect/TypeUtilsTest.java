@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.reflect.testbed.Foo;
 import org.apache.commons.lang3.reflect.testbed.GenericParent;
 import org.apache.commons.lang3.reflect.testbed.GenericTypeHolder;
@@ -100,6 +99,8 @@ public class TypeUtilsTest<B> {
     public static Comparable<?> wildcardComparable;
 
     public static URI uri;
+
+    public static List<String>[] stringListArray;
 
     public void dummyMethod(final List list0, final List<Object> list1, final List<?> list2,
             final List<? super Object> list3, final List<String> list4, final List<? extends String> list5,
@@ -453,12 +454,12 @@ public class TypeUtilsTest<B> {
 
         if (expected) {
             Assert.assertTrue("[" + i1 + ", " + i2 + "]: From "
-                    + StringEscapeUtils.escapeHtml4(String.valueOf(type2)) + " to "
-                    + StringEscapeUtils.escapeHtml4(String.valueOf(type1)), isAssignable);
+                    + String.valueOf(type2) + " to "
+                    + String.valueOf(type1), isAssignable);
         } else {
             Assert.assertFalse("[" + i1 + ", " + i2 + "]: From "
-                    + StringEscapeUtils.escapeHtml4(String.valueOf(type2)) + " to "
-                    + StringEscapeUtils.escapeHtml4(String.valueOf(type1)), isAssignable);
+                    + String.valueOf(type2) + " to "
+                    + String.valueOf(type1), isAssignable);
         }
     }
 
@@ -525,7 +526,7 @@ public class TypeUtilsTest<B> {
     @Test
     public void testTypesSatisfyVariables() throws SecurityException, NoSuchFieldException,
             NoSuchMethodException {
-        final Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<TypeVariable<?>, Type>();
+        final Map<TypeVariable<?>, Type> typeVarAssigns = new HashMap<>();
         final Integer max = TypeUtilsTest.<Integer> stub();
         typeVarAssigns.put(getClass().getMethod("stub").getTypeParameters()[0], Integer.class);
         Assert.assertTrue(TypeUtils.typesSatisfyVariables(typeVarAssigns));
@@ -684,14 +685,14 @@ public class TypeUtilsTest<B> {
             stringComparableType));
         Assert.assertEquals("java.lang.Comparable<java.lang.String>", stringComparableType.toString());
     }
-    
+
     @Test
     public void testParameterizeWithOwner() throws Exception {
         final Type owner = TypeUtils.parameterize(TypeUtilsTest.class, String.class);
         final ParameterizedType dat2Type = TypeUtils.parameterizeWithOwner(owner, That.class, String.class, String.class);
         Assert.assertTrue(TypeUtils.equals(getClass().getField("dat2").getGenericType(), dat2Type));
     }
-    
+
     @Test
     public void testWildcardType() throws Exception {
         final WildcardType simpleWildcard = TypeUtils.wildcardType().withUpperBounds(String.class).build();
@@ -744,6 +745,14 @@ public class TypeUtilsTest<B> {
     }
 
     @Test
+    public void testToStringLang1311() {
+        Assert.assertEquals("int[]", TypeUtils.toString(int[].class));
+        Assert.assertEquals("java.lang.Integer[]", TypeUtils.toString(Integer[].class));
+        Field stringListField = FieldUtils.getDeclaredField(getClass(), "stringListArray");
+        Assert.assertEquals("java.util.List<java.lang.String>[]", TypeUtils.toString(stringListField.getGenericType()));
+    }
+
+    @Test
     public void testToLongString() {
         Assert.assertEquals(getClass().getName() + ":B", TypeUtils.toLongString(getClass().getTypeParameters()[0]));
     }
@@ -766,8 +775,8 @@ public class TypeUtilsTest<B> {
 
     @Test
     public void testLANG1190() throws Exception {
-        Type fromType = ClassWithSuperClassWithGenericType.class.getDeclaredMethod("methodWithGenericReturnType").getGenericReturnType();
-        Type failingToType = TypeUtils.wildcardType().withLowerBounds(ClassWithSuperClassWithGenericType.class).build();
+        final Type fromType = ClassWithSuperClassWithGenericType.class.getDeclaredMethod("methodWithGenericReturnType").getGenericReturnType();
+        final Type failingToType = TypeUtils.wildcardType().withLowerBounds(ClassWithSuperClassWithGenericType.class).build();
 
         Assert.assertTrue(TypeUtils.isAssignable(fromType, failingToType));
     }
@@ -802,7 +811,7 @@ class AAAClass extends AAClass<String> {
 //raw types, where used, are used purposely
 class AClass extends AAClass<String>.BBClass<Number> {
 
-    public AClass(final AAClass<String> enclosingInstance) {
+    AClass(final AAClass<String> enclosingInstance) {
         enclosingInstance.super();
     }
 

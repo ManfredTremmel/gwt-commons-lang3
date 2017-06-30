@@ -19,6 +19,7 @@ package org.apache.commons.lang3.concurrent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -348,6 +349,14 @@ public class ConcurrentUtilsTest {
     }
 
     /**
+     * Tests creating ConcurrentRuntimeException with no arguments.
+     */
+    @Test
+    public void testUninitializedConcurrentRuntimeException() {
+        assertNotNull("Error creating empty ConcurrentRuntimeException", new ConcurrentRuntimeException());
+    }
+
+    /**
      * Tests a successful initializeUnchecked() operation.
      *
      * @throws org.apache.commons.lang3.concurrent.ConcurrentException so we don't have to catch it
@@ -434,7 +443,7 @@ public class ConcurrentUtilsTest {
     public void testPutIfAbsentKeyPresent() {
         final String key = "testKey";
         final Integer value = 42;
-        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
         map.put(key, value);
         assertEquals("Wrong result", value,
                 ConcurrentUtils.putIfAbsent(map, key, 0));
@@ -448,7 +457,7 @@ public class ConcurrentUtilsTest {
     public void testPutIfAbsentKeyNotPresent() {
         final String key = "testKey";
         final Integer value = 42;
-        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
         assertEquals("Wrong result", value,
                 ConcurrentUtils.putIfAbsent(map, key, value));
         assertEquals("Wrong value in map", value, map.get(key));
@@ -477,7 +486,7 @@ public class ConcurrentUtilsTest {
         EasyMock.replay(init);
         final String key = "testKey";
         final Integer value = 42;
-        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
         map.put(key, value);
         assertEquals("Wrong result", value,
                 ConcurrentUtils.createIfAbsent(map, key, init));
@@ -500,7 +509,7 @@ public class ConcurrentUtilsTest {
         final Integer value = 42;
         EasyMock.expect(init.get()).andReturn(value);
         EasyMock.replay(init);
-        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
         assertEquals("Wrong result", value,
                 ConcurrentUtils.createIfAbsent(map, key, init));
         assertEquals("Wrong value in map", value, map.get(key));
@@ -531,7 +540,7 @@ public class ConcurrentUtilsTest {
      */
     @Test
     public void testCreateIfAbsentNullInit() throws ConcurrentException {
-        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
         final String key = "testKey";
         final Integer value = 42;
         map.put(key, value);
@@ -547,10 +556,10 @@ public class ConcurrentUtilsTest {
     public void testCreateIfAbsentUncheckedSuccess() {
         final String key = "testKey";
         final Integer value = 42;
-        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+        final ConcurrentMap<String, Integer> map = new ConcurrentHashMap<>();
         assertEquals("Wrong result", value,
                 ConcurrentUtils.createIfAbsentUnchecked(map, key,
-                        new ConstantInitializer<Integer>(value)));
+                        new ConstantInitializer<>(value)));
         assertEquals("Wrong value in map", value, map.get(key));
     }
 

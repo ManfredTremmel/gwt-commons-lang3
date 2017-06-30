@@ -667,8 +667,10 @@ public class SystemUtils {
      * sync with that System property.
      * </p>
      *
+     * @deprecated Use {@link System#lineSeparator} instead, since it does not require a privilege check.
      * @since Java 1.1
      */
+    @Deprecated
     public static final String LINE_SEPARATOR = getSystemProperty("line.separator");
 
     /**
@@ -956,7 +958,7 @@ public class SystemUtils {
      * </p>
      *
      * @since 3.4
-     * 
+     *
      * @deprecated As of release 3.5, replaced by {@link #IS_JAVA_9}
      */
     @Deprecated
@@ -1497,6 +1499,20 @@ public class SystemUtils {
     }
 
     /**
+     * Gets the host name from an environment variable.
+     *
+     * <p>
+     * If you want to know what the network stack says is the host name, you should use {@code InetAddress.getLocalHost().getHostName()}.
+     * </p>
+     *
+     * @return the host name.
+     * @since 3.6
+     */
+    public static String getHostName() {
+        return SystemUtils.IS_OS_WINDOWS ? System.getenv("COMPUTERNAME") : System.getenv("HOSTNAME");
+    }
+
+    /**
      * <p>
      * Gets the Java IO temporary directory as a {@code File}.
      * </p>
@@ -1700,8 +1716,8 @@ public class SystemUtils {
         }
         // Compare parts of the version string instead of using String.startsWith(String) because otherwise
         // osVersionPrefix 10.1 would also match osVersion 10.10
-        String[] versionPrefixParts = osVersionPrefix.split("\\.");
-        String[] versionParts = osVersion.split("\\.");
+        final String[] versionPrefixParts = osVersionPrefix.split("\\.");
+        final String[] versionParts = osVersion.split("\\.");
         for (int i = 0; i < Math.min(versionPrefixParts.length, versionParts.length); i++) {
             if (!versionPrefixParts[i].equals(versionParts[i])) {
                 return false;

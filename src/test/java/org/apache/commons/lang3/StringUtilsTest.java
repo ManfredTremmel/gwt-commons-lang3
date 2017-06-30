@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -226,6 +227,7 @@ public class StringUtilsTest {
         final String test = "This String contains a TitleCase character: \u01C8";
         final String expect = "tHIS sTRING CONTAINS A tITLEcASE CHARACTER: \u01C9";
         assertEquals(expect, WordUtils.swapCase(test));
+        assertEquals(expect, StringUtils.swapCase(test));
     }
 
     //-----------------------------------------------------------------------
@@ -241,14 +243,14 @@ public class StringUtilsTest {
 //        assertNull(StringUtils.join(null)); // generates warning
         assertNull(StringUtils.join((Object[]) null)); // equivalent explicit cast
         // test additional varargs calls
-        assertEquals("", StringUtils.join(new Object[0])); // empty array
+        assertEquals("", StringUtils.join()); // empty array
         assertEquals("", StringUtils.join((Object) null)); // => new Object[]{null}
 
         assertEquals("", StringUtils.join(EMPTY_ARRAY_LIST));
         assertEquals("", StringUtils.join(NULL_ARRAY_LIST));
         assertEquals("null", StringUtils.join(NULL_TO_STRING_LIST));
-        assertEquals("abc", StringUtils.join(new String[]{"a", "b", "c"}));
-        assertEquals("a", StringUtils.join(new String[]{null, "a", ""}));
+        assertEquals("abc", StringUtils.join("a", "b", "c"));
+        assertEquals("a", StringUtils.join(null, "a", ""));
         assertEquals("foo", StringUtils.join(MIXED_ARRAY_LIST));
         assertEquals("foo2", StringUtils.join(MIXED_TYPE_LIST));
     }
@@ -261,6 +263,7 @@ public class StringUtilsTest {
         assertEquals(";;foo", StringUtils.join(MIXED_ARRAY_LIST, SEPARATOR_CHAR));
         assertEquals("foo;2", StringUtils.join(MIXED_TYPE_LIST, SEPARATOR_CHAR));
 
+        assertNull(StringUtils.join((Object[]) null, ',', 0, 1));
         assertEquals("/", StringUtils.join(MIXED_ARRAY_LIST, '/', 0, MIXED_ARRAY_LIST.length - 1));
         assertEquals("foo", StringUtils.join(MIXED_TYPE_LIST, '/', 0, 1));
         assertEquals("null", StringUtils.join(NULL_TO_STRING_LIST, '/', 0, 1));
@@ -419,12 +422,12 @@ public class StringUtilsTest {
 
     @Test
     public void testJoinWith() {
-        assertEquals("", StringUtils.joinWith(",", new Object[0]));        // empty array
+        assertEquals("", StringUtils.joinWith(","));        // empty array
         assertEquals("", StringUtils.joinWith(",", (Object[]) NULL_ARRAY_LIST));
         assertEquals("null", StringUtils.joinWith(",", NULL_TO_STRING_LIST));   //toString method prints 'null'
 
-        assertEquals("a,b,c", StringUtils.joinWith(",", new Object[]{"a", "b", "c"}));
-        assertEquals(",a,", StringUtils.joinWith(",", new Object[]{null, "a", ""}));
+        assertEquals("a,b,c", StringUtils.joinWith(",", "a", "b", "c"));
+        assertEquals(",a,", StringUtils.joinWith(",", null, "a", ""));
 
         assertEquals("ab", StringUtils.joinWith(null, "a", "b"));
     }
@@ -614,6 +617,43 @@ public class StringUtilsTest {
         assertEquals(splitOnStringExpectedResults.length, splitOnStringResults.length);
         for (int i = 0; i < splitOnStringExpectedResults.length; i++) {
             assertEquals(splitOnStringExpectedResults[i], splitOnStringResults[i]);
+        }
+    }
+
+    @Test
+    public void testSplitByWholeSeparatorPreserveAllTokens_StringString() {
+        assertArrayEquals(null, StringUtils.splitByWholeSeparatorPreserveAllTokens(null, "."));
+
+        assertEquals(0, StringUtils.splitByWholeSeparatorPreserveAllTokens("", ".").length);
+
+        // test whitespace
+        String input = "ab   de fg";
+        String[] expected = new String[]{"ab", "", "", "de", "fg"};
+
+        String[] actual = StringUtils.splitByWholeSeparatorPreserveAllTokens(input, null);
+        assertEquals(expected.length, actual.length);
+        for (int i = 0; i < actual.length; i += 1) {
+            assertEquals(expected[i], actual[i]);
+        }
+
+        // test delimiter singlechar
+        input = "1::2:::3::::4";
+        expected = new String[]{"1", "", "2", "", "", "3", "", "", "", "4"};
+
+        actual = StringUtils.splitByWholeSeparatorPreserveAllTokens(input, ":");
+        assertEquals(expected.length, actual.length);
+        for (int i = 0; i < actual.length; i += 1) {
+            assertEquals(expected[i], actual[i]);
+        }
+
+        // test delimiter multichar
+        input = "1::2:::3::::4";
+        expected = new String[]{"1", "2", ":3", "", "4"};
+
+        actual = StringUtils.splitByWholeSeparatorPreserveAllTokens(input, "::");
+        assertEquals(expected.length, actual.length);
+        for (int i = 0; i < actual.length; i += 1) {
+            assertEquals(expected[i], actual[i]);
         }
     }
 
@@ -1031,25 +1071,25 @@ public class StringUtilsTest {
         assertNull(StringUtils.splitByCharacterType(null));
         assertEquals(0, StringUtils.splitByCharacterType("").length);
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ab", " ", "de", " ",
+        assertTrue(Objects.deepEquals(new String[]{"ab", " ", "de", " ",
                 "fg"}, StringUtils.splitByCharacterType("ab de fg")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ab", "   ", "de", " ",
+        assertTrue(Objects.deepEquals(new String[]{"ab", "   ", "de", " ",
                 "fg"}, StringUtils.splitByCharacterType("ab   de fg")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ab", ":", "cd", ":",
+        assertTrue(Objects.deepEquals(new String[]{"ab", ":", "cd", ":",
                 "ef"}, StringUtils.splitByCharacterType("ab:cd:ef")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"number", "5"},
+        assertTrue(Objects.deepEquals(new String[]{"number", "5"},
                 StringUtils.splitByCharacterType("number5")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"foo", "B", "ar"},
+        assertTrue(Objects.deepEquals(new String[]{"foo", "B", "ar"},
                 StringUtils.splitByCharacterType("fooBar")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"foo", "200", "B", "ar"},
+        assertTrue(Objects.deepEquals(new String[]{"foo", "200", "B", "ar"},
                 StringUtils.splitByCharacterType("foo200Bar")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ASFR", "ules"},
+        assertTrue(Objects.deepEquals(new String[]{"ASFR", "ules"},
                 StringUtils.splitByCharacterType("ASFRules")));
     }
 
@@ -1058,25 +1098,25 @@ public class StringUtilsTest {
         assertNull(StringUtils.splitByCharacterTypeCamelCase(null));
         assertEquals(0, StringUtils.splitByCharacterTypeCamelCase("").length);
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ab", " ", "de", " ",
+        assertTrue(Objects.deepEquals(new String[]{"ab", " ", "de", " ",
                 "fg"}, StringUtils.splitByCharacterTypeCamelCase("ab de fg")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ab", "   ", "de", " ",
+        assertTrue(Objects.deepEquals(new String[]{"ab", "   ", "de", " ",
                 "fg"}, StringUtils.splitByCharacterTypeCamelCase("ab   de fg")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ab", ":", "cd", ":",
+        assertTrue(Objects.deepEquals(new String[]{"ab", ":", "cd", ":",
                 "ef"}, StringUtils.splitByCharacterTypeCamelCase("ab:cd:ef")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"number", "5"},
+        assertTrue(Objects.deepEquals(new String[]{"number", "5"},
                 StringUtils.splitByCharacterTypeCamelCase("number5")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"foo", "Bar"},
+        assertTrue(Objects.deepEquals(new String[]{"foo", "Bar"},
                 StringUtils.splitByCharacterTypeCamelCase("fooBar")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"foo", "200", "Bar"},
+        assertTrue(Objects.deepEquals(new String[]{"foo", "200", "Bar"},
                 StringUtils.splitByCharacterTypeCamelCase("foo200Bar")));
 
-        assertTrue(ArrayUtils.isEquals(new String[]{"ASF", "Rules"},
+        assertTrue(Objects.deepEquals(new String[]{"ASF", "Rules"},
                 StringUtils.splitByCharacterTypeCamelCase("ASFRules")));
     }
 
@@ -1283,7 +1323,7 @@ public class StringUtilsTest {
         assertEquals("", StringUtils.replaceIgnoreCase("", "any", null, 2));
         assertEquals("", StringUtils.replaceIgnoreCase("", "any", "any", 2));
 
-        String str = new String(new char[] { 'o', 'o', 'f', 'o', 'o' });
+        final String str = new String(new char[] { 'o', 'o', 'f', 'o', 'o' });
         assertSame(str, StringUtils.replaceIgnoreCase(str, "x", "", -1));
 
         assertEquals("f", StringUtils.replaceIgnoreCase("oofoo", "o", "", -1));
@@ -1513,7 +1553,7 @@ public class StringUtilsTest {
         assertEquals("abcabcabc", StringUtils.repeat("abc", 3));
         final String str = StringUtils.repeat("a", 10000);  // bigger than pad limit
         assertEquals(10000, str.length());
-        assertTrue(StringUtils.containsOnly(str, new char[]{'a'}));
+        assertTrue(StringUtils.containsOnly(str, 'a'));
     }
 
     @Test
@@ -1640,7 +1680,7 @@ public class StringUtilsTest {
         assertEquals("abcxx", StringUtils.rightPad("abc", 5, 'x'));
         final String str = StringUtils.rightPad("aaa", 10000, 'a');  // bigger than pad length
         assertEquals(10000, str.length());
-        assertTrue(StringUtils.containsOnly(str, new char[]{'a'}));
+        assertTrue(StringUtils.containsOnly(str, 'a'));
     }
 
     @Test
@@ -1676,7 +1716,7 @@ public class StringUtilsTest {
         assertEquals("abc", StringUtils.leftPad("abc", 2, ' '));
         final String str = StringUtils.leftPad("aaa", 10000, 'a');  // bigger than pad length
         assertEquals(10000, str.length());
-        assertTrue(StringUtils.containsOnly(str, new char[]{'a'}));
+        assertTrue(StringUtils.containsOnly(str, 'a'));
     }
 
     @Test
@@ -1933,9 +1973,36 @@ public class StringUtilsTest {
         assertEquals("", StringUtils.abbreviate("", 4));
 
         try {
+            StringUtils.abbreviate("abc", 3);
+            fail("StringUtils.abbreviate expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException expected) {
+            // empty
+        }
+    }
+
+    @Test
+    public void testAbbreviate_StringStringInt() {
+        assertNull(StringUtils.abbreviate(null, null, 10));
+        assertNull(StringUtils.abbreviate(null, "...", 10));
+        assertEquals("paranaguacu", StringUtils.abbreviate("paranaguacu", null, 10));
+        assertEquals("", StringUtils.abbreviate("", "...", 2));
+        assertEquals("wai**", StringUtils.abbreviate("waiheke", "**", 5));
+        assertEquals("And af,,,,", StringUtils.abbreviate("And after a long time, he finally met his son.", ",,,,", 10));
+
+        final String raspberry = "raspberry peach";
+        assertEquals("raspberry pe..", StringUtils.abbreviate(raspberry, "..", 14));
+        assertEquals("raspberry peach", StringUtils.abbreviate("raspberry peach", "---*---", 15));
+        assertEquals("raspberry peach", StringUtils.abbreviate("raspberry peach", ".", 16));
+        assertEquals("abc()(", StringUtils.abbreviate("abcdefg", "()(", 6));
+        assertEquals("abcdefg", StringUtils.abbreviate("abcdefg", ";", 7));
+        assertEquals("abcdefg", StringUtils.abbreviate("abcdefg", "_-", 8));
+        assertEquals("abc.", StringUtils.abbreviate("abcdefg", ".", 4));
+        assertEquals("", StringUtils.abbreviate("", 4));
+
+        try {
             @SuppressWarnings("unused")
             final
-            String res = StringUtils.abbreviate("abc", 3);
+            String res = StringUtils.abbreviate("abcdefghij", "...", 3);
             fail("StringUtils.abbreviate expecting IllegalArgumentException");
         } catch (final IllegalArgumentException ex) {
             // empty
@@ -1949,19 +2016,15 @@ public class StringUtilsTest {
         assertEquals("", StringUtils.abbreviate("", 2, 10));
 
         try {
-            @SuppressWarnings("unused")
-            final
-            String res = StringUtils.abbreviate("abcdefghij", 0, 3);
+            StringUtils.abbreviate("abcdefghij", 0, 3);
             fail("StringUtils.abbreviate expecting IllegalArgumentException");
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException expected) {
             // empty
         }
         try {
-            @SuppressWarnings("unused")
-            final
-            String res = StringUtils.abbreviate("abcdefghij", 5, 6);
+            StringUtils.abbreviate("abcdefghij", 5, 6);
             fail("StringUtils.abbreviate expecting IllegalArgumentException");
-        } catch (final IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException expected) {
             // empty
         }
 
@@ -1996,6 +2059,65 @@ public class StringUtilsTest {
         final String abcdefghijklmno = "abcdefghijklmno";
         final String message = "abbreviate(String,int,int) failed";
         final String actual = StringUtils.abbreviate(abcdefghijklmno, offset, maxWidth);
+        if (offset >= 0 && offset < abcdefghijklmno.length()) {
+            assertTrue(message + " -- should contain offset character",
+                    actual.indexOf((char) ('a' + offset)) != -1);
+        }
+        assertTrue(message + " -- should not be greater than maxWidth",
+                actual.length() <= maxWidth);
+        assertEquals(message, expected, actual);
+    }
+
+    @Test
+    public void testAbbreviate_StringStringIntInt() {
+        assertNull(StringUtils.abbreviate(null, null, 10, 12));
+        assertNull(StringUtils.abbreviate(null, "...", 10, 12));
+        assertEquals("", StringUtils.abbreviate("", null, 0, 10));
+        assertEquals("", StringUtils.abbreviate("", "...", 2, 10));
+
+        try {
+            StringUtils.abbreviate("abcdefghij", "::", 0, 2);
+            fail("StringUtils.abbreviate expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException expected) {
+            // empty
+        }
+        try {
+            StringUtils.abbreviate("abcdefghij", "!!!", 5, 6);
+            fail("StringUtils.abbreviate expecting IllegalArgumentException");
+        } catch (final IllegalArgumentException expected) {
+            // empty
+        }
+
+        final String raspberry = "raspberry peach";
+        assertEquals("raspberry peach", StringUtils.abbreviate(raspberry, "--", 12, 15));
+
+        assertNull(StringUtils.abbreviate(null, ";", 7, 14));
+        assertAbbreviateWithAbbrevMarkerAndOffset("abcdefgh;;", ";;", -1, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("abcdefghi.", ".", 0, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("abcdefgh++", "++", 1, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("abcdefghi*", "*", 2, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("abcdef{{{{", "{{{{", 4, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("abcdef____", "____", 5, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("==fghijk==", "==", 5, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("___ghij___", "___", 6, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("/ghijklmno", "/", 7, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("/ghijklmno", "/", 8, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("/ghijklmno", "/", 9, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("///ijklmno", "///", 10, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("//hijklmno", "//", 10, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("//hijklmno", "//", 11, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("...ijklmno", "...", 12, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("/ghijklmno", "/", 13, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("/ghijklmno", "/", 14, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("999ijklmno", "999", 15, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("_ghijklmno", "_", 16, 10);
+        assertAbbreviateWithAbbrevMarkerAndOffset("+ghijklmno", "+", Integer.MAX_VALUE, 10);
+    }
+
+    private void assertAbbreviateWithAbbrevMarkerAndOffset(final String expected, final String abbrevMarker, final int offset, final int maxWidth) {
+        final String abcdefghijklmno = "abcdefghijklmno";
+        final String message = "abbreviate(String,String,int,int) failed";
+        final String actual = StringUtils.abbreviate(abcdefghijklmno, abbrevMarker, offset, maxWidth);
         if (offset >= 0 && offset < abcdefghijklmno.length()) {
             assertTrue(message + " -- should contain offset character",
                     actual.indexOf((char) ('a' + offset)) != -1);
@@ -2046,25 +2168,26 @@ public class StringUtilsTest {
         assertEquals("ab.ef", StringUtils.abbreviateMiddle("abcdef", ".", 5));
     }
 
+    //-----------------------------------------------------------------------
     @Test
     public void testTruncate_StringInt() {
         assertNull(StringUtils.truncate(null, 12));
         try {
             StringUtils.truncate(null, -1);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate(null, -10);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate(null, Integer.MIN_VALUE);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         assertEquals("", StringUtils.truncate("", 10));
@@ -2075,19 +2198,19 @@ public class StringUtilsTest {
         try {
             StringUtils.truncate("abcdefghij", -1);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -100);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", Integer.MIN_VALUE);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         assertEquals("abcdefghij", StringUtils.truncate("abcdefghijklmno", 10));
@@ -2102,19 +2225,19 @@ public class StringUtilsTest {
         try {
             StringUtils.truncate(null, -1, 0);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate(null, -10, -4);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate(null, Integer.MIN_VALUE, Integer.MIN_VALUE);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         assertNull(StringUtils.truncate(null, 10, 12));
@@ -2126,79 +2249,79 @@ public class StringUtilsTest {
         try {
             StringUtils.truncate("abcdefghij", 0, -1);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", 0, -10);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", 0, -100);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", 1, -100);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", 0, Integer.MIN_VALUE);
             fail("maxWith cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -1, 0);
             fail("offset cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -10, 0);
             fail("offset cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -100, 1);
             fail("offset cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", Integer.MIN_VALUE, 0);
             fail("offset cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -1, -1);
             fail("offset cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -10, -10);
             fail("offset cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", -100, -100);
             fail("offset  cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         try {
             StringUtils.truncate("abcdefghij", Integer.MIN_VALUE, Integer.MIN_VALUE);
             fail("offset  cannot be negative");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             assertTrue(e instanceof IllegalArgumentException);
         }
         final String raspberry = "raspberry peach";
@@ -2456,6 +2579,29 @@ public class StringUtilsTest {
         assertFalse(StringUtils.isAllUpperCase("A C"));
         assertFalse(StringUtils.isAllUpperCase("A1C"));
         assertFalse(StringUtils.isAllUpperCase("A/C"));
+    }
+
+    /**
+     * Test for {@link StringUtils#isMixedCase(CharSequence)}.
+     */
+    @Test
+    public void testIsMixedCase() {
+        assertFalse(StringUtils.isMixedCase(null));
+        assertFalse(StringUtils.isMixedCase(StringUtils.EMPTY));
+        assertFalse(StringUtils.isMixedCase(" "));
+        assertFalse(StringUtils.isMixedCase("A"));
+        assertFalse(StringUtils.isMixedCase("a"));
+        assertFalse(StringUtils.isMixedCase("/"));
+        assertFalse(StringUtils.isMixedCase("A/"));
+        assertFalse(StringUtils.isMixedCase("/b"));
+        assertFalse(StringUtils.isMixedCase("abc"));
+        assertFalse(StringUtils.isMixedCase("ABC"));
+        assertTrue(StringUtils.isMixedCase("aBc"));
+        assertTrue(StringUtils.isMixedCase("aBc "));
+        assertTrue(StringUtils.isMixedCase("A c"));
+        assertTrue(StringUtils.isMixedCase("aBc\n"));
+        assertTrue(StringUtils.isMixedCase("A1c"));
+        assertTrue(StringUtils.isMixedCase("a/C"));
     }
 
     @Test
@@ -2764,7 +2910,7 @@ public class StringUtilsTest {
         final Method[] methods = c.getMethods();
 
         for (final Method m : methods) {
-            String methodStr = m.toString();
+            final String methodStr = m.toString();
             if (m.getReturnType() == String.class || m.getReturnType() == String[].class) {
                 // Assume this is mutable and ensure the first parameter is not CharSequence.
                 // It may be String or it may be something else (String[], Object, Object[]) so
@@ -2796,14 +2942,14 @@ public class StringUtilsTest {
      */
     @Test
     public void testToString() throws UnsupportedEncodingException {
-        final String expectedString = "The quick brown fox jumped over the lazy dog.";
+        final String expectedString = "The quick brown fox jumps over the lazy dog.";
         byte[] expectedBytes = expectedString.getBytes(Charset.defaultCharset());
         // sanity check start
         assertArrayEquals(expectedBytes, expectedString.getBytes());
         // sanity check end
         assertEquals(expectedString, StringUtils.toString(expectedBytes, null));
         assertEquals(expectedString, StringUtils.toString(expectedBytes, SystemUtils.FILE_ENCODING));
-        String encoding = "UTF-16";
+        final String encoding = "UTF-16";
         expectedBytes = expectedString.getBytes(Charset.forName(encoding));
         assertEquals(expectedString, StringUtils.toString(expectedBytes, encoding));
     }
@@ -2943,7 +3089,7 @@ public class StringUtilsTest {
      */
     @Test
     public void testToEncodedString() {
-        final String expectedString = "The quick brown fox jumped over the lazy dog.";
+        final String expectedString = "The quick brown fox jumps over the lazy dog.";
         String encoding = SystemUtils.FILE_ENCODING;
         byte[] expectedBytes = expectedString.getBytes(Charset.defaultCharset());
         // sanity check start
@@ -2960,10 +3106,10 @@ public class StringUtilsTest {
 
     @Test
     public void testWrap_StringChar() {
-        assertNull(StringUtils.wrap(null, '\0'));
+        assertNull(StringUtils.wrap(null, CharUtils.NUL));
         assertNull(StringUtils.wrap(null, '1'));
 
-        assertEquals("", StringUtils.wrap("", '\0'));
+        assertEquals("", StringUtils.wrap("", CharUtils.NUL));
         assertEquals("xabx", StringUtils.wrap("ab", 'x'));
         assertEquals("\"ab\"", StringUtils.wrap("ab", '\"'));
         assertEquals("\"\"ab\"\"", StringUtils.wrap("\"ab\"", '\"'));
@@ -2975,10 +3121,10 @@ public class StringUtilsTest {
 
     @Test
     public void testWrapIfMissing_StringChar() {
-        assertNull(StringUtils.wrapIfMissing(null, '\0'));
+        assertNull(StringUtils.wrapIfMissing(null, CharUtils.NUL));
         assertNull(StringUtils.wrapIfMissing(null, '1'));
 
-        assertEquals("", StringUtils.wrapIfMissing("", '\0'));
+        assertEquals("", StringUtils.wrapIfMissing("", CharUtils.NUL));
         assertEquals("xabx", StringUtils.wrapIfMissing("ab", 'x'));
         assertEquals("\"ab\"", StringUtils.wrapIfMissing("ab", '\"'));
         assertEquals("\"ab\"", StringUtils.wrapIfMissing("\"ab\"", '\"'));
@@ -3031,5 +3177,67 @@ public class StringUtilsTest {
         assertEquals("''abcd''", StringUtils.wrap("'abcd'", "'"));
         assertEquals("'\"abcd\"'", StringUtils.wrap("\"abcd\"", "'"));
         assertEquals("\"'abcd'\"", StringUtils.wrap("'abcd'", "\""));
+    }
+
+    @Test
+    public void testUnwrap_StringString() {
+        assertNull(StringUtils.unwrap(null, null));
+        assertNull(StringUtils.unwrap(null, ""));
+        assertNull(StringUtils.unwrap(null, "1"));
+
+        assertEquals("abc", StringUtils.unwrap("abc", null));
+        assertEquals("abc", StringUtils.unwrap("abc", ""));
+        assertEquals("abc", StringUtils.unwrap("\'abc\'", "\'"));
+        assertEquals("abc", StringUtils.unwrap("\"abc\"", "\""));
+        assertEquals("abc\"xyz", StringUtils.unwrap("\"abc\"xyz\"", "\""));
+        assertEquals("abc\"xyz\"", StringUtils.unwrap("\"abc\"xyz\"\"", "\""));
+        assertEquals("abc\'xyz\'", StringUtils.unwrap("\"abc\'xyz\'\"", "\""));
+        assertEquals("\"abc\'xyz\'\"", StringUtils.unwrap("AA\"abc\'xyz\'\"AA", "AA"));
+        assertEquals("\"abc\'xyz\'\"", StringUtils.unwrap("123\"abc\'xyz\'\"123", "123"));
+        assertEquals("AA\"abc\'xyz\'\"", StringUtils.unwrap("AA\"abc\'xyz\'\"", "AA"));
+        assertEquals("AA\"abc\'xyz\'\"AA", StringUtils.unwrap("AAA\"abc\'xyz\'\"AAA", "A"));
+        assertEquals("\"abc\'xyz\'\"AA", StringUtils.unwrap("\"abc\'xyz\'\"AA", "AA"));
+    }
+
+    @Test
+    public void testUnwrap_StringChar() {
+        assertNull(StringUtils.unwrap(null, null));
+        assertNull(StringUtils.unwrap(null, CharUtils.NUL));
+        assertNull(StringUtils.unwrap(null, '1'));
+
+        assertEquals("abc", StringUtils.unwrap("abc", null));
+        assertEquals("abc", StringUtils.unwrap("\'abc\'", '\''));
+        assertEquals("abc", StringUtils.unwrap("AabcA", 'A'));
+        assertEquals("AabcA", StringUtils.unwrap("AAabcAA", 'A'));
+        assertEquals("abc", StringUtils.unwrap("abc", 'b'));
+        assertEquals("#A", StringUtils.unwrap("#A", '#'));
+        assertEquals("A#", StringUtils.unwrap("A#", '#'));
+        assertEquals("ABA", StringUtils.unwrap("AABAA", 'A'));
+    }
+
+    @Test
+    public void testToCodePoints() throws Exception {
+        final int orphanedHighSurrogate = 0xD801;
+        final int orphanedLowSurrogate = 0xDC00;
+        final int supplementary = 0x2070E;
+
+        final int[] codePoints = {'a', orphanedHighSurrogate, 'b','c', supplementary,
+                'd', orphanedLowSurrogate, 'e'};
+        final String s = new String(codePoints, 0, codePoints.length);
+        assertArrayEquals(codePoints, StringUtils.toCodePoints(s));
+
+        assertNull(StringUtils.toCodePoints(null));
+        assertArrayEquals(ArrayUtils.EMPTY_INT_ARRAY, StringUtils.toCodePoints(""));
+    }
+
+    @Test
+    public void testGetDigits() {
+        assertEquals(null, StringUtils.getDigits(null));
+        assertEquals("", StringUtils.getDigits(""));
+        assertEquals("", StringUtils.getDigits("abc"));
+        assertEquals("1000", StringUtils.getDigits("1000$"));
+        assertEquals("12345", StringUtils.getDigits("123password45"));
+        assertEquals("5417543010", StringUtils.getDigits("(541) 754-3010"));
+        assertEquals("\u0967\u0968\u0969", StringUtils.getDigits("\u0967\u0968\u0969"));
     }
 }

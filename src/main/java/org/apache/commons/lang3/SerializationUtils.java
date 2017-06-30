@@ -84,10 +84,8 @@ public class SerializationUtils {
         final byte[] objectData = serialize(object);
         final ByteArrayInputStream bais = new ByteArrayInputStream(objectData);
 
-        ClassLoaderAwareObjectInputStream in = null;
-        try {
-            // stream closed in the finally
-            in = new ClassLoaderAwareObjectInputStream(bais, object.getClass().getClassLoader());
+        try (final ClassLoaderAwareObjectInputStream in = new ClassLoaderAwareObjectInputStream(bais,
+                object.getClass().getClassLoader())) {
             /*
              * when we serialize and deserialize an object,
              * it is reasonable to assume the deserialized object
@@ -100,15 +98,7 @@ public class SerializationUtils {
         } catch (final ClassNotFoundException ex) {
             throw new SerializationException("ClassNotFoundException while reading cloned object data", ex);
         } catch (final IOException ex) {
-            throw new SerializationException("IOException while reading cloned object data", ex);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (final IOException ex) {
-                throw new SerializationException("IOException on closing cloned object data InputStream.", ex);
-            }
+            throw new SerializationException("IOException while reading or closing cloned object data", ex);
         }
     }
 
@@ -120,7 +110,7 @@ public class SerializationUtils {
      *           the type of the object involved
      * @param msg
      *            the object to roundtrip
-     * @return the serialized and deseralized object
+     * @return the serialized and deserialized object
      * @since 3.3
      */
     @SuppressWarnings("unchecked") // OK, because we serialized a type `T`
@@ -146,25 +136,11 @@ public class SerializationUtils {
      * @throws SerializationException (runtime) if the serialization fails
      */
     public static void serialize(final Serializable obj, final OutputStream outputStream) {
-        if (outputStream == null) {
-            throw new IllegalArgumentException("The OutputStream must not be null");
-        }
-        ObjectOutputStream out = null;
-        try {
-            // stream closed in the finally
-            out = new ObjectOutputStream(outputStream);
+        Validate.isTrue(outputStream != null, "The OutputStream must not be null");
+        try (ObjectOutputStream out = new ObjectOutputStream(outputStream)){
             out.writeObject(obj);
-
         } catch (final IOException ex) {
             throw new SerializationException(ex);
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (final IOException ex) { // NOPMD
-                // ignore close exception
-            }
         }
     }
 
@@ -188,17 +164,17 @@ public class SerializationUtils {
      * <p>
      * Deserializes an {@code Object} from the specified stream.
      * </p>
-     * 
+     *
      * <p>
      * The stream will be closed once the object is written. This avoids the need for a finally clause, and maybe also
      * exception handling, in the application code.
      * </p>
-     * 
+     *
      * <p>
      * The stream passed in is not buffered internally within this method. This is the responsibility of your
      * application if desired.
      * </p>
-     * 
+     *
      * <p>
      * If the call site incorrectly types the return value, a {@link ClassCastException} is thrown from the call site.
      * Without Generics in this declaration, the call site must type cast and can cause the same ClassCastException.
@@ -215,29 +191,13 @@ public class SerializationUtils {
      *             (runtime) if the serialization fails
      */
     public static <T> T deserialize(final InputStream inputStream) {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("The InputStream must not be null");
-        }
-        ObjectInputStream in = null;
-        try {
-            // stream closed in the finally
-            in = new ObjectInputStream(inputStream);
+        Validate.isTrue(inputStream != null, "The InputStream must not be null");
+        try (ObjectInputStream in = new ObjectInputStream(inputStream)) {
             @SuppressWarnings("unchecked")
             final T obj = (T) in.readObject();
             return obj;
-
-        } catch (final ClassNotFoundException ex) {
+        } catch (final ClassNotFoundException | IOException ex) {
             throw new SerializationException(ex);
-        } catch (final IOException ex) {
-            throw new SerializationException(ex);
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (final IOException ex) { // NOPMD
-                // ignore close exception
-            }
         }
     }
 
@@ -245,13 +205,13 @@ public class SerializationUtils {
      * <p>
      * Deserializes a single {@code Object} from an array of bytes.
      * </p>
-     * 
+     *
      * <p>
      * If the call site incorrectly types the return value, a {@link ClassCastException} is thrown from the call site.
      * Without Generics in this declaration, the call site must type cast and can cause the same ClassCastException.
      * Note that in both cases, the ClassCastException is in the call site, not in this method.
      * </p>
-     * 
+     *
      * @param <T>  the object type to be deserialized
      * @param objectData
      *            the serialized object, must not be null
@@ -262,10 +222,8 @@ public class SerializationUtils {
      *             (runtime) if the serialization fails
      */
     public static <T> T deserialize(final byte[] objectData) {
-        if (objectData == null) {
-            throw new IllegalArgumentException("The byte[] must not be null");
-        }
-        return SerializationUtils.<T>deserialize(new ByteArrayInputStream(objectData));
+        Validate.isTrue(objectData != null, "The byte[] must not be null");
+        return SerializationUtils.deserialize(new ByteArrayInputStream(objectData));
     }
 
     /**
@@ -277,13 +235,13 @@ public class SerializationUtils {
      * containers and application servers, no matter in which of the
      * <code>ClassLoader</code> the particular class that encapsulates
      * serialization/deserialization lives. </p>
-     * 
+     *
      * <p>For more in-depth information about the problem for which this
      * class here is a workaround, see the JIRA issue LANG-626. </p>
      */
      static class ClassLoaderAwareObjectInputStream extends ObjectInputStream {
-        private static final Map<String, Class<?>> primitiveTypes = 
-                new HashMap<String, Class<?>>();
+        private static final Map<String, Class<?>> primitiveTypes =
+                new HashMap<>();
 
         static {
             primitiveTypes.put("byte", byte.class);
@@ -298,7 +256,7 @@ public class SerializationUtils {
         }
 
         private final ClassLoader classLoader;
-        
+
         /**
          * Constructor.
          * @param in The <code>InputStream</code>.
@@ -306,13 +264,13 @@ public class SerializationUtils {
          * @throws IOException if an I/O error occurs while reading stream header.
          * @see java.io.ObjectInputStream
          */
-        public ClassLoaderAwareObjectInputStream(final InputStream in, final ClassLoader classLoader) throws IOException {
+        ClassLoaderAwareObjectInputStream(final InputStream in, final ClassLoader classLoader) throws IOException {
             super(in);
             this.classLoader = classLoader;
         }
 
         /**
-         * Overriden version that uses the parametrized <code>ClassLoader</code> or the <code>ClassLoader</code>
+         * Overridden version that uses the parameterized <code>ClassLoader</code> or the <code>ClassLoader</code>
          * of the current <code>Thread</code> to resolve the class.
          * @param desc An instance of class <code>ObjectStreamClass</code>.
          * @return A <code>Class</code> object corresponding to <code>desc</code>.

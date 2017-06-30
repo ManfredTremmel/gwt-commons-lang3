@@ -61,7 +61,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Development status: work on going, only a part of the little endian, Lsb0 methods implemented
  * so far.
  * </p>
- * 
+ *
  * @since Lang 3.2
  */
 
@@ -74,7 +74,7 @@ public class Conversion {
      * <p>
      * '1' is converted to 1
      * </p>
-     * 
+     *
      * @param hexDigit the hexadecimal digit to convert
      * @return an int equals to {@code hexDigit}
      * @throws IllegalArgumentException if {@code hexDigit} is not a hexadecimal digit
@@ -94,7 +94,7 @@ public class Conversion {
      * <p>
      * '1' is converted to 8
      * </p>
-     * 
+     *
      * @param hexDigit the hexadecimal digit to convert
      * @return an int equals to {@code hexDigit}
      * @throws IllegalArgumentException if {@code hexDigit} is not a hexadecimal digit
@@ -152,7 +152,7 @@ public class Conversion {
      * <p>
      * '1' is converted as follow: (1, 0, 0, 0)
      * </p>
-     * 
+     *
      * @param hexDigit the hexadecimal digit to convert
      * @return a boolean array with the binary representation of {@code hexDigit}
      * @throws IllegalArgumentException if {@code hexDigit} is not a hexadecimal digit
@@ -210,7 +210,7 @@ public class Conversion {
      * <p>
      * '1' is converted as follow: (0, 0, 0, 1)
      * </p>
-     * 
+     *
      * @param hexDigit the hexadecimal digit to convert
      * @return a boolean array with the binary representation of {@code hexDigit}
      * @throws IllegalArgumentException if {@code hexDigit} is not a hexadecimal digit
@@ -268,7 +268,7 @@ public class Conversion {
      * <p>
      * (1, 0, 0, 0) is converted as follow: '1'
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @return a hexadecimal digit representing the selected bits
      * @throws IllegalArgumentException if {@code src} is empty
@@ -286,7 +286,7 @@ public class Conversion {
      * <p>
      * (1, 0, 0, 0) is converted as follow: '1'
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position of the lsb to start the conversion
      * @return a hexadecimal digit representing the selected bits
@@ -329,7 +329,7 @@ public class Conversion {
      * <p>
      * (1, 0, 0, 0) is converted as follow: '8'
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @return a hexadecimal digit representing the selected bits
      * @throws IllegalArgumentException if {@code src} is empty, {@code src.length < 4} or
@@ -349,7 +349,7 @@ public class Conversion {
      * (1, 0, 0, 0) is converted as follow: '8' (1,0,0,1,1,0,1,0) with srcPos = 3 is converted
      * to 'D'
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position of the lsb to start the conversion
      * @return a hexadecimal digit representing the selected bits
@@ -397,7 +397,7 @@ public class Conversion {
      * (1, 0, 0, 0) is converted as follow: '8' (1,0,0,0,0,0,0,0, 0,0,0,0,0,1,0,0) is converted
      * to '4'
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @return a hexadecimal digit representing the selected bits
      * @throws IllegalArgumentException if {@code src} is empty
@@ -416,7 +416,7 @@ public class Conversion {
      * (1, 0, 0, 0) with srcPos = 0 is converted as follow: '8' (1,0,0,0,0,0,0,0,
      * 0,0,0,1,0,1,0,0) with srcPos = 2 is converted to '5'
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position of the lsb to start the conversion
      * @return a hexadecimal digit representing the selected bits
@@ -470,7 +470,7 @@ public class Conversion {
      * <p>
      * 10 returns 'A' and so on...
      * </p>
-     * 
+     *
      * @param nibble the 4 bits to convert
      * @return a hexadecimal digit representing the 4 lsb of {@code nibble}
      * @throws IllegalArgumentException if {@code nibble < 0} or {@code nibble > 15}
@@ -496,7 +496,7 @@ public class Conversion {
      * <p>
      * 10 returns '5' and so on...
      * </p>
-     * 
+     *
      * @param nibble the 4 bits to convert
      * @return a hexadecimal digit representing the 4 lsb of {@code nibble}
      * @throws IllegalArgumentException if {@code nibble < 0} or {@code nibble > 15}
@@ -545,7 +545,7 @@ public class Conversion {
      * Converts an array of int into a long using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the int array to convert
      * @param srcPos the position in {@code src}, in int unit, from where to start the
      *            conversion
@@ -563,7 +563,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nInts - 1) * 32 + dstPos >= 64) {
-            throw new IllegalArgumentException("(nInts-1)*32+dstPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nInts-1)*32+dstPos is greater or equal to than 64");
         }
         long out = dstInit;
         for (int i = 0; i < nInts; i++) {
@@ -580,7 +580,7 @@ public class Conversion {
      * Converts an array of short into a long using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the short array to convert
      * @param srcPos the position in {@code src}, in short unit, from where to start the
      *            conversion
@@ -598,7 +598,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nShorts - 1) * 16 + dstPos >= 64) {
-            throw new IllegalArgumentException("(nShorts-1)*16+dstPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nShorts-1)*16+dstPos is greater or equal to than 64");
         }
         long out = dstInit;
         for (int i = 0; i < nShorts; i++) {
@@ -612,17 +612,17 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts an array of short into a int using the default (little endian, Lsb0) byte and
+     * Converts an array of short into an int using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the short array to convert
      * @param srcPos the position in {@code src}, in short unit, from where to start the
      *            conversion
      * @param dstInit initial value of the destination int
      * @param dstPos the position of the lsb, in bits, in the result int
      * @param nShorts the number of shorts to convert
-     * @return a int containing the selected bits
+     * @return an int containing the selected bits
      * @throws NullPointerException if {@code src} is {@code null}
      * @throws IllegalArgumentException if {@code (nShorts-1)*16+dstPos >= 32}
      * @throws ArrayIndexOutOfBoundsException if {@code srcPos + nShorts > src.length}
@@ -633,7 +633,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nShorts - 1) * 16 + dstPos >= 32) {
-            throw new IllegalArgumentException("(nShorts-1)*16+dstPos is greather or equal to than 32");
+            throw new IllegalArgumentException("(nShorts-1)*16+dstPos is greater or equal to than 32");
         }
         int out = dstInit;
         for (int i = 0; i < nShorts; i++) {
@@ -650,7 +650,7 @@ public class Conversion {
      * Converts an array of byte into a long using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the byte array to convert
      * @param srcPos the position in {@code src}, in byte unit, from where to start the
      *            conversion
@@ -668,7 +668,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nBytes - 1) * 8 + dstPos >= 64) {
-            throw new IllegalArgumentException("(nBytes-1)*8+dstPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nBytes-1)*8+dstPos is greater or equal to than 64");
         }
         long out = dstInit;
         for (int i = 0; i < nBytes; i++) {
@@ -682,17 +682,17 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts an array of byte into a int using the default (little endian, Lsb0) byte and bit
+     * Converts an array of byte into an int using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the byte array to convert
      * @param srcPos the position in {@code src}, in byte unit, from where to start the
      *            conversion
      * @param dstInit initial value of the destination int
      * @param dstPos the position of the lsb, in bits, in the result int
      * @param nBytes the number of bytes to convert
-     * @return a int containing the selected bits
+     * @return an int containing the selected bits
      * @throws NullPointerException if {@code src} is {@code null}
      * @throws IllegalArgumentException if {@code (nBytes-1)*8+dstPos >= 32}
      * @throws ArrayIndexOutOfBoundsException if {@code srcPos + nBytes > src.length}
@@ -703,7 +703,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nBytes - 1) * 8 + dstPos >= 32) {
-            throw new IllegalArgumentException("(nBytes-1)*8+dstPos is greather or equal to than 32");
+            throw new IllegalArgumentException("(nBytes-1)*8+dstPos is greater or equal to than 32");
         }
         int out = dstInit;
         for (int i = 0; i < nBytes; i++) {
@@ -720,7 +720,7 @@ public class Conversion {
      * Converts an array of byte into a short using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the byte array to convert
      * @param srcPos the position in {@code src}, in byte unit, from where to start the
      *            conversion
@@ -738,7 +738,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nBytes - 1) * 8 + dstPos >= 16) {
-            throw new IllegalArgumentException("(nBytes-1)*8+dstPos is greather or equal to than 16");
+            throw new IllegalArgumentException("(nBytes-1)*8+dstPos is greater or equal to than 16");
         }
         short out = dstInit;
         for (int i = 0; i < nBytes; i++) {
@@ -755,7 +755,7 @@ public class Conversion {
      * Converts an array of Char into a long using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the hex string to convert
      * @param srcPos the position in {@code src}, in Char unit, from where to start the
      *            conversion
@@ -771,7 +771,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHex - 1) * 4 + dstPos >= 64) {
-            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greater or equal to than 64");
         }
         long out = dstInit;
         for (int i = 0; i < nHex; i++) {
@@ -785,17 +785,17 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts an array of Char into a int using the default (little endian, Lsb0) byte and bit
+     * Converts an array of Char into an int using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the hex string to convert
      * @param srcPos the position in {@code src}, in Char unit, from where to start the
      *            conversion
      * @param dstInit initial value of the destination int
      * @param dstPos the position of the lsb, in bits, in the result int
      * @param nHex the number of Chars to convert
-     * @return a int containing the selected bits
+     * @return an int containing the selected bits
      * @throws IllegalArgumentException if {@code (nHexs-1)*4+dstPos >= 32}
      */
     public static int hexToInt(final String src, final int srcPos, final int dstInit, final int dstPos, final int nHex) {
@@ -803,7 +803,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHex - 1) * 4 + dstPos >= 32) {
-            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greather or equal to than 32");
+            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greater or equal to than 32");
         }
         int out = dstInit;
         for (int i = 0; i < nHex; i++) {
@@ -820,7 +820,7 @@ public class Conversion {
      * Converts an array of Char into a short using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the hex string to convert
      * @param srcPos the position in {@code src}, in Char unit, from where to start the
      *            conversion
@@ -836,7 +836,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHex - 1) * 4 + dstPos >= 16) {
-            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greather or equal to than 16");
+            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greater or equal to than 16");
         }
         short out = dstInit;
         for (int i = 0; i < nHex; i++) {
@@ -853,7 +853,7 @@ public class Conversion {
      * Converts an array of Char into a byte using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the hex string to convert
      * @param srcPos the position in {@code src}, in Char unit, from where to start the
      *            conversion
@@ -869,7 +869,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHex - 1) * 4 + dstPos >= 8) {
-            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greather or equal to than 8");
+            throw new IllegalArgumentException("(nHexs-1)*4+dstPos is greater or equal to than 8");
         }
         byte out = dstInit;
         for (int i = 0; i < nHex; i++) {
@@ -886,7 +886,7 @@ public class Conversion {
      * Converts binary (represented as boolean array) into a long using the default (little
      * endian, Lsb0) byte and bit ordering.
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position in {@code src}, in boolean unit, from where to start the
      *            conversion
@@ -904,7 +904,7 @@ public class Conversion {
             return dstInit;
         }
         if (nBools - 1 + dstPos >= 64) {
-            throw new IllegalArgumentException("nBools-1+dstPos is greather or equal to than 64");
+            throw new IllegalArgumentException("nBools-1+dstPos is greater or equal to than 64");
         }
         long out = dstInit;
         for (int i = 0; i < nBools; i++) {
@@ -918,17 +918,17 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts binary (represented as boolean array) into a int using the default (little
+     * Converts binary (represented as boolean array) into an int using the default (little
      * endian, Lsb0) byte and bit ordering.
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position in {@code src}, in boolean unit, from where to start the
      *            conversion
      * @param dstInit initial value of the destination int
      * @param dstPos the position of the lsb, in bits, in the result int
      * @param nBools the number of booleans to convert
-     * @return a int containing the selected bits
+     * @return an int containing the selected bits
      * @throws NullPointerException if {@code src} is {@code null}
      * @throws IllegalArgumentException if {@code nBools-1+dstPos >= 32}
      * @throws ArrayIndexOutOfBoundsException if {@code srcPos + nBools > src.length}
@@ -939,7 +939,7 @@ public class Conversion {
             return dstInit;
         }
         if (nBools - 1 + dstPos >= 32) {
-            throw new IllegalArgumentException("nBools-1+dstPos is greather or equal to than 32");
+            throw new IllegalArgumentException("nBools-1+dstPos is greater or equal to than 32");
         }
         int out = dstInit;
         for (int i = 0; i < nBools; i++) {
@@ -956,7 +956,7 @@ public class Conversion {
      * Converts binary (represented as boolean array) into a short using the default (little
      * endian, Lsb0) byte and bit ordering.
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position in {@code src}, in boolean unit, from where to start the
      *            conversion
@@ -974,7 +974,7 @@ public class Conversion {
             return dstInit;
         }
         if (nBools - 1 + dstPos >= 16) {
-            throw new IllegalArgumentException("nBools-1+dstPos is greather or equal to than 16");
+            throw new IllegalArgumentException("nBools-1+dstPos is greater or equal to than 16");
         }
         short out = dstInit;
         for (int i = 0; i < nBools; i++) {
@@ -991,7 +991,7 @@ public class Conversion {
      * Converts binary (represented as boolean array) into a byte using the default (little
      * endian, Lsb0) byte and bit ordering.
      * </p>
-     * 
+     *
      * @param src the binary to convert
      * @param srcPos the position in {@code src}, in boolean unit, from where to start the
      *            conversion
@@ -1009,7 +1009,7 @@ public class Conversion {
             return dstInit;
         }
         if (nBools - 1 + dstPos >= 8) {
-            throw new IllegalArgumentException("nBools-1+dstPos is greather or equal to than 8");
+            throw new IllegalArgumentException("nBools-1+dstPos is greater or equal to than 8");
         }
         byte out = dstInit;
         for (int i = 0; i < nBools; i++) {
@@ -1026,7 +1026,7 @@ public class Conversion {
      * Converts a long into an array of int using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the long to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1044,7 +1044,7 @@ public class Conversion {
             return dst;
         }
         if ((nInts - 1) * 32 + srcPos >= 64) {
-            throw new IllegalArgumentException("(nInts-1)*32+srcPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nInts-1)*32+srcPos is greater or equal to than 64");
         }
         for (int i = 0; i < nInts; i++) {
             final int shift = i * 32 + srcPos;
@@ -1058,7 +1058,7 @@ public class Conversion {
      * Converts a long into an array of short using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the long to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1076,7 +1076,7 @@ public class Conversion {
             return dst;
         }
         if ((nShorts - 1) * 16 + srcPos >= 64) {
-            throw new IllegalArgumentException("(nShorts-1)*16+srcPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nShorts-1)*16+srcPos is greater or equal to than 64");
         }
         for (int i = 0; i < nShorts; i++) {
             final int shift = i * 16 + srcPos;
@@ -1087,10 +1087,10 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts a int into an array of short using the default (little endian, Lsb0) byte and
+     * Converts an int into an array of short using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the int to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1108,7 +1108,7 @@ public class Conversion {
             return dst;
         }
         if ((nShorts - 1) * 16 + srcPos >= 32) {
-            throw new IllegalArgumentException("(nShorts-1)*16+srcPos is greather or equal to than 32");
+            throw new IllegalArgumentException("(nShorts-1)*16+srcPos is greater or equal to than 32");
         }
         for (int i = 0; i < nShorts; i++) {
             final int shift = i * 16 + srcPos;
@@ -1122,7 +1122,7 @@ public class Conversion {
      * Converts a long into an array of byte using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the long to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1140,7 +1140,7 @@ public class Conversion {
             return dst;
         }
         if ((nBytes - 1) * 8 + srcPos >= 64) {
-            throw new IllegalArgumentException("(nBytes-1)*8+srcPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nBytes-1)*8+srcPos is greater or equal to than 64");
         }
         for (int i = 0; i < nBytes; i++) {
             final int shift = i * 8 + srcPos;
@@ -1151,10 +1151,10 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts a int into an array of byte using the default (little endian, Lsb0) byte and bit
+     * Converts an int into an array of byte using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the int to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1172,7 +1172,7 @@ public class Conversion {
             return dst;
         }
         if ((nBytes - 1) * 8 + srcPos >= 32) {
-            throw new IllegalArgumentException("(nBytes-1)*8+srcPos is greather or equal to than 32");
+            throw new IllegalArgumentException("(nBytes-1)*8+srcPos is greater or equal to than 32");
         }
         for (int i = 0; i < nBytes; i++) {
             final int shift = i * 8 + srcPos;
@@ -1186,7 +1186,7 @@ public class Conversion {
      * Converts a short into an array of byte using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the short to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1204,7 +1204,7 @@ public class Conversion {
             return dst;
         }
         if ((nBytes - 1) * 8 + srcPos >= 16) {
-            throw new IllegalArgumentException("(nBytes-1)*8+srcPos is greather or equal to than 16");
+            throw new IllegalArgumentException("(nBytes-1)*8+srcPos is greater or equal to than 16");
         }
         for (int i = 0; i < nBytes; i++) {
             final int shift = i * 8 + srcPos;
@@ -1218,7 +1218,7 @@ public class Conversion {
      * Converts a long into an array of Char using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the long to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dstInit the initial value for the result String
@@ -1235,7 +1235,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHexs - 1) * 4 + srcPos >= 64) {
-            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greather or equal to than 64");
+            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greater or equal to than 64");
         }
         final StringBuilder sb = new StringBuilder(dstInit);
         int append = sb.length();
@@ -1254,10 +1254,10 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts a int into an array of Char using the default (little endian, Lsb0) byte and bit
+     * Converts an int into an array of Char using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the int to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dstInit the initial value for the result String
@@ -1274,7 +1274,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHexs - 1) * 4 + srcPos >= 32) {
-            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greather or equal to than 32");
+            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greater or equal to than 32");
         }
         final StringBuilder sb = new StringBuilder(dstInit);
         int append = sb.length();
@@ -1296,7 +1296,7 @@ public class Conversion {
      * Converts a short into an array of Char using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the short to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dstInit the initial value for the result String
@@ -1313,7 +1313,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHexs - 1) * 4 + srcPos >= 16) {
-            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greather or equal to than 16");
+            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greater or equal to than 16");
         }
         final StringBuilder sb = new StringBuilder(dstInit);
         int append = sb.length();
@@ -1335,7 +1335,7 @@ public class Conversion {
      * Converts a byte into an array of Char using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the byte to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dstInit the initial value for the result String
@@ -1352,7 +1352,7 @@ public class Conversion {
             return dstInit;
         }
         if ((nHexs - 1) * 4 + srcPos >= 8) {
-            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greather or equal to than 8");
+            throw new IllegalArgumentException("(nHexs-1)*4+srcPos is greater or equal to than 8");
         }
         final StringBuilder sb = new StringBuilder(dstInit);
         int append = sb.length();
@@ -1374,7 +1374,7 @@ public class Conversion {
      * Converts a long into an array of boolean using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the long to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1392,7 +1392,7 @@ public class Conversion {
             return dst;
         }
         if (nBools - 1 + srcPos >= 64) {
-            throw new IllegalArgumentException("nBools-1+srcPos is greather or equal to than 64");
+            throw new IllegalArgumentException("nBools-1+srcPos is greater or equal to than 64");
         }
         for (int i = 0; i < nBools; i++) {
             final int shift = i + srcPos;
@@ -1403,10 +1403,10 @@ public class Conversion {
 
     /**
      * <p>
-     * Converts a int into an array of boolean using the default (little endian, Lsb0) byte and
+     * Converts an int into an array of boolean using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the int to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1424,7 +1424,7 @@ public class Conversion {
             return dst;
         }
         if (nBools - 1 + srcPos >= 32) {
-            throw new IllegalArgumentException("nBools-1+srcPos is greather or equal to than 32");
+            throw new IllegalArgumentException("nBools-1+srcPos is greater or equal to than 32");
         }
         for (int i = 0; i < nBools; i++) {
             final int shift = i + srcPos;
@@ -1438,7 +1438,7 @@ public class Conversion {
      * Converts a short into an array of boolean using the default (little endian, Lsb0) byte
      * and bit ordering.
      * </p>
-     * 
+     *
      * @param src the short to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1456,7 +1456,7 @@ public class Conversion {
             return dst;
         }
         if (nBools - 1 + srcPos >= 16) {
-            throw new IllegalArgumentException("nBools-1+srcPos is greather or equal to than 16");
+            throw new IllegalArgumentException("nBools-1+srcPos is greater or equal to than 16");
         }
         assert (nBools - 1) < 16 - srcPos;
         for (int i = 0; i < nBools; i++) {
@@ -1471,7 +1471,7 @@ public class Conversion {
      * Converts a byte into an array of boolean using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the byte to convert
      * @param srcPos the position in {@code src}, in bits, from where to start the conversion
      * @param dst the destination array
@@ -1489,7 +1489,7 @@ public class Conversion {
             return dst;
         }
         if (nBools - 1 + srcPos >= 8) {
-            throw new IllegalArgumentException("nBools-1+srcPos is greather or equal to than 8");
+            throw new IllegalArgumentException("nBools-1+srcPos is greater or equal to than 8");
         }
         for (int i = 0; i < nBools; i++) {
             final int shift = i + srcPos;
@@ -1503,7 +1503,7 @@ public class Conversion {
      * Converts UUID into an array of byte using the default (little endian, Lsb0) byte and bit
      * ordering.
      * </p>
-     * 
+     *
      * @param src the UUID to convert
      * @param dst the destination array
      * @param dstPos the position in {@code dst} where to copy the result
@@ -1520,7 +1520,7 @@ public class Conversion {
             return dst;
         }
         if (nBytes > 16) {
-            throw new IllegalArgumentException("nBytes is greather than 16");
+            throw new IllegalArgumentException("nBytes is greater than 16");
         }
         longToByteArray(src.getMostSignificantBits(), 0, dst, dstPos, nBytes > 8 ? 8 : nBytes);
         if (nBytes >= 8) {
@@ -1534,7 +1534,7 @@ public class Conversion {
      * Converts bytes from an array into a UUID using the default (little endian, Lsb0) byte and
      * bit ordering.
      * </p>
-     * 
+     *
      * @param src the byte array to convert
      * @param srcPos the position in {@code src} where to copy the result from
      * @return a UUID

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.gwt.core.shared.GwtIncompatible;
@@ -70,7 +71,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * <code>reflectionEquals</code>, uses <code>AccessibleObject.setAccessible</code> to
  * change the visibility of the fields. This will fail under a security
  * manager, unless the appropriate permissions are set up correctly. It is
- * also slower than testing explicitly.  Non-primitive fields are compared using 
+ * also slower than testing explicitly.  Non-primitive fields are compared using
  * <code>equals()</code>.</p>
  *
  * <p> A typical invocation for this method would look like:</p>
@@ -79,7 +80,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  *   return EqualsBuilder.reflectionEquals(this, obj);
  * }
  * </pre>
- * 
+ *
  * <p>The {@link EqualsExclude} annotation can be used to exclude fields from being
  * used by the <code>reflectionEquals</code> methods.</p>
  *
@@ -95,7 +96,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @since 3.0
      */
     @GwtIncompatible("incompatible method")
-    private static final ThreadLocal<Set<Pair<IDKey, IDKey>>> REGISTRY = new ThreadLocal<Set<Pair<IDKey, IDKey>>>();
+    private static final ThreadLocal<Set<Pair<IDKey, IDKey>>> REGISTRY = new ThreadLocal<>();
 
     /*
      * NOTE: we cannot store the actual objects in a HashSet, as that would use the very hashCode()
@@ -103,7 +104,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * So we generate a one-to-one mapping from the original object to a new object.
      *
-     * Now HashSet uses equals() to determine if two elements with the same hashcode really
+     * Now HashSet uses equals() to determine if two elements with the same hash code really
      * are equal, so we also need to ensure that the replacement objects are only equal
      * if the original objects are identical.
      *
@@ -180,7 +181,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     private static void register(final Object lhs, final Object rhs) {
         Set<Pair<IDKey, IDKey>> registry = getRegistry();
         if (registry == null) {
-            registry = new HashSet<Pair<IDKey, IDKey>>();
+            registry = new HashSet<>();
             REGISTRY.set(registry);
         }
         final Pair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
@@ -201,7 +202,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      */
     @GwtIncompatible("incompatible method")
     private static void unregister(final Object lhs, final Object rhs) {
-        Set<Pair<IDKey, IDKey>> registry = getRegistry();
+        final Set<Pair<IDKey, IDKey>> registry = getRegistry();
         if (registry != null) {
             final Pair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
             registry.remove(pair);
@@ -217,6 +218,11 @@ public class EqualsBuilder implements Builder<Boolean> {
      */
     private boolean isEquals = true;
 
+    private boolean testTransients = false;
+    private boolean testRecursive = false;
+    private Class<?> reflectUpToClass = null;
+    private String[] excludeFields = null;
+
     /**
      * <p>Constructor for EqualsBuilder.</p>
      *
@@ -230,15 +236,60 @@ public class EqualsBuilder implements Builder<Boolean> {
     //-------------------------------------------------------------------------
 
     /**
+     * Set whether to include transient fields when reflectively comparing objects.
+     * @param testTransients whether to test transient fields
+     * @return EqualsBuilder - used to chain calls.
+     * @since 3.6
+     */
+    public EqualsBuilder setTestTransients(final boolean testTransients) {
+        this.testTransients = testTransients;
+        return this;
+    }
+
+    /**
+     * Set whether to include transient fields when reflectively comparing objects.
+     * @param testRecursive  whether to do a recursive test
+     * @return EqualsBuilder - used to chain calls.
+     * @since 3.6
+     */
+    public EqualsBuilder setTestRecursive(final boolean testRecursive) {
+        this.testRecursive = testRecursive;
+        return this;
+    }
+
+    /**
+     * Set the superclass to reflect up to at reflective tests.
+     * @param reflectUpToClass the super class to reflect up to
+     * @return EqualsBuilder - used to chain calls.
+     * @since 3.6
+     */
+    public EqualsBuilder setReflectUpToClass(final Class<?> reflectUpToClass) {
+        this.reflectUpToClass = reflectUpToClass;
+        return this;
+    }
+
+    /**
+     * Set field names to be excluded by reflection tests.
+     * @param excludeFields the fields to exclude
+     * @return EqualsBuilder - used to chain calls.
+     * @since 3.6
+     */
+    public EqualsBuilder setExcludeFields(final String... excludeFields) {
+        this.excludeFields = excludeFields;
+        return this;
+    }
+
+
+    /**
      * <p>This method uses reflection to determine if the two <code>Object</code>s
      * are equal.</p>
      *
      * <p>It uses <code>AccessibleObject.setAccessible</code> to gain access to private
      * fields. This means that it will throw a security exception if run under
      * a security manager, if the permissions are not set up correctly. It is also
-     * not as efficient as testing explicitly. Non-primitive fields are compared using 
+     * not as efficient as testing explicitly. Non-primitive fields are compared using
      * <code>equals()</code>.</p>
-     * 
+     *
      * <p>Transient members will be not be tested, as they are likely derived
      * fields, and not part of the value of the Object.</p>
      *
@@ -248,7 +299,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param rhs  the other object
      * @param excludeFields  Collection of String field names to exclude from testing
      * @return <code>true</code> if the two Objects have tested equals.
-     * 
+     *
      * @see EqualsExclude
      */
     @GwtIncompatible("incompatible method")
@@ -263,7 +314,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * <p>It uses <code>AccessibleObject.setAccessible</code> to gain access to private
      * fields. This means that it will throw a security exception if run under
      * a security manager, if the permissions are not set up correctly. It is also
-     * not as efficient as testing explicitly. Non-primitive fields are compared using 
+     * not as efficient as testing explicitly. Non-primitive fields are compared using
      * <code>equals()</code>.</p>
      *
      * <p>Transient members will be not be tested, as they are likely derived
@@ -275,7 +326,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param rhs  the other object
      * @param excludeFields  array of field names to exclude from testing
      * @return <code>true</code> if the two Objects have tested equals.
-     * 
+     *
      * @see EqualsExclude
      */
     @GwtIncompatible("incompatible method")
@@ -290,7 +341,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * <p>It uses <code>AccessibleObject.setAccessible</code> to gain access to private
      * fields. This means that it will throw a security exception if run under
      * a security manager, if the permissions are not set up correctly. It is also
-     * not as efficient as testing explicitly. Non-primitive fields are compared using 
+     * not as efficient as testing explicitly. Non-primitive fields are compared using
      * <code>equals()</code>.</p>
      *
      * <p>If the TestTransients parameter is set to <code>true</code>, transient
@@ -303,7 +354,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param rhs  the other object
      * @param testTransients  whether to include transient fields
      * @return <code>true</code> if the two Objects have tested equals.
-     * 
+     *
      * @see EqualsExclude
      */
     @GwtIncompatible("incompatible method")
@@ -318,7 +369,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * <p>It uses <code>AccessibleObject.setAccessible</code> to gain access to private
      * fields. This means that it will throw a security exception if run under
      * a security manager, if the permissions are not set up correctly. It is also
-     * not as efficient as testing explicitly. Non-primitive fields are compared using 
+     * not as efficient as testing explicitly. Non-primitive fields are compared using
      * <code>equals()</code>.</p>
      *
      * <p>If the testTransients parameter is set to <code>true</code>, transient
@@ -336,19 +387,106 @@ public class EqualsBuilder implements Builder<Boolean> {
      *  may be <code>null</code>
      * @param excludeFields  array of field names to exclude from testing
      * @return <code>true</code> if the two Objects have tested equals.
-     * 
+     *
      * @see EqualsExclude
      * @since 2.0
      */
     @GwtIncompatible("incompatible method")
     public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,
             final String... excludeFields) {
+        return reflectionEquals(lhs, rhs, testTransients, reflectUpToClass, false, excludeFields);
+    }
+
+    /**
+     * <p>This method uses reflection to determine if the two <code>Object</code>s
+     * are equal.</p>
+     *
+     * <p>It uses <code>AccessibleObject.setAccessible</code> to gain access to private
+     * fields. This means that it will throw a security exception if run under
+     * a security manager, if the permissions are not set up correctly. It is also
+     * not as efficient as testing explicitly. Non-primitive fields are compared using
+     * <code>equals()</code>.</p>
+     *
+     * <p>If the testTransients parameter is set to <code>true</code>, transient
+     * members will be tested, otherwise they are ignored, as they are likely
+     * derived fields, and not part of the value of the <code>Object</code>.</p>
+     *
+     * <p>Static fields will not be included. Superclass fields will be appended
+     * up to and including the specified superclass. A null superclass is treated
+     * as java.lang.Object.</p>
+     *
+     * <p>If the testRecursive parameter is set to <code>true</code>, non primitive
+     * (and non primitive wrapper) field types will be compared by
+     * <code>EqualsBuilder</code> recursively instead of invoking their
+     * <code>equals()</code> method. Leading to a deep reflection equals test.
+     *
+     * @param lhs  <code>this</code> object
+     * @param rhs  the other object
+     * @param testTransients  whether to include transient fields
+     * @param reflectUpToClass  the superclass to reflect up to (inclusive),
+     *  may be <code>null</code>
+     * @param testRecursive  whether to call reflection equals on non primitive
+     *  fields recursively.
+     * @param excludeFields  array of field names to exclude from testing
+     * @return <code>true</code> if the two Objects have tested equals.
+     *
+     * @see EqualsExclude
+     * @since 3.6
+     */
+    @GwtIncompatible("incompatible method")
+    public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,
+            final boolean testRecursive, final String... excludeFields) {
         if (lhs == rhs) {
             return true;
         }
         if (lhs == null || rhs == null) {
             return false;
         }
+        return new EqualsBuilder()
+                    .setExcludeFields(excludeFields)
+                    .setReflectUpToClass(reflectUpToClass)
+                    .setTestTransients(testTransients)
+                    .setTestRecursive(testRecursive)
+                    .reflectionAppend(lhs, rhs)
+                    .isEquals();
+    }
+
+    /**
+     * <p>Tests if two <code>objects</code> by using reflection.</p>
+     *
+     * <p>It uses <code>AccessibleObject.setAccessible</code> to gain access to private
+     * fields. This means that it will throw a security exception if run under
+     * a security manager, if the permissions are not set up correctly. It is also
+     * not as efficient as testing explicitly. Non-primitive fields are compared using
+     * <code>equals()</code>.</p>
+     *
+     * <p>If the testTransients field is set to <code>true</code>, transient
+     * members will be tested, otherwise they are ignored, as they are likely
+     * derived fields, and not part of the value of the <code>Object</code>.</p>
+     *
+     * <p>Static fields will not be included. Superclass fields will be appended
+     * up to and including the specified superclass in field <code>reflectUpToClass</code>.
+     * A null superclass is treated as java.lang.Object.</p>
+     *
+     * <p>Field names listed in field <code>excludeFields</code> will be ignored.</p>
+     *
+     * @param lhs  the left hand object
+     * @param rhs  the left hand object
+     * @return EqualsBuilder - used to chain calls.
+     */
+    @GwtIncompatible("incompatible method")
+    public EqualsBuilder reflectionAppend(final Object lhs, final Object rhs) {
+        if (!isEquals) {
+            return this;
+        }
+        if (lhs == rhs) {
+            return this;
+        }
+        if (lhs == null || rhs == null) {
+            isEquals = false;
+            return this;
+        }
+
         // Find the leaf class since there may be transients in the leaf
         // class or in classes between the leaf and root.
         // If we are not testing transients or a subclass has no ivars,
@@ -370,17 +508,18 @@ public class EqualsBuilder implements Builder<Boolean> {
             }
         } else {
             // The two classes are not related.
-            return false;
+            isEquals = false;
+            return this;
         }
-        final EqualsBuilder equalsBuilder = new EqualsBuilder();
+
         try {
             if (testClass.isArray()) {
-                equalsBuilder.append(lhs, rhs);
+                append(lhs, rhs);
             } else {
-                reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
+                reflectionAppend(lhs, rhs, testClass);
                 while (testClass.getSuperclass() != null && testClass != reflectUpToClass) {
                     testClass = testClass.getSuperclass();
-                    reflectionAppend(lhs, rhs, testClass, equalsBuilder, testTransients, excludeFields);
+                    reflectionAppend(lhs, rhs, testClass);
                 }
             }
         } catch (final IllegalArgumentException e) {
@@ -389,9 +528,10 @@ public class EqualsBuilder implements Builder<Boolean> {
             // we are testing transients.
             // If a subclass has ivars that we are trying to test them, we get an
             // exception and we know that the objects are not equal.
-            return false;
+            isEquals = false;
+            return this;
         }
-        return equalsBuilder.isEquals();
+        return this;
     }
 
     /**
@@ -401,18 +541,12 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param lhs  the left hand object
      * @param rhs  the right hand object
      * @param clazz  the class to append details of
-     * @param builder  the builder to append to
-     * @param useTransients  whether to test transient fields
-     * @param excludeFields  array of field names to exclude from testing
      */
     @GwtIncompatible("incompatible method")
-    private static void reflectionAppend(
+    private void reflectionAppend(
         final Object lhs,
         final Object rhs,
-        final Class<?> clazz,
-        final EqualsBuilder builder,
-        final boolean useTransients,
-        final String[] excludeFields) {
+         final Class<?> clazz) {
 
         if (isRegistered(lhs, rhs)) {
             return;
@@ -422,15 +556,15 @@ public class EqualsBuilder implements Builder<Boolean> {
             register(lhs, rhs);
             final Field[] fields = clazz.getDeclaredFields();
             AccessibleObject.setAccessible(fields, true);
-            for (int i = 0; i < fields.length && builder.isEquals; i++) {
+            for (int i = 0; i < fields.length && isEquals; i++) {
                 final Field f = fields[i];
                 if (!ArrayUtils.contains(excludeFields, f.getName())
                     && !f.getName().contains("$")
-                    && (useTransients || !Modifier.isTransient(f.getModifiers()))
+                    && (testTransients || !Modifier.isTransient(f.getModifiers()))
                     && !Modifier.isStatic(f.getModifiers())
                     && !f.isAnnotationPresent(EqualsExclude.class)) {
                     try {
-                        builder.append(f.get(lhs), f.get(rhs));
+                        append(f.get(lhs), f.get(rhs));
                     } catch (final IllegalAccessException e) {
                         //this can't happen. Would get a Security exception instead
                         //throw a runtime exception in case the impossible happens.
@@ -463,13 +597,17 @@ public class EqualsBuilder implements Builder<Boolean> {
     //-------------------------------------------------------------------------
 
     /**
-     * <p>Test if two <code>Object</code>s are equal using their
+     * <p>Test if two <code>Object</code>s are equal using either
+     * #{@link #reflectionAppend(Object, Object)}, if object are non
+     * primitives (or wrapper of primitives) or if field <code>testRecursive</code>
+     * is set to <code>false</code>. Otherwise, using their
      * <code>equals</code> method.</p>
      *
      * @param lhs  the left hand object
      * @param rhs  the right hand object
      * @return EqualsBuilder - used to chain calls.
      */
+    @GwtIncompatible("incompatible method")
     public EqualsBuilder append(final Object lhs, final Object rhs) {
         if (!isEquals) {
             return this;
@@ -484,7 +622,11 @@ public class EqualsBuilder implements Builder<Boolean> {
         final Class<?> lhsClass = lhs.getClass();
         if (!lhsClass.isArray()) {
             // The simple case, not an array, just test the element
-            isEquals = lhs.equals(rhs);
+            if (testRecursive && !ClassUtils.isPrimitiveOrWrapper(lhsClass)) {
+                reflectionAppend(lhs, rhs);
+            } else {
+                isEquals = lhs.equals(rhs);
+            }
         } else {
             // factor out array case in order to keep method small enough
             // to be inlined
@@ -499,14 +641,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @param lhs  the left hand object, an array
      * @param rhs  the right hand object
      */
+    @GwtIncompatible("incompatible method")
     private void appendArray(final Object lhs, final Object rhs) {
-        if (lhs.getClass() != rhs.getClass()) {
-            // Here when we compare different dimensions, for example: a boolean[][] to a boolean[]
-            this.setEquals(false);
-        }
-        // 'Switch' on type of array, to dispatch to the correct handler
+        // First we compare different dimensions, for example: a boolean[][] to a boolean[]
+        // then we 'Switch' on type of array, to dispatch to the correct handler
         // This handles multi dimensional arrays of the same depth
-        else if (lhs instanceof long[]) {
+        if (lhs.getClass() != rhs.getClass()) {
+            this.setEquals(false);
+        } else if (lhs instanceof long[]) {
             append((long[]) lhs, (long[]) rhs);
         } else if (lhs instanceof int[]) {
             append((int[]) lhs, (int[]) rhs);
@@ -668,10 +810,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * <p>This also will be called for the top level of
      * multi-dimensional, ragged, and multi-typed arrays.</p>
      *
+     * <p>Note that this method does not compare the type of the arrays; it only
+     * compares the contents.</p>
+     *
      * @param lhs  the left hand <code>Object[]</code>
      * @param rhs  the right hand <code>Object[]</code>
      * @return EqualsBuilder - used to chain calls.
      */
+    @GwtIncompatible("incompatible method")
     public EqualsBuilder append(final Object[] lhs, final Object[] rhs) {
         if (!isEquals) {
             return this;

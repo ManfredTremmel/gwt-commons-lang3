@@ -24,7 +24,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * accessing data of background tasks.
  * </p>
  * <p>
- * This class is an analogon of the {@link ConcurrentException} exception class.
+ * This class is an analogue of the {@link ConcurrentException} exception class.
  * However, it is a runtime exception and thus does not need explicit catch
  * clauses. Some methods of {@link ConcurrentUtils} throw {@code
  * ConcurrentRuntimeException} exceptions rather than

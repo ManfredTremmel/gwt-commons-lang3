@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,15 +34,22 @@ public class EqualsBuilderTest {
 
     static class TestObject {
         private int a;
-        public TestObject() {
+
+        TestObject() {
         }
-        public TestObject(final int a) {
+
+        TestObject(final int a) {
             this.a = a;
         }
+
         @Override
         public boolean equals(final Object o) {
-            if (o == null) { return false; }
-            if (o == this) { return true; }
+            if (o == null) {
+                return false;
+            }
+            if (o == this) {
+                return true;
+            }
             if (o.getClass() != getClass()) {
                 return false;
             }
@@ -67,17 +74,24 @@ public class EqualsBuilderTest {
 
     static class TestSubObject extends TestObject {
         private int b;
-        public TestSubObject() {
+
+        TestSubObject() {
             super(0);
         }
-        public TestSubObject(final int a, final int b) {
+
+        TestSubObject(final int a, final int b) {
             super(a);
             this.b = b;
         }
+
         @Override
         public boolean equals(final Object o) {
-            if (o == null) { return false; }
-            if (o == this) { return true; }
+            if (o == null) {
+                return false;
+            }
+            if (o == this) {
+                return true;
+            }
             if (o.getClass() != getClass()) {
                 return false;
             }
@@ -88,7 +102,7 @@ public class EqualsBuilderTest {
 
         @Override
         public int hashCode() {
-            return b *17 + super.hashCode();
+            return b * 17 + super.hashCode();
         }
 
         public void setB(final int b) {
@@ -99,9 +113,9 @@ public class EqualsBuilderTest {
             return b;
         }
     }
-    
+
     static class TestEmptySubObject extends TestObject {
-        public TestEmptySubObject(final int a) {
+        TestEmptySubObject(final int a) {
             super(a);
         }
     }
@@ -109,7 +123,8 @@ public class EqualsBuilderTest {
     static class TestTSubObject extends TestObject {
         @SuppressWarnings("unused")
         private transient int t;
-        public TestTSubObject(final int a, final int t) {
+
+        TestTSubObject(final int a, final int t) {
             super(a);
             this.t = t;
         }
@@ -118,7 +133,8 @@ public class EqualsBuilderTest {
     static class TestTTSubObject extends TestTSubObject {
         @SuppressWarnings("unused")
         private transient int tt;
-        public TestTTSubObject(final int a, final int t, final int tt) {
+
+        TestTTSubObject(final int a, final int t, final int tt) {
             super(a, t);
             this.tt = tt;
         }
@@ -127,7 +143,8 @@ public class EqualsBuilderTest {
     static class TestTTLeafObject extends TestTTSubObject {
         @SuppressWarnings("unused")
         private final int leafValue;
-        public TestTTLeafObject(final int a, final int t, final int tt, final int leafValue) {
+
+        TestTTLeafObject(final int a, final int t, final int tt, final int leafValue) {
             super(a, t, tt);
             this.leafValue = leafValue;
         }
@@ -135,14 +152,81 @@ public class EqualsBuilderTest {
 
     static class TestTSubObject2 extends TestObject {
         private transient int t;
-        public TestTSubObject2(final int a, final int t) {
+
+        TestTSubObject2(final int a, final int t) {
             super(a);
         }
+
         public int getT() {
             return t;
         }
+
         public void setT(final int t) {
             this.t = t;
+        }
+    }
+
+    static class TestRecursiveObject {
+        private final TestRecursiveInnerObject a;
+        private final TestRecursiveInnerObject b;
+        private int z;
+
+        TestRecursiveObject(final TestRecursiveInnerObject a,
+                            final TestRecursiveInnerObject b, final int z) {
+            this.a = a;
+            this.b = b;
+        }
+
+        public TestRecursiveInnerObject getA() {
+            return a;
+        }
+
+        public TestRecursiveInnerObject getB() {
+            return b;
+        }
+
+        public int getZ() {
+            return z;
+        }
+
+    }
+
+    static class TestRecursiveInnerObject {
+        private final int n;
+
+        TestRecursiveInnerObject(final int n) {
+            this.n = n;
+        }
+
+        public int getN() {
+            return n;
+        }
+    }
+
+    static class TestRecursiveCycleObject {
+        private TestRecursiveCycleObject cycle;
+        private final int n;
+
+        TestRecursiveCycleObject(final int n) {
+            this.n = n;
+            this.cycle = this;
+        }
+
+        TestRecursiveCycleObject(final TestRecursiveCycleObject cycle, final int n) {
+            this.n = n;
+            this.cycle = cycle;
+        }
+
+        public int getN() {
+            return n;
+        }
+
+        public TestRecursiveCycleObject getCycle() {
+            return cycle;
+        }
+
+        public void setCycle(final TestRecursiveCycleObject cycle) {
+            this.cycle = cycle;
         }
     }
 
@@ -151,17 +235,17 @@ public class EqualsBuilderTest {
         final TestObject o1 = new TestObject(4);
         final TestObject o2 = new TestObject(5);
         assertTrue(EqualsBuilder.reflectionEquals(o1, o1));
-        assertTrue(!EqualsBuilder.reflectionEquals(o1, o2));
+        assertFalse(EqualsBuilder.reflectionEquals(o1, o2));
         o2.setA(4);
         assertTrue(EqualsBuilder.reflectionEquals(o1, o2));
 
-        assertTrue(!EqualsBuilder.reflectionEquals(o1, this));
+        assertFalse(EqualsBuilder.reflectionEquals(o1, this));
 
-        assertTrue(!EqualsBuilder.reflectionEquals(o1, null));
-        assertTrue(!EqualsBuilder.reflectionEquals(null, o2));
-        assertTrue(EqualsBuilder.reflectionEquals((Object) null, (Object) null));
+        assertFalse(EqualsBuilder.reflectionEquals(o1, null));
+        assertFalse(EqualsBuilder.reflectionEquals(null, o2));
+        assertTrue(EqualsBuilder.reflectionEquals(null, null));
     }
-    
+
     @Test
     public void testReflectionHierarchyEquals() {
         testReflectionHierarchyEquals(false);
@@ -169,9 +253,9 @@ public class EqualsBuilderTest {
         // Transients
         assertTrue(EqualsBuilder.reflectionEquals(new TestTTLeafObject(1, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 4), true));
         assertTrue(EqualsBuilder.reflectionEquals(new TestTTLeafObject(1, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 4), false));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestTTLeafObject(1, 0, 0, 4), new TestTTLeafObject(1, 2, 3, 4), true));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestTTLeafObject(1, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 0), true));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestTTLeafObject(0, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 4), true));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestTTLeafObject(1, 0, 0, 4), new TestTTLeafObject(1, 2, 3, 4), true));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestTTLeafObject(1, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 0), true));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestTTLeafObject(0, 2, 3, 4), new TestTTLeafObject(1, 2, 3, 4), true));
     }
 
     private void testReflectionHierarchyEquals(final boolean testTransients) {
@@ -197,11 +281,11 @@ public class EqualsBuilderTest {
         assertTrue(EqualsBuilder.reflectionEquals(ttlo, ttlo, testTransients));
         assertTrue(EqualsBuilder.reflectionEquals(new TestSubObject(1, 10), new TestSubObject(1, 10), testTransients));
         // same super values, diff sub values
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestSubObject(1, 10), new TestSubObject(1, 11), testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestSubObject(1, 11), new TestSubObject(1, 10), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestSubObject(1, 10), new TestSubObject(1, 11), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestSubObject(1, 11), new TestSubObject(1, 10), testTransients));
         // diff super values, same sub values
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestSubObject(0, 10), new TestSubObject(1, 10), testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestSubObject(1, 10), new TestSubObject(0, 10), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestSubObject(0, 10), new TestSubObject(1, 10), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestSubObject(1, 10), new TestSubObject(0, 10), testTransients));
 
         // mix super and sub types: equals
         assertTrue(EqualsBuilder.reflectionEquals(to1, teso, testTransients));
@@ -217,17 +301,17 @@ public class EqualsBuilderTest {
         assertTrue(EqualsBuilder.reflectionEquals(tttso, ttso, false)); // Force testTransients = false for this assert
 
         // mix super and sub types: NOT equals
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestObject(0), new TestEmptySubObject(1), testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestEmptySubObject(1), new TestObject(0), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestObject(0), new TestEmptySubObject(1), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestEmptySubObject(1), new TestObject(0), testTransients));
 
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestObject(0), new TestTSubObject(1, 1), testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestTSubObject(1, 1), new TestObject(0), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestObject(0), new TestTSubObject(1, 1), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestTSubObject(1, 1), new TestObject(0), testTransients));
 
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestObject(1), new TestSubObject(0, 10), testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(new TestSubObject(0, 10), new TestObject(1), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestObject(1), new TestSubObject(0, 10), testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(new TestSubObject(0, 10), new TestObject(1), testTransients));
 
-        assertTrue(!EqualsBuilder.reflectionEquals(to1, ttlo));
-        assertTrue(!EqualsBuilder.reflectionEquals(tso1, this));
+        assertFalse(EqualsBuilder.reflectionEquals(to1, ttlo));
+        assertFalse(EqualsBuilder.reflectionEquals(tso1, this));
     }
 
     /**
@@ -239,20 +323,21 @@ public class EqualsBuilderTest {
      * <li>consistency</li>
      * <li>non-null reference</li>
      * </ul>
-     * @param to a TestObject
-     * @param toBis a TestObject, equal to to and toTer
-     * @param toTer Left hand side, equal to to and toBis
-     * @param to2 a different TestObject
-     * @param oToChange a TestObject that will be changed
-     * @param testTransients whether to test transient instance variables 
+     *
+     * @param to             a TestObject
+     * @param toBis          a TestObject, equal to to and toTer
+     * @param toTer          Left hand side, equal to to and toBis
+     * @param to2            a different TestObject
+     * @param oToChange      a TestObject that will be changed
+     * @param testTransients whether to test transient instance variables
      */
     private void testReflectionEqualsEquivalenceRelationship(
-        final TestObject to,
-        final TestObject toBis,
-        final TestObject toTer,
-        final TestObject to2,
-        final TestObject oToChange,
-        final boolean testTransients) {
+            final TestObject to,
+            final TestObject toBis,
+            final TestObject toTer,
+            final TestObject to2,
+            final TestObject oToChange,
+            final boolean testTransients) {
 
         // reflection test
         assertTrue(EqualsBuilder.reflectionEquals(to, to, testTransients));
@@ -263,9 +348,9 @@ public class EqualsBuilderTest {
 
         // transitive test
         assertTrue(
-            EqualsBuilder.reflectionEquals(to, toBis, testTransients)
-                && EqualsBuilder.reflectionEquals(toBis, toTer, testTransients)
-                && EqualsBuilder.reflectionEquals(to, toTer, testTransients));
+                EqualsBuilder.reflectionEquals(to, toBis, testTransients)
+                        && EqualsBuilder.reflectionEquals(toBis, toTer, testTransients)
+                        && EqualsBuilder.reflectionEquals(to, toTer, testTransients));
 
         // consistency test
         oToChange.setA(to.getA());
@@ -278,15 +363,15 @@ public class EqualsBuilderTest {
         if (oToChange instanceof TestSubObject) {
             ((TestSubObject) oToChange).setB(((TestSubObject) to).getB() + 1);
         }
-        assertTrue(!EqualsBuilder.reflectionEquals(oToChange, to, testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(oToChange, to, testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(oToChange, to, testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(oToChange, to, testTransients));
 
         // non-null reference test
-        assertTrue(!EqualsBuilder.reflectionEquals(to, null, testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(to2, null, testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(null, to, testTransients));
-        assertTrue(!EqualsBuilder.reflectionEquals(null, to2, testTransients));
-        assertTrue(EqualsBuilder.reflectionEquals((Object) null, (Object) null, testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(to, null, testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(to2, null, testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(null, to, testTransients));
+        assertFalse(EqualsBuilder.reflectionEquals(null, to2, testTransients));
+        assertTrue(EqualsBuilder.reflectionEquals(null, null, testTransients));
     }
 
     @Test
@@ -304,17 +389,17 @@ public class EqualsBuilderTest {
         final TestObject o1 = new TestObject(4);
         final TestObject o2 = new TestObject(5);
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
         o2.setA(4);
         assertTrue(new EqualsBuilder().append(o1, o2).isEquals());
 
-        assertTrue(!new EqualsBuilder().append(o1, this).isEquals());
-        
-        assertTrue(!new EqualsBuilder().append(o1, null).isEquals());
-        assertTrue(!new EqualsBuilder().append(null, o2).isEquals());
-        assertTrue(new EqualsBuilder().append((Object) null, (Object) null).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, this).isEquals());
+
+        assertFalse(new EqualsBuilder().append(o1, null).isEquals());
+        assertFalse(new EqualsBuilder().append(null, o2).isEquals());
+        assertTrue(new EqualsBuilder().append((Object) null, null).isEquals());
     }
-    
+
     @Test
     public void testObjectBuild() {
         final TestObject o1 = new TestObject(4);
@@ -325,10 +410,66 @@ public class EqualsBuilderTest {
         assertEquals(Boolean.TRUE, new EqualsBuilder().append(o1, o2).build());
 
         assertEquals(Boolean.FALSE, new EqualsBuilder().append(o1, this).build());
-        
+
         assertEquals(Boolean.FALSE, new EqualsBuilder().append(o1, null).build());
         assertEquals(Boolean.FALSE, new EqualsBuilder().append(null, o2).build());
-        assertEquals(Boolean.TRUE, new EqualsBuilder().append((Object) null, (Object) null).build());
+        assertEquals(Boolean.TRUE, new EqualsBuilder().append((Object) null, null).build());
+    }
+
+    @Test
+    public void testObjectRecursive() {
+        final TestRecursiveInnerObject i1_1 = new TestRecursiveInnerObject(1);
+        final TestRecursiveInnerObject i1_2 = new TestRecursiveInnerObject(1);
+        final TestRecursiveInnerObject i2_1 = new TestRecursiveInnerObject(2);
+        final TestRecursiveInnerObject i2_2 = new TestRecursiveInnerObject(2);
+        final TestRecursiveInnerObject i3 = new TestRecursiveInnerObject(3);
+        final TestRecursiveInnerObject i4 = new TestRecursiveInnerObject(4);
+
+        final TestRecursiveObject o1_a = new TestRecursiveObject(i1_1, i2_1, 1);
+        final TestRecursiveObject o1_b = new TestRecursiveObject(i1_2, i2_2, 1);
+        final TestRecursiveObject o2 = new TestRecursiveObject(i3, i4, 2);
+        final TestRecursiveObject oNull = new TestRecursiveObject(null, null, 2);
+
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_a).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
+
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, o2).isEquals());
+
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(oNull, oNull).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, oNull).isEquals());
+    }
+
+    @Test
+    public void testObjectRecursiveCycleSelfreference() {
+        final TestRecursiveCycleObject o1_a = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject o1_b = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject o2 = new TestRecursiveCycleObject(2);
+
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_a).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, o2).isEquals());
+    }
+
+    @Test
+    public void testObjectRecursiveCycle() {
+        final TestRecursiveCycleObject o1_a = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject i1_a = new TestRecursiveCycleObject(o1_a, 100);
+        o1_a.setCycle(i1_a);
+
+        final TestRecursiveCycleObject o1_b = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject i1_b = new TestRecursiveCycleObject(o1_b, 100);
+        o1_b.setCycle(i1_b);
+
+        final TestRecursiveCycleObject o2 = new TestRecursiveCycleObject(2);
+        final TestRecursiveCycleObject i2 = new TestRecursiveCycleObject(o1_b, 200);
+        o2.setCycle(i2);
+
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_a).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, o2).isEquals());
+
+        assertTrue(EqualsBuilder.reflectionEquals(o1_a, o1_b, false, null, true));
+        assertFalse(EqualsBuilder.reflectionEquals(o1_a, o2, false, null, true));
     }
 
     @Test
@@ -336,7 +477,7 @@ public class EqualsBuilderTest {
         final long o1 = 1L;
         final long o2 = 2L;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
     @Test
@@ -344,7 +485,7 @@ public class EqualsBuilderTest {
         final int o1 = 1;
         final int o2 = 2;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
     @Test
@@ -352,7 +493,7 @@ public class EqualsBuilderTest {
         final short o1 = 1;
         final short o2 = 2;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
     @Test
@@ -360,7 +501,7 @@ public class EqualsBuilderTest {
         final char o1 = 1;
         final char o2 = 2;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
     @Test
@@ -368,7 +509,7 @@ public class EqualsBuilderTest {
         final byte o1 = 1;
         final byte o2 = 2;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
     @Test
@@ -376,8 +517,8 @@ public class EqualsBuilderTest {
         final double o1 = 1;
         final double o2 = 2;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, Double.NaN).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, Double.NaN).isEquals());
         assertTrue(new EqualsBuilder().append(Double.NaN, Double.NaN).isEquals());
         assertTrue(new EqualsBuilder().append(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).isEquals());
     }
@@ -387,8 +528,8 @@ public class EqualsBuilderTest {
         final float o1 = 1;
         final float o2 = 2;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, Float.NaN).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, Float.NaN).isEquals());
         assertTrue(new EqualsBuilder().append(Float.NaN, Float.NaN).isEquals());
         assertTrue(new EqualsBuilder().append(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY).isEquals());
     }
@@ -412,13 +553,13 @@ public class EqualsBuilderTest {
         equalsBuilder.reset();
         assertTrue(equalsBuilder.isEquals());
     }
-    
+
     @Test
     public void testBoolean() {
         final boolean o1 = true;
         final boolean o2 = false;
         assertTrue(new EqualsBuilder().append(o1, o1).isEquals());
-        assertTrue(!new EqualsBuilder().append(o1, o2).isEquals());
+        assertFalse(new EqualsBuilder().append(o1, o2).isEquals());
     }
 
     @Test
@@ -431,21 +572,21 @@ public class EqualsBuilderTest {
         obj2[0] = new TestObject(4);
         obj2[1] = new TestObject(5);
         obj2[2] = null;
-        
+
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj2, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1].setA(6);
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1].setA(5);
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[2] = obj1[1];
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[2] = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
-                       
+
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -461,10 +602,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -480,10 +621,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -499,10 +640,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -518,10 +659,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -537,10 +678,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -556,10 +697,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -575,10 +716,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -594,10 +735,10 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj1).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1[1] = true;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
 
         obj2 = null;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
         obj1 = null;
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
@@ -615,7 +756,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -631,7 +772,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -647,7 +788,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -663,7 +804,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -679,7 +820,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -695,7 +836,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -711,7 +852,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -727,8 +868,8 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = false;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
-        
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
+
         // compare 1 dim to 2.
         final boolean[] array3 = new boolean[]{true, true};
         assertFalse(new EqualsBuilder().append(array1, array3).isEquals());
@@ -752,7 +893,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         array1[1][1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -770,7 +911,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(array1, array1).isEquals());
         assertTrue(new EqualsBuilder().append(array1, array2).isEquals());
         ((long[]) array1[1])[1] = 0;
-        assertTrue(!new EqualsBuilder().append(array1, array2).isEquals());
+        assertFalse(new EqualsBuilder().append(array1, array2).isEquals());
     }
 
     @Test
@@ -788,7 +929,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1].setA(6);
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -806,7 +947,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -824,7 +965,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -842,7 +983,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -860,7 +1001,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -878,7 +1019,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -896,7 +1037,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -914,7 +1055,7 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = 7;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
 
     @Test
@@ -932,9 +1073,9 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(obj1, obj2).isEquals());
         assertTrue(new EqualsBuilder().append(obj1, array2).isEquals());
         array1[1] = true;
-        assertTrue(!new EqualsBuilder().append(obj1, obj2).isEquals());
+        assertFalse(new EqualsBuilder().append(obj1, obj2).isEquals());
     }
-    
+
     public static class TestACanEqualB {
         private final int a;
 
@@ -996,7 +1137,7 @@ public class EqualsBuilderTest {
             return this.b;
         }
     }
-    
+
     /**
      * Tests two instances of classes that can be equal and that are not "related". The two classes are not subclasses
      * of each other and do not share a parent aside from Object.
@@ -1022,14 +1163,14 @@ public class EqualsBuilderTest {
         assertTrue(new EqualsBuilder().append(x, y).isEquals());
         assertTrue(new EqualsBuilder().append(y, x).isEquals());
     }
-    
+
     /**
      * Test from http://issues.apache.org/bugzilla/show_bug.cgi?id=33067
      */
     @Test
     public void testNpeForNullElement() {
-        final Object[] x1 = new Object[] { Integer.valueOf(1), null, Integer.valueOf(3) };
-        final Object[] x2 = new Object[] { Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3) };
+        final Object[] x1 = new Object[]{Integer.valueOf(1), null, Integer.valueOf(3)};
+        final Object[] x2 = new Object[]{Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3)};
 
         // causes an NPE in 2.0 according to:
         // http://issues.apache.org/bugzilla/show_bug.cgi?id=33067
@@ -1042,23 +1183,23 @@ public class EqualsBuilderTest {
         final TestObjectWithMultipleFields x2 = new TestObjectWithMultipleFields(1, 3, 4);
 
         // not equal when including all fields
-        assertTrue(!EqualsBuilder.reflectionEquals(x1, x2));
+        assertFalse(EqualsBuilder.reflectionEquals(x1, x2));
 
         // doesn't barf on null, empty array, or non-existent field, but still tests as not equal
-        assertTrue(!EqualsBuilder.reflectionEquals(x1, x2, (String[]) null));
-        assertTrue(!EqualsBuilder.reflectionEquals(x1, x2, new String[] {}));
-        assertTrue(!EqualsBuilder.reflectionEquals(x1, x2, new String[] {"xxx"}));
+        assertFalse(EqualsBuilder.reflectionEquals(x1, x2, (String[]) null));
+        assertFalse(EqualsBuilder.reflectionEquals(x1, x2));
+        assertFalse(EqualsBuilder.reflectionEquals(x1, x2, "xxx"));
 
         // not equal if only one of the differing fields excluded
-        assertTrue(!EqualsBuilder.reflectionEquals(x1, x2, new String[] {"two"}));
-        assertTrue(!EqualsBuilder.reflectionEquals(x1, x2, new String[] {"three"}));
+        assertFalse(EqualsBuilder.reflectionEquals(x1, x2, "two"));
+        assertFalse(EqualsBuilder.reflectionEquals(x1, x2, "three"));
 
         // equal if both differing fields excluded
-        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, new String[] {"two", "three"}));
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "two", "three"));
 
         // still equal as long as both differing fields are among excluded
-        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, new String[] {"one", "two", "three"}));
-        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, new String[] {"one", "two", "three", "xxx"}));
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "one", "two", "three"));
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "one", "two", "three", "xxx"));
     }
 
     static class TestObjectWithMultipleFields {
@@ -1069,13 +1210,13 @@ public class EqualsBuilderTest {
         @SuppressWarnings("unused")
         private final TestObject three;
 
-        public TestObjectWithMultipleFields(final int one, final int two, final int three) {
+        TestObjectWithMultipleFields(final int one, final int two, final int three) {
             this.one = new TestObject(one);
             this.two = new TestObject(two);
             this.three = new TestObject(three);
         }
     }
-    
+
     /**
      * Test cyclical object references which cause a StackOverflowException if
      * not handled properly. s. LANG-606
@@ -1111,7 +1252,7 @@ public class EqualsBuilderTest {
         @SuppressWarnings("unused")
         private final TestObject one;
 
-        public TestObjectReference(final int one) {
+        TestObjectReference(final int one) {
             this.one = new TestObject(one);
         }
 
@@ -1124,36 +1265,36 @@ public class EqualsBuilderTest {
             return EqualsBuilder.reflectionEquals(this, obj);
         }
     }
-    
+
     @Test
     public void testReflectionArrays() throws Exception {
 
         final TestObject one = new TestObject(1);
         final TestObject two = new TestObject(2);
 
-        final Object[] o1 = new Object[] { one };
-        final Object[] o2 = new Object[] { two };
-        final Object[] o3 = new Object[] { one };
+        final Object[] o1 = new Object[]{one};
+        final Object[] o2 = new Object[]{two};
+        final Object[] o3 = new Object[]{one};
 
-        assertTrue(!EqualsBuilder.reflectionEquals(o1, o2));
+        assertFalse(EqualsBuilder.reflectionEquals(o1, o2));
         assertTrue(EqualsBuilder.reflectionEquals(o1, o1));
         assertTrue(EqualsBuilder.reflectionEquals(o1, o3));
-        
-        final double[] d1 = { 0, 1 };
-        final double[] d2 = { 2, 3 };
-        final double[] d3 = { 0, 1 };
-        
-        assertTrue(!EqualsBuilder.reflectionEquals(d1, d2));
+
+        final double[] d1 = {0, 1};
+        final double[] d2 = {2, 3};
+        final double[] d3 = {0, 1};
+
+        assertFalse(EqualsBuilder.reflectionEquals(d1, d2));
         assertTrue(EqualsBuilder.reflectionEquals(d1, d1));
         assertTrue(EqualsBuilder.reflectionEquals(d1, d3));
     }
 
     static class TestObjectEqualsExclude {
         @EqualsExclude
-        private int a;
-        private int b;
+        private final int a;
+        private final int b;
 
-        public TestObjectEqualsExclude(int a, int b) {
+        TestObjectEqualsExclude(final int a, final int b) {
             this.a = a;
             this.b = b;
         }
@@ -1178,6 +1319,24 @@ public class EqualsBuilderTest {
         two = new TestObjectEqualsExclude(2, 2);
 
         assertTrue(EqualsBuilder.reflectionEquals(one, two));
+    }
+
+    @Test
+    public void testReflectionAppend() {
+        assertTrue(EqualsBuilder.reflectionEquals(null, null));
+
+        final TestObject o1 = new TestObject(4);
+        final TestObject o2 = new TestObject(5);
+        assertTrue(new EqualsBuilder().reflectionAppend(o1, o1).build());
+        assertFalse(new EqualsBuilder().reflectionAppend(o1, o2).build());
+
+        o2.setA(4);
+        assertTrue(new EqualsBuilder().reflectionAppend(o1, o2).build());
+
+        assertFalse(new EqualsBuilder().reflectionAppend(o1, this).build());
+
+        assertFalse(new EqualsBuilder().reflectionAppend(o1, null).build());
+        assertFalse(new EqualsBuilder().reflectionAppend(null, o2).build());
     }
 
 }

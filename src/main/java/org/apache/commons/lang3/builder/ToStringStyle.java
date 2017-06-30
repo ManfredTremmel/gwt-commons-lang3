@@ -166,14 +166,14 @@ public abstract class ToStringStyle implements Serializable {
      * </p>
      */
     private static final ThreadLocal<WeakHashMap<Object, Object>> REGISTRY =
-        new ThreadLocal<WeakHashMap<Object,Object>>();
+        new ThreadLocal<>();
     /*
      * Note that objects of this class are generally shared between threads, so
      * an instance variable would not be suitable here.
-     * 
+     *
      * In normal use the registry should always be left empty, because the caller
      * should call toString() which will clean up.
-     * 
+     *
      * See LANG-792
      */
 
@@ -218,7 +218,7 @@ public abstract class ToStringStyle implements Serializable {
         if (value != null) {
             final Map<Object, Object> m = getRegistry();
             if (m == null) {
-                REGISTRY.set(new WeakHashMap<Object, Object>());
+                REGISTRY.set(new WeakHashMap<>());
             }
             getRegistry().put(value, null);
         }
@@ -2316,7 +2316,7 @@ public abstract class ToStringStyle implements Serializable {
 
     /**
      * <p><code>ToStringStyle</code> that does not print out the classname
-     * and identity hashcode but prints content start and field names.</p>
+     * and identity hash code but prints content start and field names.</p>
      *
      * <p>This is an inner class rather than using
      * <code>StandardToStringStyle</code> to ensure its immutability.</p>
@@ -2366,10 +2366,7 @@ public abstract class ToStringStyle implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        /**
-         * The summary size text start <code>'&gt;'</code>.
-         */
-        private String FIELD_NAME_PREFIX = "\"";
+        private static final String FIELD_NAME_QUOTE = "\"";
 
         /**
          * <p>
@@ -2405,8 +2402,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName,
-                           Object[] array, Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName,
+                           final Object[] array, final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2421,8 +2418,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName, long[] array,
-                           Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName, final long[] array,
+                           final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2437,8 +2434,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName, int[] array,
-                           Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName, final int[] array,
+                           final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2453,8 +2450,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName,
-                           short[] array, Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName,
+                           final short[] array, final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2469,8 +2466,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName, byte[] array,
-                           Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName, final byte[] array,
+                           final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2485,8 +2482,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName, char[] array,
-                           Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName, final char[] array,
+                           final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2501,8 +2498,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName,
-                           double[] array, Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName,
+                           final double[] array, final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2517,8 +2514,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName,
-                           float[] array, Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName,
+                           final float[] array, final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2533,8 +2530,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName,
-                           boolean[] array, Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName,
+                           final boolean[] array, final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2549,8 +2546,8 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        public void append(StringBuffer buffer, String fieldName, Object value,
-                           Boolean fullDetail) {
+        public void append(final StringBuffer buffer, final String fieldName, final Object value,
+                           final Boolean fullDetail) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
@@ -2565,12 +2562,12 @@ public abstract class ToStringStyle implements Serializable {
         }
 
         @Override
-        protected void appendDetail(StringBuffer buffer, String fieldName, char value) {
+        protected void appendDetail(final StringBuffer buffer, final String fieldName, final char value) {
             appendValueAsString(buffer, String.valueOf(value));
         }
 
         @Override
-        protected void appendDetail(StringBuffer buffer, String fieldName, Object value) {
+        protected void appendDetail(final StringBuffer buffer, final String fieldName, final Object value) {
 
             if (value == null) {
                 appendNullText(buffer, fieldName);
@@ -2596,36 +2593,36 @@ public abstract class ToStringStyle implements Serializable {
             appendDetail(buffer, fieldName, valueAsString);
         }
 
-        private boolean isJsonArray(String valueAsString) {
+        private boolean isJsonArray(final String valueAsString) {
             return valueAsString.startsWith(getArrayStart())
                     && valueAsString.startsWith(getArrayEnd());
         }
 
-        private boolean isJsonObject(String valueAsString) {
+        private boolean isJsonObject(final String valueAsString) {
             return valueAsString.startsWith(getContentStart())
                     && valueAsString.endsWith(getContentEnd());
         }
 
         /**
          * Appends the given String in parenthesis to the given StringBuffer.
-         * 
+         *
          * @param buffer the StringBuffer to append the value to.
          * @param value the value to append.
          */
-        private void appendValueAsString(StringBuffer buffer, String value) {
+        private void appendValueAsString(final StringBuffer buffer, final String value) {
             buffer.append("\"" + value + "\"");
         }
 
         @Override
-        protected void appendFieldStart(StringBuffer buffer, String fieldName) {
+        protected void appendFieldStart(final StringBuffer buffer, final String fieldName) {
 
             if (fieldName == null) {
                 throw new UnsupportedOperationException(
                         "Field names are mandatory when using JsonToStringStyle");
             }
 
-            super.appendFieldStart(buffer, FIELD_NAME_PREFIX + fieldName
-                    + FIELD_NAME_PREFIX);
+            super.appendFieldStart(buffer, FIELD_NAME_QUOTE + fieldName
+                    + FIELD_NAME_QUOTE);
         }
 
         /**

@@ -25,6 +25,8 @@ import java.util.concurrent.ExecutorService;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * <p>
  * A specialized {@link BackgroundInitializer} implementation that can deal with
@@ -101,7 +103,7 @@ public class MultiBackgroundInitializer
         BackgroundInitializer<MultiBackgroundInitializer.MultiBackgroundInitializerResults> {
     /** A map with the child initializers. */
     private final Map<String, BackgroundInitializer<?>> childInitializers =
-        new HashMap<String, BackgroundInitializer<?>>();
+        new HashMap<>();
 
     /**
      * Creates a new instance of {@code MultiBackgroundInitializer}.
@@ -134,14 +136,8 @@ public class MultiBackgroundInitializer
      * @throws IllegalStateException if {@code start()} has already been called
      */
     public void addInitializer(final String name, final BackgroundInitializer<?> init) {
-        if (name == null) {
-            throw new IllegalArgumentException(
-                    "Name of child initializer must not be null!");
-        }
-        if (init == null) {
-            throw new IllegalArgumentException(
-                    "Child initializer must not be null!");
-        }
+        Validate.isTrue(name != null, "Name of child initializer must not be null!");
+        Validate.isTrue(init != null, "Child initializer must not be null!");
 
         synchronized (this) {
             if (isStarted()) {
@@ -188,7 +184,7 @@ public class MultiBackgroundInitializer
         Map<String, BackgroundInitializer<?>> inits;
         synchronized (this) {
             // create a snapshot to operate on
-            inits = new HashMap<String, BackgroundInitializer<?>>(
+            inits = new HashMap<>(
                     childInitializers);
         }
 
@@ -203,8 +199,8 @@ public class MultiBackgroundInitializer
         }
 
         // collect the results
-        final Map<String, Object> results = new HashMap<String, Object>();
-        final Map<String, ConcurrentException> excepts = new HashMap<String, ConcurrentException>();
+        final Map<String, Object> results = new HashMap<>();
+        final Map<String, ConcurrentException> excepts = new HashMap<>();
         for (final Map.Entry<String, BackgroundInitializer<?>> e : inits.entrySet()) {
             try {
                 results.put(e.getKey(), e.getValue().get());

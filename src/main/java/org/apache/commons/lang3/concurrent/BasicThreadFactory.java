@@ -22,6 +22,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.google.gwt.core.shared.GwtIncompatible;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * <p>
  * An implementation of the {@code ThreadFactory} interface that provides some
@@ -252,9 +254,9 @@ public class BasicThreadFactory implements ThreadFactory {
      * </p>
      *
      */
-    public static class Builder 
+    public static class Builder
         implements org.apache.commons.lang3.builder.Builder<BasicThreadFactory> {
-        
+
         /** The wrapped factory. */
         private ThreadFactory wrappedFactory;
 
@@ -281,10 +283,7 @@ public class BasicThreadFactory implements ThreadFactory {
          * is <b>null</b>
          */
         public Builder wrappedFactory(final ThreadFactory factory) {
-            if (factory == null) {
-                throw new NullPointerException(
-                        "Wrapped ThreadFactory must not be null!");
-            }
+            Validate.notNull(factory, "Wrapped ThreadFactory must not be null!");
 
             wrappedFactory = factory;
             return this;
@@ -299,10 +298,7 @@ public class BasicThreadFactory implements ThreadFactory {
          * @throws NullPointerException if the naming pattern is <b>null</b>
          */
         public Builder namingPattern(final String pattern) {
-            if (pattern == null) {
-                throw new NullPointerException(
-                        "Naming pattern must not be null!");
-            }
+            Validate.notNull(pattern, "Naming pattern must not be null!");
 
             namingPattern = pattern;
             return this;
@@ -344,10 +340,7 @@ public class BasicThreadFactory implements ThreadFactory {
          */
         public Builder uncaughtExceptionHandler(
                 final Thread.UncaughtExceptionHandler handler) {
-            if (handler == null) {
-                throw new NullPointerException(
-                        "Uncaught exception handler must not be null!");
-            }
+            Validate.notNull(handler, "Uncaught exception handler must not be null!");
 
             exceptionHandler = handler;
             return this;

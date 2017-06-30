@@ -16,15 +16,15 @@
  */
 package org.apache.commons.lang3;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-
-import org.junit.Assert;
 
 import org.junit.Test;
 
@@ -43,34 +43,34 @@ public class CharSequenceUtilsTest {
         assertTrue(Modifier.isPublic(CharSequenceUtils.class.getModifiers()));
         assertFalse(Modifier.isFinal(CharSequenceUtils.class.getModifiers()));
     }
-    
+
     //-----------------------------------------------------------------------
     @Test
     public void testSubSequence() {
         //
         // null input
         //
-        Assert.assertEquals(null, CharSequenceUtils.subSequence(null, -1));
-        Assert.assertEquals(null, CharSequenceUtils.subSequence(null, 0));
-        Assert.assertEquals(null, CharSequenceUtils.subSequence(null, 1));
+        assertEquals(null, CharSequenceUtils.subSequence(null, -1));
+        assertEquals(null, CharSequenceUtils.subSequence(null, 0));
+        assertEquals(null, CharSequenceUtils.subSequence(null, 1));
         //
         // non-null input
         //
-        Assert.assertEquals(StringUtils.EMPTY, CharSequenceUtils.subSequence(StringUtils.EMPTY, 0));
-        Assert.assertEquals("012", CharSequenceUtils.subSequence("012", 0));
-        Assert.assertEquals("12", CharSequenceUtils.subSequence("012", 1));
-        Assert.assertEquals("2", CharSequenceUtils.subSequence("012", 2));
-        Assert.assertEquals(StringUtils.EMPTY, CharSequenceUtils.subSequence("012", 3));
+        assertEquals(StringUtils.EMPTY, CharSequenceUtils.subSequence(StringUtils.EMPTY, 0));
+        assertEquals("012", CharSequenceUtils.subSequence("012", 0));
+        assertEquals("12", CharSequenceUtils.subSequence("012", 1));
+        assertEquals("2", CharSequenceUtils.subSequence("012", 2));
+        assertEquals(StringUtils.EMPTY, CharSequenceUtils.subSequence("012", 3));
     }
 
     @Test(expected=IndexOutOfBoundsException.class)
     public void testSubSequenceNegativeStart() {
-        Assert.assertEquals(null, CharSequenceUtils.subSequence(StringUtils.EMPTY, -1));
+        assertEquals(null, CharSequenceUtils.subSequence(StringUtils.EMPTY, -1));
     }
 
     @Test(expected=IndexOutOfBoundsException.class)
     public void testSubSequenceTooLong() {
-        Assert.assertEquals(null, CharSequenceUtils.subSequence(StringUtils.EMPTY, 1));
+        assertEquals(null, CharSequenceUtils.subSequence(StringUtils.EMPTY, 1));
     }
 
     static class TestData{
@@ -82,8 +82,8 @@ public class CharSequenceUtilsTest {
         final int len;
         final boolean expected;
         final Class<?> throwable;
-        TestData(String source, boolean ignoreCase, int toffset,
-                String other, int ooffset, int len, boolean expected){
+        TestData(final String source, final boolean ignoreCase, final int toffset,
+                final String other, final int ooffset, final int len, final boolean expected){
             this.source = source;
             this.ignoreCase = ignoreCase;
             this.toffset = toffset;
@@ -93,8 +93,8 @@ public class CharSequenceUtilsTest {
             this.expected = expected;
             this.throwable = null;
         }
-        TestData(String source, boolean ignoreCase, int toffset,
-                String other, int ooffset, int len, Class<?> throwable){
+        TestData(final String source, final boolean ignoreCase, final int toffset,
+                final String other, final int ooffset, final int len, final Class<?> throwable){
             this.source = source;
             this.ignoreCase = ignoreCase;
             this.toffset = toffset;
@@ -104,8 +104,9 @@ public class CharSequenceUtilsTest {
             this.expected = false;
             this.throwable = throwable;
         }
+        @Override
         public String toString(){
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             sb.append(source).append("[").append(toffset).append("]");
             sb.append(ignoreCase? " caseblind ":" samecase ");
             sb.append(other).append("[").append(ooffset).append("]");
@@ -136,26 +137,26 @@ public class CharSequenceUtilsTest {
             new TestData("Abcd",false,     1,     "abcD",1,     2,     true),
     };
 
-    private static abstract class RunTest {
-        
+    private abstract static class RunTest {
+
         abstract boolean invoke();
-        
-        void run(TestData data, String id) {
+
+        void run(final TestData data, final String id) {
             if (data.throwable != null) {
                 try {
                     invoke();
-                    Assert.fail(id + " Expected " + data.throwable);
-                } catch (Exception e) {
+                    fail(id + " Expected " + data.throwable);
+                } catch (final Exception e) {
                     if (!e.getClass().equals(data.throwable)) {
-                        Assert.fail(id + " Expected " + data.throwable + " got " + e.getClass());
+                        fail(id + " Expected " + data.throwable + " got " + e.getClass());
                     }
                 }
             } else {
-                boolean stringCheck = invoke();
-                Assert.assertEquals(id + " Failed test " + data, data.expected, stringCheck);                
+                final boolean stringCheck = invoke();
+                assertEquals(id + " Failed test " + data, data.expected, stringCheck);
             }
         }
-        
+
     }
 
     @Test
@@ -164,22 +165,31 @@ public class CharSequenceUtilsTest {
             new RunTest() {
                 @Override
                 boolean invoke() {
-                    return data.source.regionMatches(data.ignoreCase, data.toffset, data.other, data.ooffset, data.len);                        
+                    return data.source.regionMatches(data.ignoreCase, data.toffset, data.other, data.ooffset, data.len);
                 }
             }.run(data, "String");
             new RunTest() {
                 @Override
                 boolean invoke() {
-                    return CharSequenceUtils.regionMatches(data.source, data.ignoreCase, data.toffset, data.other, data.ooffset, data.len);                        
+                    return CharSequenceUtils.regionMatches(data.source, data.ignoreCase, data.toffset, data.other, data.ooffset, data.len);
                 }
             }.run(data, "CSString");
             new RunTest() {
                 @Override
                 boolean invoke() {
-                    return CharSequenceUtils.regionMatches(new StringBuilder(data.source), data.ignoreCase, data.toffset, data.other, data.ooffset, data.len);             
+                    return CharSequenceUtils.regionMatches(new StringBuilder(data.source), data.ignoreCase, data.toffset, data.other, data.ooffset, data.len);
                 }
             }.run(data, "CSNonString");
         }
+    }
+
+
+    @Test
+    public void testToCharArray() throws Exception {
+        final StringBuilder builder = new StringBuilder("abcdefg");
+        final char[] expected = builder.toString().toCharArray();
+        assertArrayEquals(expected, CharSequenceUtils.toCharArray(builder));
+        assertArrayEquals(expected, CharSequenceUtils.toCharArray(builder.toString()));
     }
 
 }

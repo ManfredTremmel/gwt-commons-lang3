@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.knightsoft-net</groupId>
   <artifactId>gwt-commons-lang3</artifactId>
-  <version>3.5-1</version>
+  <version>3.6-0</version>
   <name>Apache Commons Lang</name>
 
   <inceptionYear>2001</inceptionYear>
@@ -536,6 +536,9 @@
         <role>GWT Port</role>
       </roles>
     </contributor>
+    <contributor>
+      <name>Mark Dacek</name>
+    </contributor>
   </contributors>
 
   <!-- Lang should depend on very little -->
@@ -554,9 +557,9 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.5</version>
+      <groupId>org.apache.bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>6.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -573,6 +576,21 @@
       <version>${gwt.version}</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-generator-annprocess</artifactId>
+      <version>${jmh.version}</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <properties>
@@ -591,9 +609,10 @@
        properties that depend on the componentid.
     -->
     <commons.componentid>lang3</commons.componentid>
+    <commons.module.name>org.apache.commons.lang3</commons.module.name>
     <!-- Current 3.x release series -->
-    <commons.release.version>3.5</commons.release.version>
-    <commons.release.desc>(Java 6.0+)</commons.release.desc>
+    <commons.release.version>3.6</commons.release.version>
+    <commons.release.desc>(Java 7.0+)</commons.release.desc>
     <!-- Previous 2.x release series -->
     <commons.release.2.version>2.6</commons.release.2.version>
     <commons.release.2.desc>(Requires Java 1.2 or later)</commons.release.2.desc>
@@ -609,6 +628,11 @@
 
     <!-- Override clirr version to be able to build the site on Java 8 -->
     <commons.clirr.version>2.8</commons.clirr.version>
+    <checkstyle.plugin.version>2.17</checkstyle.plugin.version>
+
+    <!-- JMH Benchmark related properties, version, target compiler and name of the benchmarking uber jar. -->
+    <jmh.version>1.17.4</jmh.version>
+    <uberjar.name>benchmarks</uberjar.name>
     <gwt.version>2.8.1</gwt.version>
     <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     <wagon-webdav-jackrabbit.version>2.12</wagon-webdav-jackrabbit.version>
@@ -620,6 +644,24 @@
 
 
   <build>
+    <defaultGoal>clean test apache-rat:check clirr:check checkstyle:check findbugs:check javadoc:javadoc</defaultGoal>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <excludes>
+              <exclude>site-content/**</exclude>
+              <exclude>src/site/resources/.htaccess</exclude>
+              <exclude>src/site/resources/download_lang.cgi</exclude>
+              <exclude>src/site/resources/release-notes/RELEASE-NOTES-*.txt</exclude>
+              <exclude>src/test/resources/lang-708-input.txt</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -659,6 +701,14 @@
             </goals>
           </execution>
         </executions>
+        <!-- Temporary fix for LANG-1338, remove this after this has implemented in parent pom -->
+        <configuration>
+          <archive combine.children="append">
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.commons.lang3</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -758,30 +808,17 @@
         <version>${wagon-webdav-jackrabbit.version}</version>
       </extension>
     </extensions>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>${maven-release-plugin.version}</version>
-          <configuration>
-            <mavenExecutorId>forked-path</mavenExecutorId>
-            <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-Psonatype-oss-release</arguments>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>        
-
   </build>
 
   <reporting>
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.15</version>
+        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${basedir}/checkstyle.xml</configLocation>
+          <suppressionsLocation>${basedir}/checkstyle-suppressions.xml</suppressionsLocation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
         </configuration>
         <reportSets>
@@ -804,7 +841,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.5</version>
+        <version>3.7</version>
         <configuration>
           <targetJdk>${maven.compiler.target}</targetJdk>
         </configuration>
@@ -860,16 +897,22 @@
         <version>2.1</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.plugin.version}</version>
         <configuration>
-          <excludes>
-            <exclude>site-content/**</exclude>
-            <exclude>src/site/resources/.htaccess</exclude>
-            <exclude>src/site/resources/download_lang.cgi</exclude>
-            <exclude>src/site/resources/release-notes/RELEASE-NOTES-*.txt</exclude>
-            <exclude>src/test/resources/lang-708-input.txt</exclude>
-          </excludes>
+          <configLocation>${basedir}/checkstyle.xml</configLocation>
+          <suppressionsLocation>${basedir}/checkstyle-suppressions.xml</suppressionsLocation>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <enableRulesSummary>false</enableRulesSummary>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <!-- Use version from parent pom as that is adjusted according to the Java version used to run Maven -->
+        <version>${commons.findbugs.version}</version>
+        <configuration>
+          <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
       </plugin>
     </plugins>

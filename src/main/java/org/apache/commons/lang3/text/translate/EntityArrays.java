@@ -22,7 +22,11 @@ package org.apache.commons.lang3.text.translate;
  * All arrays are of length [*][2].
  *
  * @since 3.0
+ * @deprecated as of 3.6, use commons-text
+ * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/translate/CodePointTranslator.html">
+ * EntityArrays</a> instead
  */
+@Deprecated
 public class EntityArrays {
 
     /**
@@ -30,7 +34,10 @@ public class EntityArrays {
      * characters to their named HTML 3.x equivalents.
      * @return the mapping table
      */
-    public static String[][] ISO8859_1_ESCAPE() { return clone(ISO8859_1_ESCAPE); }
+    public static String[][] ISO8859_1_ESCAPE() {
+        return ISO8859_1_ESCAPE;
+    }
+
     private static final String[][] ISO8859_1_ESCAPE = {
         {"\u00A0", "&nbsp;"}, // non-breaking space
         {"\u00A1", "&iexcl;"}, // inverted exclamation mark
@@ -134,7 +141,10 @@ public class EntityArrays {
      * Reverse of {@link #ISO8859_1_ESCAPE()} for unescaping purposes.
      * @return the mapping table
      */
-    public static String[][] ISO8859_1_UNESCAPE() { return clone(ISO8859_1_UNESCAPE); }
+    public static String[][] ISO8859_1_UNESCAPE() {
+        return ISO8859_1_UNESCAPE;
+    }
+
     private static final String[][] ISO8859_1_UNESCAPE = invert(ISO8859_1_ESCAPE);
 
     /**
@@ -143,7 +153,10 @@ public class EntityArrays {
      * HTML 4.0 character entities.
      * @return the mapping table
      */
-    public static String[][] HTML40_EXTENDED_ESCAPE() { return clone(HTML40_EXTENDED_ESCAPE); }
+    public static String[][] HTML40_EXTENDED_ESCAPE() {
+        return HTML40_EXTENDED_ESCAPE;
+    }
+
     private static final String[][] HTML40_EXTENDED_ESCAPE = {
         // <!-- Latin Extended-B -->
         {"\u0192", "&fnof;"}, // latin small f with hook = function= florin, U+0192 ISOtech -->
@@ -345,7 +358,10 @@ public class EntityArrays {
      * Reverse of {@link #HTML40_EXTENDED_ESCAPE()} for unescaping purposes.
      * @return the mapping table
      */
-    public static String[][] HTML40_EXTENDED_UNESCAPE() { return clone(HTML40_EXTENDED_UNESCAPE); }
+    public static String[][] HTML40_EXTENDED_UNESCAPE() {
+        return HTML40_EXTENDED_UNESCAPE;
+    }
+
     private static final String[][] HTML40_EXTENDED_UNESCAPE = invert(HTML40_EXTENDED_ESCAPE);
 
     /**
@@ -354,7 +370,10 @@ public class EntityArrays {
      * Namely: {@code " & < >}
      * @return the mapping table
      */
-    public static String[][] BASIC_ESCAPE() { return clone(BASIC_ESCAPE); }
+    public static String[][] BASIC_ESCAPE() {
+        return BASIC_ESCAPE;
+    }
+
     private static final String[][] BASIC_ESCAPE = {
         {"\"", "&quot;"}, // " - double-quote
         {"&", "&amp;"},   // & - ampersand
@@ -366,14 +385,20 @@ public class EntityArrays {
      * Reverse of {@link #BASIC_ESCAPE()} for unescaping purposes.
      * @return the mapping table
      */
-    public static String[][] BASIC_UNESCAPE() { return clone(BASIC_UNESCAPE); }
+    public static String[][] BASIC_UNESCAPE() {
+        return BASIC_UNESCAPE;
+    }
+
     private static final String[][] BASIC_UNESCAPE = invert(BASIC_ESCAPE);
 
     /**
      * Mapping to escape the apostrophe character to its XML character entity.
      * @return the mapping table
      */
-    public static String[][] APOS_ESCAPE() { return clone(APOS_ESCAPE); }
+    public static String[][] APOS_ESCAPE() {
+        return APOS_ESCAPE;
+    }
+
     private static final String[][] APOS_ESCAPE = {
         {"'", "&apos;"}, // XML apostrophe
     };
@@ -382,7 +407,10 @@ public class EntityArrays {
      * Reverse of {@link #APOS_ESCAPE()} for unescaping purposes.
      * @return the mapping table
      */
-    public static String[][] APOS_UNESCAPE() { return clone(APOS_UNESCAPE); }
+    public static String[][] APOS_UNESCAPE() {
+        return APOS_UNESCAPE;
+    }
+
     private static final String[][] APOS_UNESCAPE = invert(APOS_ESCAPE);
 
     /**
@@ -391,7 +419,10 @@ public class EntityArrays {
      * Namely: {@code \b \n \t \f \r}
      * @return the mapping table
      */
-    public static String[][] JAVA_CTRL_CHARS_ESCAPE() { return clone(JAVA_CTRL_CHARS_ESCAPE); }
+    public static String[][] JAVA_CTRL_CHARS_ESCAPE() {
+        return JAVA_CTRL_CHARS_ESCAPE;
+    }
+
     private static final String[][] JAVA_CTRL_CHARS_ESCAPE = {
         {"\b", "\\b"},
         {"\n", "\\n"},
@@ -404,7 +435,10 @@ public class EntityArrays {
      * Reverse of {@link #JAVA_CTRL_CHARS_ESCAPE()} for unescaping purposes.
      * @return the mapping table
      */
-    public static String[][] JAVA_CTRL_CHARS_UNESCAPE() { return clone(JAVA_CTRL_CHARS_UNESCAPE); }
+    public static String[][] JAVA_CTRL_CHARS_UNESCAPE() {
+        return JAVA_CTRL_CHARS_UNESCAPE;
+    }
+
     private static final String[][] JAVA_CTRL_CHARS_UNESCAPE = invert(JAVA_CTRL_CHARS_ESCAPE);
 
     /**

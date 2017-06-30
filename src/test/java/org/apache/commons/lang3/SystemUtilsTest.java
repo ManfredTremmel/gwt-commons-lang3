@@ -43,7 +43,7 @@ import org.junit.Test;
 
 /**
  * Unit tests {@link org.apache.commons.lang3.SystemUtils}.
- * 
+ *
  * Only limited testing can be performed.
  */
 public class SystemUtilsTest {
@@ -58,8 +58,15 @@ public class SystemUtilsTest {
         assertFalse(Modifier.isFinal(SystemUtils.class.getModifiers()));
     }
 
+    @Test
+    public void testGetHostName() {
+        final String hostName = SystemUtils.getHostName();
+        String expected = SystemUtils.IS_OS_WINDOWS ? System.getenv("COMPUTERNAME") : System.getenv("HOSTNAME");
+        Assert.assertEquals(expected, hostName);
+    }
+
     /**
-     * Assums no security manager exists.
+     * Assumes no security manager exists.
      */
     @Test
     public void testGetJavaHome() {
@@ -69,7 +76,7 @@ public class SystemUtilsTest {
     }
 
     /**
-     * Assums no security manager exists.
+     * Assumes no security manager exists.
      */
     @Test
     public void testGetJavaIoTmpDir() {
@@ -79,7 +86,7 @@ public class SystemUtilsTest {
     }
 
     /**
-     * Assums no security manager exists.
+     * Assumes no security manager exists.
      */
     @Test
     public void testGetUserDir() {
@@ -89,7 +96,7 @@ public class SystemUtilsTest {
     }
 
     /**
-     * Assums no security manager exists.
+     * Assumes no security manager exists.
      */
     @Test
     public void testGetUserHome() {
@@ -109,17 +116,6 @@ public class SystemUtilsTest {
             assertFalse(SystemUtils.IS_JAVA_1_4);
             assertFalse(SystemUtils.IS_JAVA_1_5);
             assertFalse(SystemUtils.IS_JAVA_1_6);
-            assertFalse(SystemUtils.IS_JAVA_1_7);
-            assertFalse(SystemUtils.IS_JAVA_1_8);
-            assertFalse(SystemUtils.IS_JAVA_1_9);
-            assertFalse(SystemUtils.IS_JAVA_9);
-        } else if (javaVersion.startsWith("1.6")) {
-            assertFalse(SystemUtils.IS_JAVA_1_1);
-            assertFalse(SystemUtils.IS_JAVA_1_2);
-            assertFalse(SystemUtils.IS_JAVA_1_3);
-            assertFalse(SystemUtils.IS_JAVA_1_4);
-            assertFalse(SystemUtils.IS_JAVA_1_5);
-            assertTrue(SystemUtils.IS_JAVA_1_6);
             assertFalse(SystemUtils.IS_JAVA_1_7);
             assertFalse(SystemUtils.IS_JAVA_1_8);
             assertFalse(SystemUtils.IS_JAVA_1_9);
@@ -385,17 +381,7 @@ public class SystemUtilsTest {
 
     @Test
     public void testIsJavaVersionAtLeat() throws Exception {
-        if (SystemUtils.IS_JAVA_1_6) {
-            assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_1));
-            assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_2));
-            assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_3));
-            assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_4));
-            assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_5));
-            assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_6));
-            assertFalse(SystemUtils.isJavaVersionAtLeast(JAVA_1_7));
-            assertFalse(SystemUtils.isJavaVersionAtLeast(JAVA_1_8));
-            assertFalse(SystemUtils.isJavaVersionAtLeast(JAVA_9));
-        } else if (SystemUtils.IS_JAVA_1_7) {
+        if (SystemUtils.IS_JAVA_1_7) {
             assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_1));
             assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_2));
             assertTrue(SystemUtils.isJavaVersionAtLeast(JAVA_1_3));

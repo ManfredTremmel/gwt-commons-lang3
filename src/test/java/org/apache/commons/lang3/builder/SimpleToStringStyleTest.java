@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import org.junit.Test;
 public class SimpleToStringStyleTest {
 
     private final Integer base = Integer.valueOf(5);
-    
+
     @Before
     public void setUp() throws Exception {
         ToStringBuilder.setDefaultStyle(ToStringStyle.SIMPLE_STYLE);
@@ -44,7 +44,7 @@ public class SimpleToStringStyleTest {
     }
 
     //----------------------------------------------------------------
-    
+
     @Test
     public void testBlank() {
         assertEquals("", new ToStringBuilder(base).toString());
@@ -54,12 +54,12 @@ public class SimpleToStringStyleTest {
     public void testAppendSuper() {
         assertEquals("", new ToStringBuilder(base).appendSuper("").toString());
         assertEquals("<null>", new ToStringBuilder(base).appendSuper("<null>").toString());
-        
+
         assertEquals("hello", new ToStringBuilder(base).appendSuper("").append("a", "hello").toString());
         assertEquals("<null>,hello", new ToStringBuilder(base).appendSuper("<null>").append("a", "hello").toString());
         assertEquals("hello", new ToStringBuilder(base).appendSuper(null).append("a", "hello").toString());
     }
-    
+
     @Test
     public void testObject() {
         final Integer i3 = Integer.valueOf(3);
@@ -70,10 +70,10 @@ public class SimpleToStringStyleTest {
         assertEquals("3", new ToStringBuilder(base).append("a", i3).toString());
         assertEquals("3,4", new ToStringBuilder(base).append("a", i3).append("b", i4).toString());
         assertEquals("<Integer>", new ToStringBuilder(base).append("a", i3, false).toString());
-        assertEquals("<size=0>", new ToStringBuilder(base).append("a", new ArrayList<Object>(), false).toString());
-        assertEquals("[]", new ToStringBuilder(base).append("a", new ArrayList<Object>(), true).toString());
-        assertEquals("<size=0>", new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), false).toString());
-        assertEquals("{}", new ToStringBuilder(base).append("a", new HashMap<Object, Object>(), true).toString());
+        assertEquals("<size=0>", new ToStringBuilder(base).append("a", new ArrayList<>(), false).toString());
+        assertEquals("[]", new ToStringBuilder(base).append("a", new ArrayList<>(), true).toString());
+        assertEquals("<size=0>", new ToStringBuilder(base).append("a", new HashMap<>(), false).toString());
+        assertEquals("{}", new ToStringBuilder(base).append("a", new HashMap<>(), true).toString());
         assertEquals("<size=0>", new ToStringBuilder(base).append("a", (Object) new String[0], false).toString());
         assertEquals("{}", new ToStringBuilder(base).append("a", (Object) new String[0], true).toString());
     }

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,10 +18,11 @@ package org.apache.commons.lang3.text;
 
 import org.junit.Test;
 import org.junit.Before;
-import static org.junit.Assert.*;
-import static org.apache.commons.lang3.JavaVersion.JAVA_1_4;
 
-import java.text.ChoiceFormat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.Format;
@@ -36,16 +37,15 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang3.SystemUtils;
-
 /**
  * Test case for {@link ExtendedMessageFormat}.
  *
  * @since 2.4
  */
+@Deprecated
 public class ExtendedMessageFormatTest {
 
-    private final Map<String, FormatFactory> registry = new HashMap<String, FormatFactory>();
+    private final Map<String, FormatFactory> registry = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
@@ -60,7 +60,7 @@ public class ExtendedMessageFormatTest {
     public void testExtendedFormats() {
         final String pattern = "Lower: {0,lower} Upper: {1,upper}";
         final ExtendedMessageFormat emf = new ExtendedMessageFormat(pattern, registry);
-        assertPatternsEqual("TOPATTERN", pattern, emf.toPattern());
+        assertEquals("TOPATTERN", pattern, emf.toPattern());
         assertEquals("Lower: foo Upper: BAR", emf.format(new Object[] {"foo", "bar"}));
         assertEquals("Lower: foo Upper: BAR", emf.format(new Object[] {"Foo", "Bar"}));
         assertEquals("Lower: foo Upper: BAR", emf.format(new Object[] {"FOO", "BAR"}));
@@ -93,12 +93,12 @@ public class ExtendedMessageFormatTest {
      */
     @Test
     public void testEscapedBraces_LANG_948() {
-        // message without placeholder because braces are escaped by quotes 
+        // message without placeholder because braces are escaped by quotes
         final String pattern = "Message without placeholders '{}'";
         final ExtendedMessageFormat emf = new ExtendedMessageFormat(pattern, registry);
         assertEquals("Message without placeholders {}", emf.format(new Object[] {"DUMMY"}));
 
-        // message with placeholder because quotes are escaped by quotes 
+        // message with placeholder because quotes are escaped by quotes
         final String pattern2 = "Message with placeholder ''{0}''";
         final ExtendedMessageFormat emf2 = new ExtendedMessageFormat(pattern2, registry);
         assertEquals("Message with placeholder 'DUMMY'", emf2.format(new Object[] {"DUMMY"}));
@@ -116,7 +116,7 @@ public class ExtendedMessageFormatTest {
         final String extendedPattern = "Name: {0,upper} ";
         final String pattern = extendedPattern + builtinsPattern;
 
-        final HashSet<Locale> testLocales = new HashSet<Locale>();
+        final HashSet<Locale> testLocales = new HashSet<>();
         testLocales.addAll(Arrays.asList(DateFormat.getAvailableLocales()));
         testLocales.retainAll(Arrays.asList(NumberFormat.getAvailableLocales()));
         testLocales.add(null);
@@ -143,7 +143,7 @@ public class ExtendedMessageFormatTest {
             expected.append(df.format(args[1]));
             expected.append(" Salary: ");
             expected.append(nf.format(args[2]));
-            assertPatternsEqual("pattern comparison for locale " + locale, expectedPattern, emf.toPattern());
+            assertEquals("pattern comparison for locale " + locale, expectedPattern, emf.toPattern());
             assertEquals(String.valueOf(locale), expected.toString(), emf.format(args));
         }
     }
@@ -210,7 +210,7 @@ public class ExtendedMessageFormatTest {
     public void testBuiltInChoiceFormat() {
         final Object[] values = new Number[] {Integer.valueOf(1), Double.valueOf("2.2"), Double.valueOf("1234.5")};
         String choicePattern = null;
-        final Locale[] availableLocales = ChoiceFormat.getAvailableLocales();
+        final Locale[] availableLocales = NumberFormat.getAvailableLocales();
 
         choicePattern = "{0,choice,1#One|2#Two|3#Many {0,number}}";
         for (final Object value : values) {
@@ -313,7 +313,7 @@ public class ExtendedMessageFormatTest {
         other = new OtherExtendedMessageFormat(pattern, Locale.US, fmtRegistry);
         assertFalse("class, equals()",  emf.equals(other));
         assertTrue("class, hashcode()", emf.hashCode() == other.hashCode()); // same hashcode
-        
+
         // Different pattern
         other = new ExtendedMessageFormat("X" + pattern, Locale.US, fmtRegistry);
         assertFalse("pattern, equals()",   emf.equals(other));
@@ -378,14 +378,7 @@ public class ExtendedMessageFormatTest {
             emf = new ExtendedMessageFormat(pattern, locale);
         }
         assertEquals("format "    + buffer.toString(), mf.format(args), emf.format(args));
-        assertPatternsEqual("toPattern " + buffer.toString(), mf.toPattern(),  emf.toPattern());
-    }
-
-    //can't trust what MessageFormat does with toPattern() pre 1.4:
-    private void assertPatternsEqual(final String message, final String expected, final String actual) {
-        if (SystemUtils.isJavaVersionAtLeast(JAVA_1_4)) {
-            assertEquals(message, expected, actual);
-        }
+        assertEquals("toPattern " + buffer.toString(), mf.toPattern(), emf.toPattern());
     }
 
     /**
@@ -416,7 +409,9 @@ public class ExtendedMessageFormatTest {
             return toAppendTo.append(((String)obj).toLowerCase());
         }
         @Override
-        public Object parseObject(final String source, final ParsePosition pos) {throw new UnsupportedOperationException();}
+        public Object parseObject(final String source, final ParsePosition pos) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
@@ -430,7 +425,9 @@ public class ExtendedMessageFormatTest {
             return toAppendTo.append(((String)obj).toUpperCase());
         }
         @Override
-        public Object parseObject(final String source, final ParsePosition pos) {throw new UnsupportedOperationException();}
+        public Object parseObject(final String source, final ParsePosition pos) {
+            throw new UnsupportedOperationException();
+        }
     }
 
 
@@ -474,11 +471,11 @@ public class ExtendedMessageFormatTest {
     private static class OtherExtendedMessageFormat extends ExtendedMessageFormat {
         private static final long serialVersionUID = 1L;
 
-        public OtherExtendedMessageFormat(final String pattern, final Locale locale,
+        OtherExtendedMessageFormat(final String pattern, final Locale locale,
                 final Map<String, ? extends FormatFactory> registry) {
             super(pattern, locale, registry);
         }
-        
+
     }
 
 }

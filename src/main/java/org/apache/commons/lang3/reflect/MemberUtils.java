@@ -168,19 +168,17 @@ abstract class MemberUtils {
             final boolean explicitArrayForVarags = srcArgs.length == destArgs.length && srcArgs[srcArgs.length-1].isArray();
 
             final float varArgsCost = 0.001f;
-            Class<?> destClass = destArgs[destArgs.length-1].getComponentType();
+            final Class<?> destClass = destArgs[destArgs.length-1].getComponentType();
             if (noVarArgsPassed) {
                 // When no varargs passed, the best match is the most generic matching type, not the most specific.
                 totalCost += getObjectTransformationCost(destClass, Object.class) + varArgsCost;
-            }
-            else if (explicitArrayForVarags) {
-                Class<?> sourceClass = srcArgs[srcArgs.length-1].getComponentType();
+            } else if (explicitArrayForVarags) {
+                final Class<?> sourceClass = srcArgs[srcArgs.length-1].getComponentType();
                 totalCost += getObjectTransformationCost(sourceClass, destClass) + varArgsCost;
-            }
-            else {
+            } else {
                 // This is typical varargs case.
                 for (int i = destArgs.length-1; i < srcArgs.length; i++) {
-                    Class<?> srcClass = srcArgs[i];
+                    final Class<?> srcClass = srcArgs[i];
                     totalCost += getObjectTransformationCost(srcClass, destClass) + varArgsCost;
                 }
             }
@@ -250,15 +248,15 @@ abstract class MemberUtils {
         return cost;
     }
 
-    static boolean isMatchingMethod(Method method, Class<?>[] parameterTypes) {
+    static boolean isMatchingMethod(final Method method, final Class<?>[] parameterTypes) {
       return MemberUtils.isMatchingExecutable(Executable.of(method), parameterTypes);
     }
 
-    static boolean isMatchingConstructor(Constructor<?> method, Class<?>[] parameterTypes) {
+    static boolean isMatchingConstructor(final Constructor<?> method, final Class<?>[] parameterTypes) {
       return MemberUtils.isMatchingExecutable(Executable.of(method), parameterTypes);
     }
 
-    private static boolean isMatchingExecutable(Executable method, Class<?>[] parameterTypes) {
+    private static boolean isMatchingExecutable(final Executable method, final Class<?>[] parameterTypes) {
         final Class<?>[] methodParameterTypes = method.getParameterTypes();
         if (method.isVarArgs()) {
             int i;
@@ -267,7 +265,7 @@ abstract class MemberUtils {
                     return false;
                 }
             }
-            Class<?> varArgParameterType = methodParameterTypes[methodParameterTypes.length - 1].getComponentType();
+            final Class<?> varArgParameterType = methodParameterTypes[methodParameterTypes.length - 1].getComponentType();
             for (; i < parameterTypes.length; i++) {
                 if (!ClassUtils.isAssignable(parameterTypes[i], varArgParameterType, true)) {
                     return false;
@@ -286,22 +284,31 @@ abstract class MemberUtils {
       private final Class<?>[] parameterTypes;
       private final boolean  isVarArgs;
 
-      private static Executable of(Method method) { return new Executable(method); }
-      private static Executable of(Constructor<?> constructor) { return new Executable(constructor); }
+      private static Executable of(final Method method) {
+          return new Executable(method);
+      }
 
-      private Executable(Method method) {
+      private static Executable of(final Constructor<?> constructor) {
+          return new Executable(constructor);
+      }
+
+      private Executable(final Method method) {
         parameterTypes = method.getParameterTypes();
         isVarArgs = method.isVarArgs();
       }
 
-      private Executable(Constructor<?> constructor) {
+      private Executable(final Constructor<?> constructor) {
         parameterTypes = constructor.getParameterTypes();
         isVarArgs = constructor.isVarArgs();
       }
 
-      public Class<?>[] getParameterTypes() { return parameterTypes; }
+      public Class<?>[] getParameterTypes() {
+          return parameterTypes;
+      }
 
-      public boolean isVarArgs() { return isVarArgs; }
+      public boolean isVarArgs() {
+          return isVarArgs;
+      }
     }
 
 }

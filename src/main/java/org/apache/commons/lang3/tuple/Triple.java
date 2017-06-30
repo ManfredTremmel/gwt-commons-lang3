@@ -17,8 +17,8 @@
 package org.apache.commons.lang3.tuple;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import com.google.gwt.core.shared.GwtIncompatible;
@@ -59,7 +59,7 @@ public abstract class Triple<L, M, R> implements Comparable<Triple<L, M, R>>, Se
      * @return a triple formed from the three parameters, not null
      */
     public static <L, M, R> Triple<L, M, R> of(final L left, final M middle, final R right) {
-        return new ImmutableTriple<L, M, R>(left, middle, right);
+        return new ImmutableTriple<>(left, middle, right);
     }
 
     //-----------------------------------------------------------------------
@@ -106,7 +106,6 @@ public abstract class Triple<L, M, R> implements Comparable<Triple<L, M, R>>, Se
      * @param obj  the object to compare to, null returns false
      * @return true if the elements of the triple are equal
      */
-    @SuppressWarnings( "deprecation" ) // ObjectUtils.equals(Object, Object) has been deprecated in 3.2
     @Override
     public boolean equals(final Object obj) {
         if (obj == this) {
@@ -114,9 +113,9 @@ public abstract class Triple<L, M, R> implements Comparable<Triple<L, M, R>>, Se
         }
         if (obj instanceof Triple<?, ?, ?>) {
             final Triple<?, ?, ?> other = (Triple<?, ?, ?>) obj;
-            return ObjectUtils.equals(getLeft(), other.getLeft())
-                && ObjectUtils.equals(getMiddle(), other.getMiddle())
-                && ObjectUtils.equals(getRight(), other.getRight());
+            return Objects.equals(getLeft(), other.getLeft())
+                && Objects.equals(getMiddle(), other.getMiddle())
+                && Objects.equals(getRight(), other.getRight());
         }
         return false;
     }

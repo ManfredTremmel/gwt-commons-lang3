@@ -68,7 +68,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
 @GwtIncompatible("incompatible class")
 public abstract class AtomicInitializer<T> implements ConcurrentInitializer<T> {
     /** Holds the reference to the managed object. */
-    private final AtomicReference<T> reference = new AtomicReference<T>();
+    private final AtomicReference<T> reference = new AtomicReference<>();
 
     /**
      * Returns the object managed by this initializer. The object is created if

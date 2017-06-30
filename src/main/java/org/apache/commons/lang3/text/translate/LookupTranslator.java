@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,11 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * Translates a value using a lookup table.
  *
  * @since 3.0
+ * @deprecated as of 3.6, use commons-text
+ * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/translate/LookupTranslator.html">
+ * LookupTranslator</a> instead
  */
+@Deprecated
 public class LookupTranslator extends CharSequenceTranslator {
 
     private final HashMap<String, String> lookupMap;
@@ -45,8 +49,8 @@ public class LookupTranslator extends CharSequenceTranslator {
      * @param lookup CharSequence[][] table of size [*][2]
      */
     public LookupTranslator(final CharSequence[]... lookup) {
-        lookupMap = new HashMap<String, String>();
-        prefixSet = new HashSet<Character>();
+        lookupMap = new HashMap<>();
+        prefixSet = new HashSet<>();
         int _shortest = Integer.MAX_VALUE;
         int _longest = 0;
         if (lookup != null) {

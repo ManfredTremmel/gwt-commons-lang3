@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,12 +41,12 @@ import com.google.gwt.core.shared.GwtIncompatible;
 public class LocaleUtils {
 
     /** Concurrent map of language locales by country. */
-    private static final ConcurrentMap<String, List<Locale>> cLanguagesByCountry = 
-        new ConcurrentHashMap<String, List<Locale>>();
+    private static final ConcurrentMap<String, List<Locale>> cLanguagesByCountry =
+        new ConcurrentHashMap<>();
 
     /** Concurrent map of country locales by language. */
-    private static final ConcurrentMap<String, List<Locale>> cCountriesByLanguage = 
-        new ConcurrentHashMap<String, List<Locale>>();
+    private static final ConcurrentMap<String, List<Locale>> cCountriesByLanguage =
+        new ConcurrentHashMap<>();
 
     /**
      * <p>{@code LocaleUtils} instances should NOT be constructed in standard programming.
@@ -70,6 +70,7 @@ public class LocaleUtils {
      *   LocaleUtils.toLocale("")           = new Locale("", "")
      *   LocaleUtils.toLocale("en")         = new Locale("en", "")
      *   LocaleUtils.toLocale("en_GB")      = new Locale("en", "GB")
+     *   LocaleUtils.toLocale("en_001")     = new Locale("en", "001")
      *   LocaleUtils.toLocale("en_GB_xxx")  = new Locale("en", "GB", "xxx")   (#)
      * </pre>
      *
@@ -124,36 +125,70 @@ public class LocaleUtils {
             }
             return new Locale(StringUtils.EMPTY, str.substring(1, 3), str.substring(4));
         }
-        
-        final String[] split = str.split("_", -1);
-        final int occurrences = split.length -1;
-        switch (occurrences) {
-            case 0:
-                if (StringUtils.isAllLowerCase(str) && (len == 2 || len == 3)) {
-                    return new Locale(str);
-                }
-            throw new IllegalArgumentException("Invalid locale format: " + str);
-                
-            case 1:
-                if (StringUtils.isAllLowerCase(split[0]) &&
-                    (split[0].length() == 2 || split[0].length() == 3) &&
-                     split[1].length() == 2 && StringUtils.isAllUpperCase(split[1])) {
-                    return new Locale(split[0], split[1]);
-                }
-            throw new IllegalArgumentException("Invalid locale format: " + str);
 
-            case 2:
-                if (StringUtils.isAllLowerCase(split[0]) && 
-                    (split[0].length() == 2 || split[0].length() == 3) &&
-                    (split[1].length() == 0 || split[1].length() == 2 && StringUtils.isAllUpperCase(split[1])) &&
-                     split[2].length() > 0) {
-                    return new Locale(split[0], split[1], split[2]);
-                }
+        return parseLocale(str);
+    }
 
-                //$FALL-THROUGH$
-            default:
-                throw new IllegalArgumentException("Invalid locale format: " + str);
+    /**
+     * Tries to parse a locale from the given String.
+     *
+     * @param str the String to parse a locale from.
+     * @return a Locale instance parsed from the given String.
+     * @throws IllegalArgumentException if the given String can not be parsed.
+     */
+    private static Locale parseLocale(final String str) {
+        if (isISO639LanguageCode(str)) {
+            return new Locale(str);
         }
+
+        final String[] segments = str.split("_", -1);
+        final String language = segments[0];
+        if (segments.length == 2) {
+            final String country = segments[1];
+            if (isISO639LanguageCode(language) && isISO3166CountryCode(country) ||
+                    isNumericAreaCode(country)) {
+                return new Locale(language, country);
+            }
+        } else if (segments.length == 3) {
+            final String country = segments[1];
+            final String variant = segments[2];
+            if (isISO639LanguageCode(language) &&
+                    (country.length() == 0 || isISO3166CountryCode(country) || isNumericAreaCode(country)) &&
+                    variant.length() > 0) {
+                return new Locale(language, country, variant);
+            }
+        }
+        throw new IllegalArgumentException("Invalid locale format: " + str);
+    }
+
+    /**
+     * Checks whether the given String is a ISO 639 compliant language code.
+     *
+     * @param str the String to check.
+     * @return true, if the given String is a ISO 639 compliant language code.
+     */
+    private static boolean isISO639LanguageCode(final String str) {
+        return StringUtils.isAllLowerCase(str) && (str.length() == 2 || str.length() == 3);
+    }
+
+    /**
+     * Checks whether the given String is a ISO 3166 alpha-2 country code.
+     *
+     * @param str the String to check
+     * @return true, is the given String is a ISO 3166 compliant country code.
+     */
+    private static boolean isISO3166CountryCode(final String str) {
+        return StringUtils.isAllUpperCase(str) && str.length() == 2;
+    }
+
+    /**
+     * Checks whether the given String is a UN M.49 numeric area code.
+     *
+     * @param str the String to check
+     * @return true, is the given String is a UN M.49 numeric area code.
+     */
+    private static boolean isNumericAreaCode(final String str) {
+        return StringUtils.isNumeric(str) && str.length() == 3;
     }
 
     //-----------------------------------------------------------------------
@@ -192,7 +227,7 @@ public class LocaleUtils {
      * @return the unmodifiable list of Locale objects, 0 being locale, not null
      */
     public static List<Locale> localeLookupList(final Locale locale, final Locale defaultLocale) {
-        final List<Locale> list = new ArrayList<Locale>(4);
+        final List<Locale> list = new ArrayList<>(4);
         if (locale != null) {
             list.add(locale);
             if (locale.getVariant().length() > 0) {
@@ -211,7 +246,7 @@ public class LocaleUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Obtains an unmodifiable list of installed locales.</p>
-     * 
+     *
      * <p>This method is a wrapper around {@link Locale#getAvailableLocales()}.
      * It is more efficient, as the JDK method must create a new array each
      * time it is called.</p>
@@ -225,7 +260,7 @@ public class LocaleUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Obtains an unmodifiable set of installed locales.</p>
-     * 
+     *
      * <p>This method is a wrapper around {@link Locale#getAvailableLocales()}.
      * It is more efficient, as the JDK method must create a new array each
      * time it is called.</p>
@@ -263,7 +298,7 @@ public class LocaleUtils {
         }
         List<Locale> langs = cLanguagesByCountry.get(countryCode);
         if (langs == null) {
-            langs = new ArrayList<Locale>();
+            langs = new ArrayList<>();
             final List<Locale> locales = availableLocaleList();
             for (int i = 0; i < locales.size(); i++) {
                 final Locale locale = locales.get(i);
@@ -282,7 +317,7 @@ public class LocaleUtils {
     //-----------------------------------------------------------------------
     /**
      * <p>Obtains the list of countries supported for a given language.</p>
-     * 
+     *
      * <p>This method takes a language code and searches to find the
      * countries available for that language. Variant locales are removed.</p>
      *
@@ -295,7 +330,7 @@ public class LocaleUtils {
         }
         List<Locale> countries = cCountriesByLanguage.get(languageCode);
         if (countries == null) {
-            countries = new ArrayList<Locale>();
+            countries = new ArrayList<>();
             final List<Locale> locales = availableLocaleList();
             for (int i = 0; i < locales.size(); i++) {
                 final Locale locale = locales.get(i);
@@ -319,11 +354,11 @@ public class LocaleUtils {
         private static final List<Locale> AVAILABLE_LOCALE_LIST;
         /** Unmodifiable set of available locales. */
         private static final Set<Locale> AVAILABLE_LOCALE_SET;
-        
+
         static {
-            final List<Locale> list = new ArrayList<Locale>(Arrays.asList(Locale.getAvailableLocales()));  // extra safe
+            final List<Locale> list = new ArrayList<>(Arrays.asList(Locale.getAvailableLocales()));  // extra safe
             AVAILABLE_LOCALE_LIST = Collections.unmodifiableList(list);
-            AVAILABLE_LOCALE_SET = Collections.unmodifiableSet(new HashSet<Locale>(list));
+            AVAILABLE_LOCALE_SET = Collections.unmodifiableSet(new HashSet<>(list));
         }
     }
 

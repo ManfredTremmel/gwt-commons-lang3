@@ -18,7 +18,9 @@ package org.apache.commons.lang3.tuple;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
@@ -35,14 +37,14 @@ public class ImmutableTripleTest {
 
     @Test
     public void testBasic() throws Exception {
-        final ImmutableTriple<Integer, String, Boolean> triple = new ImmutableTriple<Integer, String, Boolean>(0, "foo", Boolean.TRUE);
+        final ImmutableTriple<Integer, String, Boolean> triple = new ImmutableTriple<>(0, "foo", Boolean.TRUE);
         assertEquals(0, triple.left.intValue());
         assertEquals(0, triple.getLeft().intValue());
         assertEquals("foo", triple.middle);
         assertEquals("foo", triple.getMiddle());
         assertEquals(Boolean.TRUE, triple.right);
         assertEquals(Boolean.TRUE, triple.getRight());
-        final ImmutableTriple<Object, String, Integer> triple2 = new ImmutableTriple<Object, String, Integer>(null, "bar", 42);
+        final ImmutableTriple<Object, String, Integer> triple2 = new ImmutableTriple<>(null, "bar", 42);
         assertNull(triple2.left);
         assertNull(triple2.getLeft());
         assertEquals("bar", triple2.middle);
@@ -83,6 +85,39 @@ public class ImmutableTripleTest {
     @Test
     public void testHashCode() throws Exception {
         assertEquals(ImmutableTriple.of(null, "foo", Boolean.TRUE).hashCode(), ImmutableTriple.of(null, "foo", Boolean.TRUE).hashCode());
+    }
+
+    @Test
+    public void testNullTripleEquals() {
+        assertEquals(ImmutableTriple.nullTriple(), ImmutableTriple.nullTriple());
+    }
+
+    @Test
+    public void testNullTripleSame() {
+        assertSame(ImmutableTriple.nullTriple(), ImmutableTriple.nullTriple());
+    }
+
+    @Test
+    public void testNullTripleLeft() {
+        assertNull(ImmutableTriple.nullTriple().getLeft());
+    }
+
+    @Test
+    public void testNullTripleMiddle() {
+        assertNull(ImmutableTriple.nullTriple().getMiddle());
+    }
+
+    @Test
+    public void testNullTripleRight() {
+        assertNull(ImmutableTriple.nullTriple().getRight());
+    }
+
+    @Test
+    public void testNullTripleTyped() {
+        // No compiler warnings
+        // How do we assert that?
+        ImmutableTriple<String, String, String> triple = ImmutableTriple.nullTriple();
+        assertNotNull(triple);
     }
 
     @Test

@@ -29,6 +29,7 @@ import org.junit.Test;
 /**
  * Test class for StrLookup.
  */
+@Deprecated
 public class StrLookupTest  {
 
     //-----------------------------------------------------------------------
@@ -40,7 +41,7 @@ public class StrLookupTest  {
     }
 
     @Test
-    public void testSystemProperiesLookup() {
+    public void testSystemPropertiesLookup() {
         assertEquals(System.getProperty("os.name"), StrLookup.systemPropertiesLookup().lookup("os.name"));
         assertEquals(null, StrLookup.systemPropertiesLookup().lookup(""));
         assertEquals(null, StrLookup.systemPropertiesLookup().lookup("other"));
@@ -59,12 +60,12 @@ public class StrLookupTest  {
      */
     @Test
     public void testSystemPropertiesLookupReplacedProperties() {
-        Properties oldProperties = System.getProperties();
+        final Properties oldProperties = System.getProperties();
         final String osName = "os.name";
         final String newOsName = oldProperties.getProperty(osName) + "_changed";
 
-        StrLookup<String> sysLookup = StrLookup.systemPropertiesLookup();
-        Properties newProps = new Properties();
+        final StrLookup<String> sysLookup = StrLookup.systemPropertiesLookup();
+        final Properties newProps = new Properties();
         newProps.setProperty(osName, newOsName);
         System.setProperties(newProps);
         try {
@@ -81,10 +82,10 @@ public class StrLookupTest  {
     @Test
     public void testSystemPropertiesLookupUpdatedProperty() {
         final String osName = "os.name";
-        String oldOs = System.getProperty(osName);
+        final String oldOs = System.getProperty(osName);
         final String newOsName = oldOs + "_changed";
 
-        StrLookup<String> sysLookup = StrLookup.systemPropertiesLookup();
+        final StrLookup<String> sysLookup = StrLookup.systemPropertiesLookup();
         System.setProperty(osName, newOsName);
         try {
             assertEquals("Changed properties not detected", newOsName, sysLookup.lookup(osName));
@@ -95,7 +96,7 @@ public class StrLookupTest  {
 
     @Test
     public void testMapLookup() {
-        final Map<String, Object> map = new HashMap<String, Object>();
+        final Map<String, Object> map = new HashMap<>();
         map.put("key", "value");
         map.put("number", Integer.valueOf(2));
         assertEquals("value", StrLookup.mapLookup(map).lookup("key"));

@@ -37,7 +37,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
     public static final String PROPERTY_NAME = "open";
 
     /** The current state of this circuit breaker. */
-    protected final AtomicReference<State> state = new AtomicReference<State>(State.CLOSED);
+    protected final AtomicReference<State> state = new AtomicReference<>(State.CLOSED);
 
     /** An object for managing change listeners registered at this instance. */
     private final PropertyChangeSupport changeSupport;
@@ -52,6 +52,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isOpen() {
         return isOpen(state.get());
     }
@@ -59,6 +60,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isClosed() {
         return !isOpen();
     }
@@ -66,16 +68,19 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public abstract boolean checkState();
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public abstract boolean incrementAndCheckState(T increment);
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
         changeState(State.CLOSED);
     }
@@ -83,6 +88,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() {
         changeState(State.OPEN);
     }
@@ -93,7 +99,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
      * @param state the state to be converted
      * @return the boolean open flag
      */
-    protected static boolean isOpen(State state) {
+    protected static boolean isOpen(final State state) {
         return state == State.OPEN;
     }
 
@@ -103,7 +109,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
      *
      * @param newState the new state to be set
      */
-    protected void changeState(State newState) {
+    protected void changeState(final State newState) {
         if (state.compareAndSet(newState.oppositeState(), newState)) {
             changeSupport.firePropertyChange(PROPERTY_NAME, !isOpen(newState), isOpen(newState));
         }
@@ -116,7 +122,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
      *
      * @param listener the listener to be added
      */
-    public void addChangeListener(PropertyChangeListener listener) {
+    public void addChangeListener(final PropertyChangeListener listener) {
         changeSupport.addPropertyChangeListener(listener);
     }
 
@@ -125,7 +131,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
      *
      * @param listener the listener to be removed
      */
-    public void removeChangeListener(PropertyChangeListener listener) {
+    public void removeChangeListener(final PropertyChangeListener listener) {
         changeSupport.removePropertyChangeListener(listener);
     }
 
@@ -135,7 +141,7 @@ public abstract class AbstractCircuitBreaker<T> implements CircuitBreaker<T> {
      * transitions. This is done to avoid complex if-conditions in the code of
      * {@code CircuitBreaker}.
      */
-    protected static enum State {
+    protected enum State {
         CLOSED {
             /**
              * {@inheritDoc}

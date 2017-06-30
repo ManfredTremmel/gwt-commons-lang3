@@ -44,6 +44,8 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * @since 1.0
  */
 //@Immutable
+@SuppressWarnings("deprecation") // deprecated class StrBuilder is imported
+// because it is part of the signature of deprecated methods
 public class ObjectUtils {
 
     /**
@@ -119,6 +121,7 @@ public class ObjectUtils {
      *  or {@code null} if there are no non-null values
      * @since 3.0
      */
+    @SafeVarargs
     public static <T> T firstNonNull(final T... values) {
         if (values != null) {
             for (final T val : values) {
@@ -146,7 +149,7 @@ public class ObjectUtils {
      * ObjectUtils.anyNotNull(null)             = false
      * ObjectUtils.anyNotNull(null, null)       = false
      * </pre>
-     * 
+     *
      * @param values  the values to test, may be {@code null} or empty
      * @return {@code true} if there is at least one non-null value in the array,
      * {@code false} if all values in the array are {@code null}s.
@@ -166,7 +169,7 @@ public class ObjectUtils {
      * {@code null} or the array is empty (contains no elements) {@code true}
      * is returned.
      * </p>
-     * 
+     *
      * <pre>
      * ObjectUtils.allNotNull(*)             = true
      * ObjectUtils.allNotNull(*, *)          = true
@@ -276,7 +279,7 @@ public class ObjectUtils {
 
     /**
      * <p>Gets the hash code for multiple objects.</p>
-     * 
+     *
      * <p>This allows a hash code to be rapidly calculated for a number of objects.
      * The hash code for a single object is the <em>not</em> same as {@link #hashCode(Object)}.
      * The hash code for multiple objects is the same as that calculated by an
@@ -352,9 +355,7 @@ public class ObjectUtils {
      * @since 3.2
      */
     public static void identityToString(final Appendable appendable, final Object object) throws IOException {
-        if (object == null) {
-            throw new NullPointerException("Cannot get the toString of a null identity");
-        }
+        Validate.notNull(object, "Cannot get the toString of a null identity");
         appendable.append(object.getClass().getName())
               .append('@')
               .append(Integer.toHexString(System.identityHashCode(object)));
@@ -374,11 +375,12 @@ public class ObjectUtils {
      * @param builder  the builder to append to
      * @param object  the object to create a toString for
      * @since 3.2
+     * @deprecated as of 3.6, because StrBuilder was moved to commons-text,
+     *  use one of the other {@code identityToString} methods instead
      */
+    @Deprecated
     public static void identityToString(final StrBuilder builder, final Object object) {
-        if (object == null) {
-            throw new NullPointerException("Cannot get the toString of a null identity");
-        }
+        Validate.notNull(object, "Cannot get the toString of a null identity");
         builder.append(object.getClass().getName())
               .append('@')
               .append(Integer.toHexString(System.identityHashCode(object)));
@@ -400,9 +402,7 @@ public class ObjectUtils {
      * @since 2.4
      */
     public static void identityToString(final StringBuffer buffer, final Object object) {
-        if (object == null) {
-            throw new NullPointerException("Cannot get the toString of a null identity");
-        }
+        Validate.notNull(object, "Cannot get the toString of a null identity");
         buffer.append(object.getClass().getName())
               .append('@')
               .append(Integer.toHexString(System.identityHashCode(object)));
@@ -424,9 +424,7 @@ public class ObjectUtils {
      * @since 3.2
      */
     public static void identityToString(final StringBuilder builder, final Object object) {
-        if (object == null) {
-            throw new NullPointerException("Cannot get the toString of a null identity");
-        }
+        Validate.notNull(object, "Cannot get the toString of a null identity");
         builder.append(object.getClass().getName())
               .append('@')
               .append(Integer.toHexString(System.identityHashCode(object)));
@@ -452,7 +450,7 @@ public class ObjectUtils {
      * @since 2.0
      * @deprecated this method has been replaced by {@code java.util.Objects.toString(Object)} in Java 7 and will be
      * removed in future releases. Note however that said method will return "null" for null references, while this
-     * method returns and empty String. To preserve behavior use {@code java.util.Objects.toString(myObject, "")}
+     * method returns an empty String. To preserve behavior use {@code java.util.Objects.toString(myObject, "")}
      */
     @Deprecated
     public static String toString(final Object obj) {
@@ -500,6 +498,7 @@ public class ObjectUtils {
      *   <li>If all the comparables are null, null is returned.
      *  </ul>
      */
+    @SafeVarargs
     public static <T extends Comparable<? super T>> T min(final T... values) {
         T result = null;
         if (values != null) {
@@ -525,6 +524,7 @@ public class ObjectUtils {
      *   <li>If all the comparables are null, null is returned.
      *  </ul>
      */
+    @SafeVarargs
     public static <T extends Comparable<? super T>> T max(final T... values) {
         T result = null;
         if (values != null) {
@@ -586,14 +586,14 @@ public class ObjectUtils {
      * @since 3.0.1
      */
     @GwtIncompatible("incompatible method")
+    @SafeVarargs
     public static <T extends Comparable<? super T>> T median(final T... items) {
         Validate.notEmpty(items);
         Validate.noNullElements(items);
-        final TreeSet<T> sort = new TreeSet<T>();
+        final TreeSet<T> sort = new TreeSet<>();
         Collections.addAll(sort, items);
         @SuppressWarnings("unchecked") //we know all items added were T instances
-        final
-        T result = (T) sort.toArray()[(sort.size() - 1) / 2];
+        final T result = (T) sort.toArray()[(sort.size() - 1) / 2];
         return result;
     }
 
@@ -609,11 +609,12 @@ public class ObjectUtils {
      * @since 3.0.1
      */
     @GwtIncompatible("incompatible method")
+    @SafeVarargs
     public static <T> T median(final Comparator<T> comparator, final T... items) {
         Validate.notEmpty(items, "null/empty items");
         Validate.noNullElements(items);
         Validate.notNull(comparator, "null comparator");
-        final TreeSet<T> sort = new TreeSet<T>(comparator);
+        final TreeSet<T> sort = new TreeSet<>(comparator);
         Collections.addAll(sort, items);
         @SuppressWarnings("unchecked") //we know all items added were T instances
         final
@@ -625,15 +626,16 @@ public class ObjectUtils {
     //-----------------------------------------------------------------------
     /**
      * Find the most frequently occurring item.
-     * 
+     *
      * @param <T> type of values processed by this method
      * @param items to check
      * @return most populous T, {@code null} if non-unique or no items supplied
      * @since 3.0.1
      */
+    @SafeVarargs
     public static <T> T mode(final T... items) {
         if (ArrayUtils.isNotEmpty(items)) {
-            final HashMap<T, MutableInt> occurrences = new HashMap<T, MutableInt>(items.length);
+            final HashMap<T, MutableInt> occurrences = new HashMap<>(items.length);
             for (final T t : items) {
                 final MutableInt count = occurrences.get(t);
                 if (count == null) {
@@ -809,7 +811,9 @@ public class ObjectUtils {
      * @return the boolean v, unchanged
      * @since 3.2
      */
-    public static boolean CONST(final boolean v) { return v; }
+    public static boolean CONST(final boolean v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -828,7 +832,9 @@ public class ObjectUtils {
      * @return the byte v, unchanged
      * @since 3.2
      */
-    public static byte CONST(final byte v) { return v; }
+    public static byte CONST(final byte v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -874,7 +880,9 @@ public class ObjectUtils {
      * @return the char v, unchanged
      * @since 3.2
      */
-    public static char CONST(final char v) { return v; }
+    public static char CONST(final char v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -893,7 +901,9 @@ public class ObjectUtils {
      * @return the short v, unchanged
      * @since 3.2
      */
-    public static short CONST(final short v) { return v; }
+    public static short CONST(final short v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -940,7 +950,9 @@ public class ObjectUtils {
      * @return the int v, unchanged
      * @since 3.2
      */
-    public static int CONST(final int v) { return v; }
+    public static int CONST(final int v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -959,7 +971,9 @@ public class ObjectUtils {
      * @return the long v, unchanged
      * @since 3.2
      */
-    public static long CONST(final long v) { return v; }
+    public static long CONST(final long v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -978,7 +992,9 @@ public class ObjectUtils {
      * @return the float v, unchanged
      * @since 3.2
      */
-    public static float CONST(final float v) { return v; }
+    public static float CONST(final float v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -997,7 +1013,9 @@ public class ObjectUtils {
      * @return the double v, unchanged
      * @since 3.2
      */
-    public static double CONST(final double v) { return v; }
+    public static double CONST(final double v) {
+        return v;
+    }
 
     /**
      * This method returns the provided value unchanged.
@@ -1012,11 +1030,13 @@ public class ObjectUtils {
      * have to recompile themselves if the field's value
      * changes at some future date.
      *
-     * @param <T> the Object type 
+     * @param <T> the Object type
      * @param v the genericized Object value to return (typically a String).
      * @return the genericized Object v, unchanged (typically a String).
      * @since 3.2
      */
-    public static <T> T CONST(final T v) { return v; }
+    public static <T> T CONST(final T v) {
+        return v;
+    }
 
 }

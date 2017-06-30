@@ -36,13 +36,14 @@ import org.junit.Test;
 /**
  * Test class for StrSubstitutor.
  */
+@Deprecated
 public class StrSubstitutorTest {
 
     private Map<String, String> values;
 
     @Before
     public void setUp() throws Exception {
-        values = new HashMap<String, String>();
+        values = new HashMap<>();
         values.put("animal", "quick brown fox");
         values.put("target", "lazy dog");
     }
@@ -235,7 +236,7 @@ public class StrSubstitutorTest {
      */
     @Test
     public void testCyclicReplacement() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("animal", "${critter}");
         map.put("target", "${pet}");
         map.put("pet", "${petCharacteristic} dog");
@@ -318,7 +319,7 @@ public class StrSubstitutorTest {
         assertEquals(
                 "Wrong result (3)",
                 "The fox jumps over the lazy dog.",
-                sub.replace("The ${unknown.animal.${unknown.species:-1}:-fox} jumps over the ${unknow.target:-lazy dog}."));
+                sub.replace("The ${unknown.animal.${unknown.species:-1}:-fox} jumps over the ${unknown.target:-lazy dog}."));
     }
 
     /**
@@ -364,7 +365,7 @@ public class StrSubstitutorTest {
 
     @Test
     public void testDefaultValueDelimiters() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("animal", "fox");
         map.put("target", "dog");
 
@@ -402,7 +403,7 @@ public class StrSubstitutorTest {
     @Test
     public void testResolveVariable() {
         final StrBuilder builder = new StrBuilder("Hi ${name}!");
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("name", "commons");
         final StrSubstitutor sub = new StrSubstitutor(map) {
             @Override
@@ -433,7 +434,7 @@ public class StrSubstitutorTest {
      */
     @Test
     public void testConstructorMapPrefixSuffix() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("name", "commons");
         final StrSubstitutor sub = new StrSubstitutor(map, "<", ">");
         assertEquals("Hi < commons", sub.replace("Hi $< <name>"));
@@ -444,7 +445,7 @@ public class StrSubstitutorTest {
      */
     @Test
     public void testConstructorMapFull() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("name", "commons");
         StrSubstitutor sub = new StrSubstitutor(map, "<", ">", '!');
         assertEquals("Hi < commons", sub.replace("Hi !< <name>"));
@@ -477,7 +478,7 @@ public class StrSubstitutorTest {
         sub.setVariablePrefix("<<");
         assertTrue(sub.getVariablePrefixMatcher() instanceof StrMatcher.StringMatcher);
         try {
-            sub.setVariablePrefix((String) null);
+            sub.setVariablePrefix(null);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected
@@ -488,7 +489,7 @@ public class StrSubstitutorTest {
         sub.setVariablePrefixMatcher(matcher);
         assertSame(matcher, sub.getVariablePrefixMatcher());
         try {
-            sub.setVariablePrefixMatcher((StrMatcher) null);
+            sub.setVariablePrefixMatcher(null);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected
@@ -509,7 +510,7 @@ public class StrSubstitutorTest {
         sub.setVariableSuffix("<<");
         assertTrue(sub.getVariableSuffixMatcher() instanceof StrMatcher.StringMatcher);
         try {
-            sub.setVariableSuffix((String) null);
+            sub.setVariableSuffix(null);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected
@@ -520,7 +521,7 @@ public class StrSubstitutorTest {
         sub.setVariableSuffixMatcher(matcher);
         assertSame(matcher, sub.getVariableSuffixMatcher());
         try {
-            sub.setVariableSuffixMatcher((StrMatcher) null);
+            sub.setVariableSuffixMatcher(null);
             fail();
         } catch (final IllegalArgumentException ex) {
             // expected
@@ -540,13 +541,13 @@ public class StrSubstitutorTest {
 
         sub.setValueDelimiter("||");
         assertTrue(sub.getValueDelimiterMatcher() instanceof StrMatcher.StringMatcher);
-        sub.setValueDelimiter((String) null);
+        sub.setValueDelimiter(null);
         assertNull(sub.getValueDelimiterMatcher());
 
         final StrMatcher matcher = StrMatcher.commaMatcher();
         sub.setValueDelimiterMatcher(matcher);
         assertSame(matcher, sub.getValueDelimiterMatcher());
-        sub.setValueDelimiterMatcher((StrMatcher) null);
+        sub.setValueDelimiterMatcher(null);
         assertNull(sub.getValueDelimiterMatcher());
     }
 
@@ -556,7 +557,7 @@ public class StrSubstitutorTest {
      */
     @Test
     public void testStaticReplace() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("name", "commons");
         assertEquals("Hi commons!", StrSubstitutor.replace("Hi ${name}!", map));
     }
@@ -566,7 +567,7 @@ public class StrSubstitutorTest {
      */
     @Test
     public void testStaticReplacePrefixSuffix() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("name", "commons");
         assertEquals("Hi commons!", StrSubstitutor.replace("Hi <name>!", map, "<", ">"));
     }
@@ -594,8 +595,8 @@ public class StrSubstitutorTest {
     public void testLANG1055() {
         System.setProperty("test_key",  "test_value");
 
-        String expected = StrSubstitutor.replace("test_key=${test_key}", System.getProperties());
-        String actual = StrSubstitutor.replaceSystemProperties("test_key=${test_key}");
+        final String expected = StrSubstitutor.replace("test_key=${test_key}", System.getProperties());
+        final String actual = StrSubstitutor.replaceSystemProperties("test_key=${test_key}");
         assertEquals(expected, actual);
     }
 
@@ -615,7 +616,7 @@ public class StrSubstitutorTest {
 
     @Test
     public void testSamePrefixAndSuffix() {
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("greeting", "Hello");
         map.put(" there ", "XXX");
         map.put("name", "commons");
@@ -626,10 +627,10 @@ public class StrSubstitutorTest {
     @Test
     public void testSubstitutePreserveEscape() {
         final String org = "${not-escaped} $${escaped}";
-        final Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<>();
         map.put("not-escaped", "value");
 
-        StrSubstitutor sub = new StrSubstitutor(map, "${", "}", '$');
+        final StrSubstitutor sub = new StrSubstitutor(map, "${", "}", '$');
         assertFalse(sub.isPreserveEscapes());
         assertEquals("value ${escaped}", sub.replace(org));
 
@@ -678,7 +679,7 @@ public class StrSubstitutorTest {
         }
 
         // replace using object
-        final MutableObject<String> obj = new MutableObject<String>(replaceTemplate);  // toString returns template
+        final MutableObject<String> obj = new MutableObject<>(replaceTemplate);  // toString returns template
         assertEquals(expectedResult, sub.replace(obj));
 
         // replace in StringBuffer

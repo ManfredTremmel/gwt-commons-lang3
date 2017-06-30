@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.Validate;
@@ -66,7 +67,11 @@ import com.google.gwt.core.shared.GwtIncompatible;
  * </ul>
  *
  * @since 2.4
+ * @deprecated as of 3.6, use commons-text
+ * <a href="https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/ExtendedMessageFormat.html">
+ * ExtendedMessageFormat</a> instead
  */
+@Deprecated
 @GwtIncompatible("incompatible class")
 public class ExtendedMessageFormat extends MessageFormat {
     private static final long serialVersionUID = -2362048321261811743L;
@@ -148,8 +153,8 @@ public class ExtendedMessageFormat extends MessageFormat {
             toPattern = super.toPattern();
             return;
         }
-        final ArrayList<Format> foundFormats = new ArrayList<Format>();
-        final ArrayList<String> foundDescriptions = new ArrayList<String>();
+        final ArrayList<Format> foundFormats = new ArrayList<>();
+        final ArrayList<String> foundDescriptions = new ArrayList<>();
         final StringBuilder stripCustom = new StringBuilder(pattern.length());
 
         final ParsePosition pos = new ParsePosition(0);
@@ -278,21 +283,17 @@ public class ExtendedMessageFormat extends MessageFormat {
         if (ObjectUtils.notEqual(toPattern, rhs.toPattern)) {
             return false;
         }
-        if (ObjectUtils.notEqual(registry, rhs.registry)) {
-            return false;
-        }
-        return true;
+        return !ObjectUtils.notEqual(registry, rhs.registry);
     }
 
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings( "deprecation" ) // ObjectUtils.hashCode(Object) has been deprecated in 3.2
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = HASH_SEED * result + ObjectUtils.hashCode(registry);
-        result = HASH_SEED * result + ObjectUtils.hashCode(toPattern);
+        result = HASH_SEED * result + Objects.hashCode(registry);
+        result = HASH_SEED * result + Objects.hashCode(toPattern);
         return result;
     }
 
@@ -476,7 +477,7 @@ public class ExtendedMessageFormat extends MessageFormat {
      */
     private StringBuilder appendQuotedString(final String pattern, final ParsePosition pos,
             final StringBuilder appendTo) {
-        assert pattern.toCharArray()[pos.getIndex()] == QUOTE : 
+        assert pattern.toCharArray()[pos.getIndex()] == QUOTE :
             "Quoted string must start with quote character";
 
         // handle quote character at the beginning of the string
@@ -487,7 +488,7 @@ public class ExtendedMessageFormat extends MessageFormat {
 
         final int start = pos.getIndex();
         final char[] c = pattern.toCharArray();
-        int lastHold = start;
+        final int lastHold = start;
         for (int i = pos.getIndex(); i < pattern.length(); i++) {
             switch (c[pos.getIndex()]) {
             case QUOTE:

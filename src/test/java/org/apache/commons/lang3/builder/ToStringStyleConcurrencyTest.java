@@ -40,7 +40,7 @@ import org.junit.Test;
  * <p>
  * This test passes but only tests one aspect of the issue.
  * </p>
- * 
+ *
  * @see <a href="https://issues.apache.org/jira/browse/LANG-762">[LANG-762] Handle or document ReflectionToStringBuilder
  *      and ToStringBuilder for collections that are not thread safe</a>
  * @since 3.1
@@ -60,7 +60,7 @@ public class ToStringStyleConcurrencyTest {
     private static final int REPEAT = 100;
 
     static {
-        LIST = new ArrayList<Integer>(LIST_SIZE);
+        LIST = new ArrayList<>(LIST_SIZE);
         for (int i = 0; i < LIST_SIZE; i++) {
             LIST.add(Integer.valueOf(i));
         }
@@ -99,7 +99,7 @@ public class ToStringStyleConcurrencyTest {
                 return Integer.valueOf(REPEAT);
             }
         };
-        final Collection<Callable<Integer>> tasks = new ArrayList<Callable<Integer>>();
+        final Collection<Callable<Integer>> tasks = new ArrayList<>();
         tasks.add(consumer);
         tasks.add(consumer);
         final List<Future<Integer>> futures = threadPool.invokeAll(tasks);

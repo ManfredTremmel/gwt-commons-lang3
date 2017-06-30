@@ -53,9 +53,7 @@ public class ThreadUtils {
      *          thread groups from this thread's thread group up to the system thread group
      */
     public static Thread findThreadById(final long threadId, final ThreadGroup threadGroup) {
-        if (threadGroup == null) {
-            throw new IllegalArgumentException("The thread group must not be null");
-        }
+        Validate.isTrue(threadGroup != null, "The thread group must not be null");
         final Thread thread = findThreadById(threadId);
         if(thread != null && threadGroup.equals(thread.getThreadGroup())) {
             return thread;
@@ -78,9 +76,7 @@ public class ThreadUtils {
      *          thread groups from this thread's thread group up to the system thread group
      */
     public static Thread findThreadById(final long threadId, final String threadGroupName) {
-        if (threadGroupName == null) {
-            throw new IllegalArgumentException("The thread group name must not be null");
-        }
+        Validate.isTrue(threadGroupName != null, "The thread group name must not be null");
         final Thread thread = findThreadById(threadId);
         if(thread != null && thread.getThreadGroup() != null && thread.getThreadGroup().getName().equals(threadGroupName)) {
             return thread;
@@ -121,12 +117,8 @@ public class ThreadUtils {
      *          thread groups from this thread's thread group up to the system thread group
      */
     public static Collection<Thread> findThreadsByName(final String threadName, final String threadGroupName) {
-        if (threadName == null) {
-            throw new IllegalArgumentException("The thread name must not be null");
-        }
-        if (threadGroupName == null) {
-            throw new IllegalArgumentException("The thread group name must not be null");
-        }
+        Validate.isTrue(threadName != null, "The thread name must not be null");
+        Validate.isTrue(threadGroupName != null, "The thread group name must not be null");
 
         final Collection<ThreadGroup> threadGroups = findThreadGroups(new NamePredicate(threadGroupName));
 
@@ -134,7 +126,7 @@ public class ThreadUtils {
             return Collections.emptyList();
         }
 
-        final Collection<Thread> result = new ArrayList<Thread>();
+        final Collection<Thread> result = new ArrayList<>();
         final NamePredicate threadNamePredicate = new NamePredicate(threadName);
         for(final ThreadGroup group : threadGroups) {
             result.addAll(findThreads(group, false, threadNamePredicate));
@@ -283,7 +275,7 @@ public class ThreadUtils {
     /**
      * A predicate implementation which always returns true.
      */
-    private final static class AlwaysTruePredicate implements ThreadPredicate, ThreadGroupPredicate{
+    private static final class AlwaysTruePredicate implements ThreadPredicate, ThreadGroupPredicate{
 
         private AlwaysTruePredicate() {
         }
@@ -314,9 +306,7 @@ public class ThreadUtils {
          */
         public NamePredicate(final String name) {
             super();
-            if (name == null) {
-                throw new IllegalArgumentException("The name must not be null");
-            }
+            Validate.isTrue(name != null, "The name must not be null");
             this.name = name;
         }
 
@@ -401,12 +391,8 @@ public class ThreadUtils {
      *          thread groups from this thread's thread group up to the system thread group
      */
     public static Collection<Thread> findThreads(final ThreadGroup group, final boolean recurse, final ThreadPredicate predicate) {
-        if (group == null) {
-            throw new IllegalArgumentException("The group must not be null");
-        }
-        if (predicate == null) {
-            throw new IllegalArgumentException("The predicate must not be null");
-        }
+        Validate.isTrue(group != null, "The group must not be null");
+        Validate.isTrue(predicate != null, "The predicate must not be null");
 
         int count = group.activeCount();
         Thread[] threads;
@@ -416,7 +402,7 @@ public class ThreadUtils {
             //return value of enumerate() must be strictly less than the array size according to javadoc
         } while (count >= threads.length);
 
-        final List<Thread> result = new ArrayList<Thread>(count);
+        final List<Thread> result = new ArrayList<>(count);
         for (int i = 0; i < count; ++i) {
             if (predicate.test(threads[i])) {
                 result.add(threads[i]);
@@ -437,12 +423,8 @@ public class ThreadUtils {
      *          thread groups from this thread's thread group up to the system thread group
      */
     public static Collection<ThreadGroup> findThreadGroups(final ThreadGroup group, final boolean recurse, final ThreadGroupPredicate predicate){
-        if (group == null) {
-            throw new IllegalArgumentException("The group must not be null");
-        }
-        if (predicate == null) {
-            throw new IllegalArgumentException("The predicate must not be null");
-        }
+        Validate.isTrue(group != null, "The group must not be null");
+        Validate.isTrue(predicate != null, "The predicate must not be null");
 
         int count = group.activeGroupCount();
         ThreadGroup[] threadGroups;
@@ -452,7 +434,7 @@ public class ThreadUtils {
             //return value of enumerate() must be strictly less than the array size according to javadoc
         } while(count >= threadGroups.length);
 
-        final List<ThreadGroup> result = new ArrayList<ThreadGroup>(count);
+        final List<ThreadGroup> result = new ArrayList<>(count);
         for(int i = 0; i < count; ++i) {
             if(predicate.test(threadGroups[i])) {
                 result.add(threadGroups[i]);

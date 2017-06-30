@@ -22,6 +22,7 @@ import java.util.BitSet;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -208,6 +209,7 @@ public class ArrayUtils {
      * removed from future releases.
      */
     @Deprecated
+    @GwtIncompatible("incompatible method")
     public static boolean isEquals(final Object array1, final Object array2) {
         return new EqualsBuilder().append(array1, array2).isEquals();
     }
@@ -243,7 +245,7 @@ public class ArrayUtils {
         if (array == null) {
             return null;
         }
-        final Map<Object, Object> map = new HashMap<Object, Object>((int) (array.length * 1.5));
+        final Map<Object, Object> map = new HashMap<>((int) (array.length * 1.5));
         for (int i = 0; i < array.length; i++) {
             final Object object = array[i];
             if (object instanceof Map.Entry<?, ?>) {
@@ -501,9 +503,9 @@ public class ArrayUtils {
             return type.cast(Array.newInstance(type.getComponentType(), 0));
         }
         return array;
-    }    
-    
-    
+    }
+
+
     /**
      * <p>Defensive programming technique to change a {@code null}
      * reference to an empty one.
@@ -1577,10 +1579,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1610,10 +1612,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1643,10 +1645,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1676,10 +1678,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1709,10 +1711,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1742,10 +1744,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1775,10 +1777,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1808,10 +1810,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1841,10 +1843,10 @@ public class ArrayUtils {
     /**
      * <p>
      * Reverses the order of the given array in the given range.
-     * 
+     *
      * <p>
      * This method does nothing for a {@code null} input array.
-     * 
+     *
      * @param array
      *            the array to reverse, may be {@code null}
      * @param startIndexInclusive
@@ -1879,7 +1881,7 @@ public class ArrayUtils {
      * <p>There is no special handling for multi-dimensional arrays. This method
      * does nothing for a {@code null} or empty input array or for overflow indices.
      * Negative indices are promoted to 0(zero).</p>
-     * 
+     *
      * Examples:
      * <ul>
      *     <li>ArrayUtils.swap(["1", "2", "3"], 0, 2) -&gt; ["3", "2", "1"]</li>
@@ -1894,7 +1896,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final Object[] array, int offset1, int offset2) {
+    public static void swap(final Object[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -1923,7 +1925,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final long[] array, int offset1, int offset2) {
+    public static void swap(final long[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -1951,7 +1953,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final int[] array, int offset1, int offset2) {
+    public static void swap(final int[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -1979,7 +1981,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final short[] array, int offset1, int offset2) {
+    public static void swap(final short[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -1992,7 +1994,7 @@ public class ArrayUtils {
      * <p>There is no special handling for multi-dimensional arrays. This method
      * does nothing for a {@code null} or empty input array or for overflow indices.
      * Negative indices are promoted to 0(zero).</p>
-     * 
+     *
      * Examples:
      * <ul>
      *     <li>ArrayUtils.swap([1, 2, 3], 0, 2) -&gt; [3, 2, 1]</li>
@@ -2007,7 +2009,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final char[] array, int offset1, int offset2) {
+    public static void swap(final char[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -2035,7 +2037,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final byte[] array, int offset1, int offset2) {
+    public static void swap(final byte[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -2063,7 +2065,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final double[] array, int offset1, int offset2) {
+    public static void swap(final double[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -2091,7 +2093,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final float[] array, int offset1, int offset2) {
+    public static void swap(final float[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -2119,7 +2121,7 @@ public class ArrayUtils {
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
-    public static void swap(final boolean[] array, int offset1, int offset2) {
+    public static void swap(final boolean[] array, final int offset1, final int offset2) {
         if (array == null || array.length == 0) {
             return;
         }
@@ -2134,7 +2136,7 @@ public class ArrayUtils {
      * of the sub-arrays to swap falls outside of the given array, then the
      * swap is stopped at the end of the array and as many as possible elements
      * are swapped.</p>
-     * 
+     *
      * Examples:
      * <ul>
      *     <li>ArrayUtils.swap([true, false, true, false], 0, 2, 1) -&gt; [true, false, true, false]</li>
@@ -2162,7 +2164,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            boolean aux = array[offset1];
+            final boolean aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2204,7 +2206,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            byte aux = array[offset1];
+            final byte aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2218,7 +2220,7 @@ public class ArrayUtils {
      * of the sub-arrays to swap falls outside of the given array, then the
      * swap is stopped at the end of the array and as many as possible elements
      * are swapped.</p>
-     * 
+     *
      * Examples:
      * <ul>
      *     <li>ArrayUtils.swap([1, 2, 3, 4], 0, 2, 1) -&gt; [3, 2, 1, 4]</li>
@@ -2246,7 +2248,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            char aux = array[offset1];
+            final char aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2288,7 +2290,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            double aux = array[offset1];
+            final double aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2330,7 +2332,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            float aux = array[offset1];
+            final float aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2373,7 +2375,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            int aux = array[offset1];
+            final int aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2415,7 +2417,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            long aux = array[offset1];
+            final long aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2457,7 +2459,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            Object aux = array[offset1];
+            final Object aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2502,7 +2504,7 @@ public class ArrayUtils {
         }
         len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
         for (int i = 0; i < len; i++, offset1++, offset2++) {
-            short aux = array[offset1];
+            final short aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
         }
@@ -2522,7 +2524,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final Object[] array, int offset) {
+    public static void shift(final Object[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2541,7 +2543,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final long[] array, int offset) {
+    public static void shift(final long[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2560,7 +2562,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final int[] array, int offset) {
+    public static void shift(final int[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2579,7 +2581,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final short[] array, int offset) {
+    public static void shift(final short[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2598,7 +2600,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final char[] array, int offset) {
+    public static void shift(final char[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2617,7 +2619,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final byte[] array, int offset) {
+    public static void shift(final byte[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2636,7 +2638,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final double[] array, int offset) {
+    public static void shift(final double[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2655,7 +2657,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final float[] array, int offset) {
+    public static void shift(final float[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2674,7 +2676,7 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final boolean[] array, int offset) {
+    public static void shift(final boolean[] array, final int offset) {
         if (array == null) {
             return;
         }
@@ -2686,14 +2688,14 @@ public class ArrayUtils {
      *
      * <p>There is no special handling for multi-dimensional arrays. This method
      * does nothing for {@code null} or empty input arrays.</p>
-     * 
+     *
      * @param array
      *            the array to shift, may be {@code null}
      * @param startIndexInclusive
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -2709,10 +2711,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -2724,8 +2726,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -2746,14 +2748,14 @@ public class ArrayUtils {
      *
      * <p>There is no special handling for multi-dimensional arrays. This method
      * does nothing for {@code null} or empty input arrays.</p>
-     * 
+     *
      * @param array
      *            the array to shift, may be {@code null}
      * @param startIndexInclusive
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -2769,10 +2771,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -2784,8 +2786,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -2813,7 +2815,7 @@ public class ArrayUtils {
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -2829,10 +2831,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -2844,8 +2846,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -2873,7 +2875,7 @@ public class ArrayUtils {
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -2889,10 +2891,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -2904,8 +2906,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -2933,7 +2935,7 @@ public class ArrayUtils {
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -2949,10 +2951,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -2964,8 +2966,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -2993,7 +2995,7 @@ public class ArrayUtils {
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -3009,10 +3011,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -3024,8 +3026,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -3053,7 +3055,7 @@ public class ArrayUtils {
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -3069,10 +3071,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -3084,8 +3086,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -3113,7 +3115,7 @@ public class ArrayUtils {
      *            the starting index. Undervalue (&lt;0) is promoted to 0, overvalue (&gt;array.length) results in no
      *            change.
      * @param endIndexExclusive
-     *            elements up to endIndex-1 are shiftd in the array. Undervalue (&lt; start index) results in no
+     *            elements up to endIndex-1 are shifted in the array. Undervalue (&lt; start index) results in no
      *            change. Overvalue (&gt;array.length) is demoted to array length.
      * @param offset
      *          The number of positions to rotate the elements.  If the offset is larger than the number of elements to
@@ -3129,10 +3131,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -3144,8 +3146,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -3189,10 +3191,10 @@ public class ArrayUtils {
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
-        } 
+        }
         if (endIndexExclusive >= array.length) {
             endIndexExclusive = array.length;
-        }        
+        }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
             return;
@@ -3204,8 +3206,8 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            int n_offset = n - offset;
-            
+            final int n_offset = n - offset;
+
             if (offset > n_offset) {
                 swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
@@ -3284,7 +3286,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param objectToFind  the object to find, may be {@code null}
      * @return the last index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -3304,7 +3306,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param objectToFind  the object to find, may be {@code null}
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the object within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -3398,7 +3400,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -3417,7 +3419,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -3501,7 +3503,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -3520,7 +3522,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -3604,7 +3606,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -3623,7 +3625,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -3709,7 +3711,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -3729,7 +3731,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      * @since 2.1
@@ -3815,7 +3817,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -3834,7 +3836,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -3969,7 +3971,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -4005,7 +4007,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -4038,7 +4040,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @param tolerance  search for value within plus/minus this amount
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -4142,7 +4144,7 @@ public class ArrayUtils {
      *
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) for a {@code null} input array.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -4161,7 +4163,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -4247,7 +4249,7 @@ public class ArrayUtils {
      * <p>This method returns {@link #INDEX_NOT_FOUND} ({@code -1}) if
      * {@code null} array input.
      *
-     * @param array  the array to travers backwords looking for the object, may be {@code null}
+     * @param array  the array to traverse backwards looking for the object, may be {@code null}
      * @param valueToFind  the object to find
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
@@ -4266,7 +4268,7 @@ public class ArrayUtils {
      *
      * @param array  the array to traverse for looking for the object, may be {@code null}
      * @param valueToFind  the value to find
-     * @param startIndex  the start index to travers backwards from
+     * @param startIndex  the start index to traverse backwards from
      * @return the last index of the value within the array,
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
@@ -4792,8 +4794,8 @@ public class ArrayUtils {
         if (array == null) {
             return null;
         }
-        Class<?> ct = array.getClass().getComponentType();
-        Class<?> pt = ClassUtils.wrapperToPrimitive(ct);
+        final Class<?> ct = array.getClass().getComponentType();
+        final Class<?> pt = ClassUtils.wrapperToPrimitive(ct);
         if(Integer.TYPE.equals(pt)) {
             return toPrimitive((Integer[]) array);
         }
@@ -5114,8 +5116,7 @@ public class ArrayUtils {
         }
         final Class<?> type1 = array1.getClass().getComponentType();
         @SuppressWarnings("unchecked") // OK, because array is of type T
-        final
-        T[] joinedArray = (T[]) Array.newInstance(type1, array1.length + array2.length);
+        final T[] joinedArray = (T[]) Array.newInstance(type1, array1.length + array2.length);
         System.arraycopy(array1, 0, joinedArray, 0, array1.length);
         try {
             System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
@@ -5380,7 +5381,7 @@ public class ArrayUtils {
      *  in which case the return type is Object[]
      *
      * <pre>
-     * ArrayUtils.add(null, null)      = [null]
+     * ArrayUtils.add(null, null)      = IllegalArgumentException
      * ArrayUtils.add(null, "a")       = ["a"]
      * ArrayUtils.add(["a"], null)     = ["a", null]
      * ArrayUtils.add(["a"], "b")      = ["a", "b"]
@@ -5672,7 +5673,7 @@ public class ArrayUtils {
      *  whose component type is the same as the element.
      *
      * <pre>
-     * ArrayUtils.add(null, 0, null)      = [null]
+     * ArrayUtils.add(null, 0, null)      = IllegalArgumentException
      * ArrayUtils.add(null, 0, "a")       = ["a"]
      * ArrayUtils.add(["a"], 1, null)     = ["a", null]
      * ArrayUtils.add(["a"], 1, "b")      = ["a", "b"]
@@ -5686,8 +5687,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range (index &lt; 0 || index &gt; array.length).
      * @throws IllegalArgumentException if both array and element are null
+     * @deprecated this method has been superseded by {@link #insert(int, Object[], Object...) insert(int, T[], T...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static <T> T[] add(final T[] array, final int index, final T element) {
         Class<?> clss = null;
         if (array != null) {
@@ -5727,8 +5732,12 @@ public class ArrayUtils {
      * @param element  the object to add
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, boolean[], boolean...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static boolean[] add(final boolean[] array, final int index, final boolean element) {
         return (boolean[]) add(array, index, Boolean.valueOf(element), Boolean.TYPE);
     }
@@ -5760,8 +5769,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, char[], char...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static char[] add(final char[] array, final int index, final char element) {
         return (char[]) add(array, index, Character.valueOf(element), Character.TYPE);
     }
@@ -5792,8 +5805,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, byte[], byte...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static byte[] add(final byte[] array, final int index, final byte element) {
         return (byte[]) add(array, index, Byte.valueOf(element), Byte.TYPE);
     }
@@ -5824,8 +5841,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, short[], short...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static short[] add(final short[] array, final int index, final short element) {
         return (short[]) add(array, index, Short.valueOf(element), Short.TYPE);
     }
@@ -5856,8 +5877,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, int[], int...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static int[] add(final int[] array, final int index, final int element) {
         return (int[]) add(array, index, Integer.valueOf(element), Integer.TYPE);
     }
@@ -5888,8 +5913,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, long[], long...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static long[] add(final long[] array, final int index, final long element) {
         return (long[]) add(array, index, Long.valueOf(element), Long.TYPE);
     }
@@ -5920,8 +5949,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, float[], float...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static float[] add(final float[] array, final int index, final float element) {
         return (float[]) add(array, index, Float.valueOf(element), Float.TYPE);
     }
@@ -5952,8 +5985,12 @@ public class ArrayUtils {
      * @return A new array containing the existing elements and the new element
      * @throws IndexOutOfBoundsException if the index is out of range
      * (index &lt; 0 || index &gt; array.length).
+     * @deprecated this method has been superseded by {@link #insert(int, double[], double...)} and
+     * may be removed in a future release. Please note the handling of {@code null} input arrays differs
+     * in the new method: inserting {@code X} into a {@code null} array results in {@code null} not {@code X}.
      */
     @GwtIncompatible("incompatible method")
+    @Deprecated
     public static double[] add(final double[] array, final int index, final double element) {
         return (double[]) add(array, index, Double.valueOf(element), Double.TYPE);
     }
@@ -6696,11 +6733,12 @@ public class ArrayUtils {
      * @since 3.0.1
      */
     @GwtIncompatible("incompatible method")
+    @SafeVarargs
     public static <T> T[] removeElements(final T[] array, final T... values) {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<T, MutableInt> occurrences = new HashMap<T, MutableInt>(values.length);
+        final HashMap<T, MutableInt> occurrences = new HashMap<>(values.length);
         for (final T v : values) {
             final MutableInt count = occurrences.get(v);
             if (count == null) {
@@ -6721,8 +6759,7 @@ public class ArrayUtils {
             }
         }
         @SuppressWarnings("unchecked") // removeAll() always creates an array of the same type as its input
-        final
-        T[] result = (T[]) removeAll(array, toRemove);
+        final T[] result = (T[]) removeAll(array, toRemove);
         return result;
     }
 
@@ -6792,7 +6829,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final Map<Byte, MutableInt> occurrences = new HashMap<Byte, MutableInt>(values.length);
+        final Map<Byte, MutableInt> occurrences = new HashMap<>(values.length);
         for (final byte v : values) {
             final Byte boxed = Byte.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -6882,7 +6919,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Short, MutableInt> occurrences = new HashMap<Short, MutableInt>(values.length);
+        final HashMap<Short, MutableInt> occurrences = new HashMap<>(values.length);
         for (final short v : values) {
             final Short boxed = Short.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -6972,7 +7009,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Integer, MutableInt> occurrences = new HashMap<Integer, MutableInt>(values.length);
+        final HashMap<Integer, MutableInt> occurrences = new HashMap<>(values.length);
         for (final int v : values) {
             final Integer boxed = Integer.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -7062,7 +7099,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Character, MutableInt> occurrences = new HashMap<Character, MutableInt>(values.length);
+        final HashMap<Character, MutableInt> occurrences = new HashMap<>(values.length);
         for (final char v : values) {
             final Character boxed = Character.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -7152,7 +7189,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Long, MutableInt> occurrences = new HashMap<Long, MutableInt>(values.length);
+        final HashMap<Long, MutableInt> occurrences = new HashMap<>(values.length);
         for (final long v : values) {
             final Long boxed = Long.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -7242,7 +7279,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Float, MutableInt> occurrences = new HashMap<Float, MutableInt>(values.length);
+        final HashMap<Float, MutableInt> occurrences = new HashMap<>(values.length);
         for (final float v : values) {
             final Float boxed = Float.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -7332,7 +7369,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Double, MutableInt> occurrences = new HashMap<Double, MutableInt>(values.length);
+        final HashMap<Double, MutableInt> occurrences = new HashMap<>(values.length);
         for (final double v : values) {
             final Double boxed = Double.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -7418,7 +7455,7 @@ public class ArrayUtils {
         if (isEmpty(array) || isEmpty(values)) {
             return clone(array);
         }
-        final HashMap<Boolean, MutableInt> occurrences = new HashMap<Boolean, MutableInt>(2); // only two possible values here
+        final HashMap<Boolean, MutableInt> occurrences = new HashMap<>(2); // only two possible values here
         for (final boolean v : values) {
             final Boolean boxed = Boolean.valueOf(v);
             final MutableInt count = occurrences.get(boxed);
@@ -7454,7 +7491,7 @@ public class ArrayUtils {
     static Object removeAll(final Object array, final int... indices) {
         final int length = getLength(array);
         int diff = 0; // number of distinct indexes, i.e. number of entries that will be removed
-        int[] clonedIndices = clone(indices);
+        final int[] clonedIndices = clone(indices);
         Arrays.sort(clonedIndices);
 
         // identify length of result array
@@ -7498,7 +7535,7 @@ public class ArrayUtils {
 
     /**
      * Removes multiple array elements specified by indices.
-     * 
+     *
      * @param array source
      * @param indices to remove
      * @return new array of same type minus elements specified by the set bits in {@code indices}
@@ -7511,7 +7548,7 @@ public class ArrayUtils {
         // No need to check maxIndex here, because method only currently called from removeElements()
         // which guarantee to generate on;y valid bit entries.
 //        final int maxIndex = indices.length();
-//        if (maxIndex > srcLength) { 
+//        if (maxIndex > srcLength) {
 //            throw new IndexOutOfBoundsException("Index: " + (maxIndex-1) + ", Length: " + srcLength);
 //        }
         final int removals = indices.cardinality(); // true bits are items to remove
@@ -7530,13 +7567,13 @@ public class ArrayUtils {
         }
         count = srcLength - srcIndex;
         if (count > 0) {
-            System.arraycopy(array, srcIndex, result, destIndex, count);            
+            System.arraycopy(array, srcIndex, result, destIndex, count);
         }
         return result;
     }
 
     /**
-     * <p>This method checks whether the provided array is sorted according to the class's 
+     * <p>This method checks whether the provided array is sorted according to the class's
      * {@code compareTo} method.
      *
      * @param array the array to check
@@ -7547,12 +7584,12 @@ public class ArrayUtils {
     public static <T extends Comparable<? super T>> boolean isSorted(final T[] array) {
         return isSorted(array, new Comparator<T>() {
             @Override
-            public int compare(T o1, T o2) {
+            public int compare(final T o1, final T o2) {
                 return o1.compareTo(o2);
             }
         });
     }
-   
+
 
     /**
      * <p>This method checks whether the provided array is sorted according to the provided {@code Comparator}.
@@ -7567,7 +7604,7 @@ public class ArrayUtils {
         if (comparator == null) {
             throw new IllegalArgumentException("Comparator should not be null.");
         }
-        
+
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7592,7 +7629,7 @@ public class ArrayUtils {
      * @return whether the array is sorted according to natural ordering
      * @since 3.4
      */
-    public static boolean isSorted(int[] array) {
+    public static boolean isSorted(final int[] array) {
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7617,7 +7654,7 @@ public class ArrayUtils {
      * @return whether the array is sorted according to natural ordering
      * @since 3.4
      */
-    public static boolean isSorted(long[] array) {
+    public static boolean isSorted(final long[] array) {
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7642,7 +7679,7 @@ public class ArrayUtils {
      * @return whether the array is sorted according to natural ordering
      * @since 3.4
      */
-    public static boolean isSorted(short[] array) {
+    public static boolean isSorted(final short[] array) {
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7717,7 +7754,7 @@ public class ArrayUtils {
      * @return whether the array is sorted according to natural ordering
      * @since 3.4
      */
-    public static boolean isSorted(byte[] array) {
+    public static boolean isSorted(final byte[] array) {
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7742,7 +7779,7 @@ public class ArrayUtils {
      * @return whether the array is sorted according to natural ordering
      * @since 3.4
      */
-    public static boolean isSorted(char[] array) {
+    public static boolean isSorted(final char[] array) {
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7768,7 +7805,7 @@ public class ArrayUtils {
      * @return whether the array is sorted according to natural ordering
      * @since 3.4
      */
-    public static boolean isSorted(boolean[] array) {
+    public static boolean isSorted(final boolean[] array) {
         if (array == null || array.length < 2) {
             return true;
         }
@@ -7808,7 +7845,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -7841,7 +7878,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -7874,7 +7911,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -7907,7 +7944,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -7940,7 +7977,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -7973,7 +8010,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -8006,7 +8043,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -8039,7 +8076,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -8073,7 +8110,7 @@ public class ArrayUtils {
             return clone(array);
         }
 
-        int[] indices = new int[array.length - index];
+        final int[] indices = new int[array.length - index];
         indices[0] = index;
         int count = 1;
 
@@ -8082,5 +8119,674 @@ public class ArrayUtils {
         }
 
         return removeAll(array, Arrays.copyOf(indices, count));
+    }
+
+    /**
+     * <p>Returns an array containing the string representation of each element in the argument array.</p>
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array the {@code Object[]} to be processed, may be null
+     * @return {@code String[]} of the same size as the source with its element's string representation,
+     * {@code null} if null array input
+     * @throws NullPointerException if array contains {@code null}
+     * @since 3.6
+     */
+    public static String[] toStringArray(final Object[] array) {
+        if (array == null) {
+            return null;
+        } else if (array.length == 0) {
+            return EMPTY_STRING_ARRAY;
+        }
+
+        final String[] result = new String[array.length];
+        for (int i = 0; i < array.length; i++) {
+            result[i] = array[i].toString();
+        }
+
+        return result;
+    }
+
+    /**
+     * <p>Returns an array containing the string representation of each element in the argument
+     * array handling {@code null} elements.</p>
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array the Object[] to be processed, may be null
+     * @param valueForNullElements the value to insert if {@code null} is found
+     * @return a {@code String} array, {@code null} if null array input
+     * @since 3.6
+     */
+    public static String[] toStringArray(final Object[] array, final String valueForNullElements) {
+        if (null == array) {
+            return null;
+        } else if (array.length == 0) {
+            return EMPTY_STRING_ARRAY;
+        }
+
+        final String[] result = new String[array.length];
+        for (int i = 0; i < array.length; i++) {
+            final Object object = array[i];
+            result[i] = (object == null ? valueForNullElements : object.toString());
+        }
+
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static boolean[] insert(final int index, final boolean[] array, final boolean... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        boolean[] result = new boolean[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static byte[] insert(final int index, final byte[] array, final byte... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        byte[] result = new byte[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static char[] insert(final int index, final char[] array, final char... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        char[] result = new char[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static double[] insert(final int index, final double[] array, final double... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        double[] result = new double[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static float[] insert(final int index, final float[] array, final float... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        float[] result = new float[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static int[] insert(final int index, final int[] array, final int... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        int[] result = new int[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static long[] insert(final int index, final long[] array, final long... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        long[] result = new long[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    public static short[] insert(final int index, final short[] array, final short... values) {
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        short[] result = new short[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * <p>Inserts elements into an array at the given index (starting from zero).</p>
+     *
+     * <p>When an array is returned, it is always a new array.</p>
+     *
+     * <pre>
+     * ArrayUtils.insert(index, null, null)      = null
+     * ArrayUtils.insert(index, array, null)     = cloned copy of 'array'
+     * ArrayUtils.insert(index, null, values)    = null
+     * </pre>
+     *
+     * @param <T> The type of elements in {@code array} and {@code values}
+     * @param index the position within {@code array} to insert the new values
+     * @param array the array to insert the values into, may be {@code null}
+     * @param values the new values to insert, may be {@code null}
+     * @return The new array.
+     * @throws IndexOutOfBoundsException if {@code array} is provided
+     * and either {@code index < 0} or {@code index > array.length}
+     * @since 3.6
+     */
+    @SafeVarargs
+    @GwtIncompatible("incompatible method")
+    public static <T> T[] insert(final int index, final T[] array, final T... values) {
+        /*
+         * Note on use of @SafeVarargs:
+         *
+         * By returning null when 'array' is null, we avoid returning the vararg
+         * array to the caller. We also avoid relying on the type of the vararg
+         * array, by inspecting the component type of 'array'.
+         */
+
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final Class<?> type = array.getClass().getComponentType();
+        @SuppressWarnings("unchecked") // OK, because array and values are of type T
+        T[] result = (T[]) Array.newInstance(type, array.length + values.length);
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(Object[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(Object[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(boolean[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(boolean[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(byte[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(byte[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(char[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(char[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(short[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(short[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(int[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(int[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(long[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(long[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(float[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(float[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(double[] array) {
+        shuffle(array, new Random());
+    }
+
+    /**
+     * Randomly permutes the elements of the specified array using the Fisher-Yates algorithm.
+     *
+     * @param array   the array to shuffle
+     * @param random  the source of randomness used to permute the elements
+     * @see <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Fisher-Yates shuffle algorithm</a>
+     * @since 3.6
+     */
+    public static void shuffle(double[] array, Random random) {
+        for (int i = array.length; i > 1; i--) {
+            swap(array, i - 1, random.nextInt(i), 1);
+        }
     }
 }

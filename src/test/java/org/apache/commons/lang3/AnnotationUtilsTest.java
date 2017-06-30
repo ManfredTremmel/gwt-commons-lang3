@@ -351,6 +351,7 @@ public class AnnotationUtilsTest {
         NestAnnotation[] nests();
     }
 
+    @Retention(RUNTIME)
     public @interface NestAnnotation {
         String string();
         String[] strings();
@@ -376,8 +377,8 @@ public class AnnotationUtilsTest {
         Stooge[] stooges();
     }
 
-    public static enum Stooge {
-        MOE, LARRY, CURLY, JOE, SHEMP;
+    public enum Stooge {
+        MOE, LARRY, CURLY, JOE, SHEMP
     }
 
     private Field field1;
@@ -494,14 +495,14 @@ public class AnnotationUtilsTest {
 
     @Test(timeout = 666000)
     public void testToString() throws Exception {
-        final Test testAnno = getClass().getDeclaredMethod("testToString")
+        final Test testAnnotation = getClass().getDeclaredMethod("testToString")
                 .getAnnotation(Test.class);
-        final String toString = AnnotationUtils.toString(testAnno);
-        assertTrue(toString.startsWith("@org.junit.Test("));
-        assertTrue(toString.endsWith(")"));
-        assertTrue(toString.contains("expected=class org.junit.Test$None"));
-        assertTrue(toString.contains("timeout=666000"));
-        assertTrue(toString.contains(", "));
+        final String annotationString = AnnotationUtils.toString(testAnnotation);
+        assertTrue(annotationString.startsWith("@org.junit.Test("));
+        assertTrue(annotationString.endsWith(")"));
+        assertTrue(annotationString.contains("expected=class org.junit.Test$None"));
+        assertTrue(annotationString.contains("timeout=666000"));
+        assertTrue(annotationString.contains(", "));
     }
 
 }
