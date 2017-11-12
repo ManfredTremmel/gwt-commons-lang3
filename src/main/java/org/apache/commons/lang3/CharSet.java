@@ -174,7 +174,7 @@ public class CharSet implements Serializable {
      */
     protected CharSet(final String... set) {
         super();
-        for (String s : set) {
+        for (final String s : set) {
             add(s);
         }
     }
@@ -262,7 +262,7 @@ public class CharSet implements Serializable {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof CharSet == false) {
+        if (!(obj instanceof CharSet)) {
             return false;
         }
         final CharSet other = (CharSet) obj;

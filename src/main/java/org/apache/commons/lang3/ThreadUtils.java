@@ -16,12 +16,12 @@
  */
 package org.apache.commons.lang3;
 
+import com.google.gwt.core.shared.GwtIncompatible;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.gwt.core.shared.GwtIncompatible;
 
 /**
  * <p>
@@ -39,7 +39,7 @@ import com.google.gwt.core.shared.GwtIncompatible;
 public class ThreadUtils {
 
     /**
-     * Return the active thread with the specified id if it belong's to the specified thread group.
+     * Return the active thread with the specified id if it belongs to the specified thread group.
      *
      * @param threadId The thread id
      * @param threadGroup The thread group
@@ -62,7 +62,7 @@ public class ThreadUtils {
     }
 
     /**
-     * Return the active thread with the specified id if it belong's to a thread group with the specified group name.
+     * Return the active thread with the specified id if it belongs to a thread group with the specified group name.
      *
      * @param threadId The thread id
      * @param threadGroupName The thread group name

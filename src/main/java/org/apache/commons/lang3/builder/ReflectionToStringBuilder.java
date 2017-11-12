@@ -358,7 +358,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      */
     public static <T> String toString(
             final T object, final ToStringStyle style, final boolean outputTransients,
-            final boolean outputStatics, boolean excludeNullValues, final Class<? super T> reflectUpToClass) {
+            final boolean outputStatics, final boolean excludeNullValues, final Class<? super T> reflectUpToClass) {
         return new ReflectionToStringBuilder(object, style, null, reflectUpToClass, outputTransients, outputStatics, excludeNullValues)
                 .toString();
     }
@@ -809,7 +809,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     public void setUpToClass(final Class<?> clazz) {
         if (clazz != null) {
             final Object object = getObject();
-            if (object != null && clazz.isInstance(object) == false) {
+            if (object != null && !clazz.isInstance(object)) {
                 throw new IllegalArgumentException("Specified class is not a superclass of the object");
             }
         }

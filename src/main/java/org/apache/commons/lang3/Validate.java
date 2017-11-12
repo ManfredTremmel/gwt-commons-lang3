@@ -107,7 +107,7 @@ public class Validate {
      * @see #isTrue(boolean, String, Object...)
      */
     public static void isTrue(final boolean expression, final String message, final long value) {
-        if (expression == false) {
+        if (!expression) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(message, Long.valueOf(value)));
         }
     }
@@ -132,7 +132,7 @@ public class Validate {
      * @see #isTrue(boolean, String, Object...)
      */
     public static void isTrue(final boolean expression, final String message, final double value) {
-        if (expression == false) {
+        if (!expression) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(message, Double.valueOf(value)));
         }
     }
@@ -156,7 +156,7 @@ public class Validate {
      * @see #isTrue(boolean, String, double)
      */
     public static void isTrue(final boolean expression, final String message, final Object... values) {
-        if (expression == false) {
+        if (!expression) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(message, values));
         }
     }
@@ -181,7 +181,7 @@ public class Validate {
      * @see #isTrue(boolean, String, Object...)
      */
     public static void isTrue(final boolean expression) {
-        if (expression == false) {
+        if (!expression) {
             throw new IllegalArgumentException(DEFAULT_IS_TRUE_EX_MESSAGE);
         }
     }
@@ -809,7 +809,7 @@ public class Validate {
      * @since 3.0
      */
     public static void validState(final boolean expression) {
-        if (expression == false) {
+        if (!expression) {
             throw new IllegalStateException(DEFAULT_VALID_STATE_EX_MESSAGE);
         }
     }
@@ -831,7 +831,7 @@ public class Validate {
      * @since 3.0
      */
     public static void validState(final boolean expression, final String message, final Object... values) {
-        if (expression == false) {
+        if (!expression) {
             throw new IllegalStateException(StringUtils.simpleFormat(message, values));
         }
     }
@@ -856,7 +856,7 @@ public class Validate {
      */
     public static void matchesPattern(final CharSequence input, final String pattern) {
         // TODO when breaking BC, consider returning input
-        if (input == null || input.toString().matches(pattern) == false) {
+        if (input == null || !input.toString().matches(pattern)) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(DEFAULT_MATCHES_PATTERN_EX, input, pattern));
         }
     }
@@ -880,7 +880,7 @@ public class Validate {
      */
     public static void matchesPattern(final CharSequence input, final String pattern, final String message, final Object... values) {
         // TODO when breaking BC, consider returning input
-        if (input == null || input.toString().matches(pattern) == false) {
+        if (input == null || !input.toString().matches(pattern)) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(message, values));
         }
     }
@@ -1266,7 +1266,7 @@ public class Validate {
     @GwtIncompatible("incompatible method")
     public static void isInstanceOf(final Class<?> type, final Object obj) {
         // TODO when breaking BC, consider returning obj
-        if (type.isInstance(obj) == false) {
+        if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(DEFAULT_IS_INSTANCE_OF_EX_MESSAGE, type.getName(),
                     obj == null ? "null" : obj.getClass().getName()));
         }
@@ -1292,7 +1292,7 @@ public class Validate {
     @GwtIncompatible("incompatible method")
     public static void isInstanceOf(final Class<?> type, final Object obj, final String message, final Object... values) {
         // TODO when breaking BC, consider returning obj
-        if (type.isInstance(obj) == false) {
+        if (!type.isInstance(obj)) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(message, values));
         }
     }
@@ -1319,7 +1319,7 @@ public class Validate {
     @GwtIncompatible("incompatible method")
     public static void isAssignableFrom(final Class<?> superType, final Class<?> type) {
         // TODO when breaking BC, consider returning type
-        if (superType.isAssignableFrom(type) == false) {
+        if (!superType.isAssignableFrom(type)) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(DEFAULT_IS_ASSIGNABLE_EX_MESSAGE, type == null ? "null" : type.getName(),
                     superType.getName()));
         }
@@ -1345,7 +1345,7 @@ public class Validate {
     @GwtIncompatible("incompatible method")
     public static void isAssignableFrom(final Class<?> superType, final Class<?> type, final String message, final Object... values) {
         // TODO when breaking BC, consider returning type
-        if (superType.isAssignableFrom(type) == false) {
+        if (!superType.isAssignableFrom(type)) {
             throw new IllegalArgumentException(StringUtils.simpleFormat(message, values));
         }
     }

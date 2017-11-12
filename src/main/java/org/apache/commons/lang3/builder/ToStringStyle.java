@@ -389,11 +389,10 @@ public abstract class ToStringStyle implements Serializable {
             final int pos1 = toString.indexOf(contentStart) + contentStart.length();
             final int pos2 = toString.lastIndexOf(contentEnd);
             if (pos1 != pos2 && pos1 >= 0 && pos2 >= 0) {
-                final String data = toString.substring(pos1, pos2);
                 if (fieldSeparatorAtStart) {
                     removeLastFieldSeparator(buffer);
                 }
-                buffer.append(data);
+                buffer.append(toString, pos1, pos2);
                 appendFieldSeparator(buffer);
             }
         }
@@ -424,7 +423,7 @@ public abstract class ToStringStyle implements Serializable {
      *  <code>toString</code> for.
      */
     public void appendEnd(final StringBuffer buffer, final Object object) {
-        if (this.fieldSeparatorAtEnd == false) {
+        if (!this.fieldSeparatorAtEnd) {
             removeLastFieldSeparator(buffer);
         }
         appendContentEnd(buffer);
@@ -2610,7 +2609,7 @@ public abstract class ToStringStyle implements Serializable {
          * @param value the value to append.
          */
         private void appendValueAsString(final StringBuffer buffer, final String value) {
-            buffer.append("\"" + value + "\"");
+            buffer.append('"').append(value).append('"');
         }
 
         @Override

@@ -608,7 +608,7 @@ public class CompareToBuilder implements Builder<Integer> {
         if (lhs == rhs) {
             return this;
         }
-        if (lhs == false) {
+        if (!lhs) {
             comparison = -1;
         } else {
             comparison = +1;

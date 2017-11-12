@@ -17,6 +17,7 @@
 package org.apache.commons.lang3.text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
@@ -26,7 +27,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Tokenizes a string based based on delimiters (separators)
+ * Tokenizes a string based on delimiters (separators)
  * and supporting quoting and ignored character concepts.
  * <p>
  * This class can split a String into many smaller strings. It aims
@@ -452,9 +453,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
     public List<String> getTokenList() {
         checkTokenized();
         final List<String> list = new ArrayList<>(tokens.length);
-        for (final String element : tokens) {
-            list.add(element);
-        }
+        list.addAll(Arrays.asList(tokens));
         return list;
     }
 
@@ -861,7 +860,7 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
     /**
      * Sets the field delimiter matcher.
      * <p>
-     * The delimitier is used to separate one token from another.
+     * The delimiter is used to separate one token from another.
      *
      * @param delim  the delimiter matcher to use
      * @return this, to enable chaining

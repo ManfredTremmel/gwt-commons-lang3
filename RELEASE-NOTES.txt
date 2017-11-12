@@ -1,3 +1,73 @@
+
+Licensed to the Apache Software Foundation (ASF) under one or more
+contributor license agreements.  See the NOTICE file distributed with
+this work for additional information regarding copyright ownership.
+The ASF licenses this file to You under the Apache License, Version 2.0
+(the "License"); you may not use this file except in compliance with
+the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+                        Apache Commons Lang
+                            Version 3.7
+                           Release Notes
+
+
+INTRODUCTION:
+
+This document contains the release notes for the 3.7 version of Apache Commons Lang.
+Commons Lang is a set of utility functions and reusable components that should be of use in any 
+Java environment.
+
+Lang 3.0 and onwards now targets Java 5.0, making use of features that arrived with Java 5.0 such as generics, 
+variable arguments, autoboxing, concurrency and formatted output.
+
+For the advice on upgrading from 2.x to 3.x, see the following page: 
+
+    http://commons.apache.org/lang/article3_0.html
+
+Apache Commons Lang, a package of Java utility classes for the
+classes that are in java.lang's hierarchy, or are considered to be so
+standard as to justify existence in java.lang.
+
+New features and bug fixes. Requires Java 7, supports Java 8, 9, 10.
+
+Changes in this version include:
+
+New features:
+o LANG-1355: TimeZone.getTimeZone() in FastDateParser causes resource contention (PR #296.) Thanks to Chas Honton.
+o LANG-1360: Add methods to ObjectUtils to get various forms of class names in a null-safe manner Thanks to Gary Gregory.
+
+Fixed Bugs:
+o LANG-1362: Fix tests DateUtilsTest for Java 9 with en_GB locale Thanks to Stephen Colebourne.
+o LANG-1365: Fix NullPointerException in isJavaVersionAtLeast on Java 10, add SystemUtils.IS_JAVA_10, add JavaVersion.JAVA_10 Thanks to Gary Gregory.
+o LANG-1348: StackOverflowError on TypeUtils.toString(...) for a generic return type of Enum.valueOf Thanks to mbusso.
+o LANG-1350: ConstructorUtils.invokeConstructor(Class, Object...) regression Thanks to Brett Kail.
+o LANG-1349: EqualsBuilder#isRegistered: swappedPair construction bug Thanks to Naman Nigam.
+o LANG-1357: org.apache.commons.lang3.time.FastDateParser should use toUpperCase(Locale) Thanks to BruceKuiLiu.
+
+Changes:
+o LANG-1358: Improve StringUtils#replace throughput Thanks to Stephane Landelle.
+o LANG-1346: Remove deprecation from RandomStringUtils
+o LANG-1361: ExceptionUtils.getThrowableList() is using deprecated ExceptionUtils.getCause() Thanks to Ana.
+
+
+Historical list of changes: http://commons.apache.org/proper/commons-lang/changes-report.html
+
+For complete information on Apache Commons Lang, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Apache Apache Commons Lang website:
+
+http://commons.apache.org/proper/commons-lang/
+
+=============================================================================
+
                            Apache Commons Lang
                                Version 3.6
                               Release Notes
@@ -179,6 +249,8 @@ o LANG-1297: Add SystemUtils.getHostName() API.
 o LANG-1301: Moving apache-rat-plugin configuration into pluginManagement.
              Thanks to Karl Heinz Marbaise.
 o LANG-1316: Deprecate classes/methods moved to commons-text.
+
+=============================================================================
 
                         Release Notes for version 3.5
 
@@ -477,6 +549,8 @@ o LANG-1107: Fix parsing edge cases in FastDateParser.
 o LANG-1273: Added new property IS_OS_MAC_OSX_EL_CAPITAN in SystemUtils. Thanks
              to Jake Wang.
 
+=============================================================================
+
                         Release Notes for version 3.4
 
 
@@ -611,6 +685,8 @@ o LANG-1003: DurationFormatUtils are not able to handle negative
 o LANG-998:  Javadoc is not clear on preferred pattern to instantiate
              FastDateParser / FastDatePrinter
 
+=============================================================================
+
                         Release Notes for version 3.3.2
 
 NEW FEATURES
@@ -622,6 +698,8 @@ FIXED BUGS
 ============
 
 o LANG-992:  NumberUtils#isNumber() returns false for "0.0", "0.4790", et al
+
+=============================================================================
 
                         Release Notes for version 3.3.1
 
@@ -636,6 +714,8 @@ o LANG-984:  DurationFormatUtils does not handle large durations correctly
 o LANG-982:  DurationFormatUtils.formatDuration(61999, "s.SSSS") - ms field
              size should be 4 digits
 o LANG-978:  Failing tests with Java 8 b128
+
+=============================================================================
 
                         Release Notes for version 3.3
 
@@ -702,6 +782,8 @@ o LANG-953:  Convert package.html files to package-info.java files
 o LANG-940:  Fix deprecation warnings
 o LANG-819:  EnumUtils.generateBitVector needs a "? extends"
 
+=============================================================================
+
                         Release Notes for version 3.2.1
 
 BUG FIXES
@@ -713,6 +795,8 @@ o LANG-942:  Test failure in FastDateParserTest and FastDateFormat_ParserTest
              when building with JDK8. Thanks to Bruno P. Kinoshita,
              Henri Yandell.
 o LANG-938:  Build fails with test failures when building with JDK 8 
+
+=============================================================================
 
                         Release Notes for version 3.2
 
@@ -874,6 +958,7 @@ CHANGES WITHOUT TICKET
 
 o Fixed URLs in javadoc to point to new oracle.com pages
 
+=============================================================================
 
                         Release Notes for version 3.1
 
@@ -908,6 +993,7 @@ o LANG-748:  Deprecating chomp(String, String)
 o LANG-736:  CharUtils static final array CHAR_STRING is not needed to compute
              CHAR_STRING_ARRAY
 
+=============================================================================
 
                         Release Notes for version 3.0
 

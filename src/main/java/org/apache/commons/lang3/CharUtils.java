@@ -206,7 +206,7 @@ public class CharUtils {
      * <p>Converts the character to the Integer it represents, throwing an
      * exception if the character is not numeric.</p>
      *
-     * <p>This method coverts the char '1' to the int 1 and so on.</p>
+     * <p>This method converts the char '1' to the int 1 and so on.</p>
      *
      * <pre>
      *   CharUtils.toIntValue('3')  = 3
@@ -218,7 +218,7 @@ public class CharUtils {
      * @throws IllegalArgumentException if the character is not ASCII numeric
      */
     public static int toIntValue(final char ch) {
-        if (isAsciiNumeric(ch) == false) {
+        if (!isAsciiNumeric(ch)) {
             throw new IllegalArgumentException("The character " + ch + " is not in the range '0' - '9'");
         }
         return ch - 48;
@@ -228,7 +228,7 @@ public class CharUtils {
      * <p>Converts the character to the Integer it represents, throwing an
      * exception if the character is not numeric.</p>
      *
-     * <p>This method coverts the char '1' to the int 1 and so on.</p>
+     * <p>This method converts the char '1' to the int 1 and so on.</p>
      *
      * <pre>
      *   CharUtils.toIntValue('3', -1)  = 3
@@ -240,7 +240,7 @@ public class CharUtils {
      * @return the int value of the character
      */
     public static int toIntValue(final char ch, final int defaultValue) {
-        if (isAsciiNumeric(ch) == false) {
+        if (!isAsciiNumeric(ch)) {
             return defaultValue;
         }
         return ch - 48;
@@ -250,7 +250,7 @@ public class CharUtils {
      * <p>Converts the character to the Integer it represents, throwing an
      * exception if the character is not numeric.</p>
      *
-     * <p>This method coverts the char '1' to the int 1 and so on.</p>
+     * <p>This method converts the char '1' to the int 1 and so on.</p>
      *
      * <pre>
      *   CharUtils.toIntValue('3')  = 3
@@ -271,7 +271,7 @@ public class CharUtils {
      * <p>Converts the character to the Integer it represents, throwing an
      * exception if the character is not numeric.</p>
      *
-     * <p>This method coverts the char '1' to the int 1 and so on.</p>
+     * <p>This method converts the char '1' to the int 1 and so on.</p>
      *
      * <pre>
      *   CharUtils.toIntValue(null, -1) = -1
@@ -351,13 +351,11 @@ public class CharUtils {
      * @return the escaped Unicode string
      */
     public static String unicodeEscaped(final char ch) {
-        final StringBuilder sb = new StringBuilder(6);
-        sb.append("\\u");
-        sb.append(HEX_DIGITS[(ch >> 12) & 15]);
-        sb.append(HEX_DIGITS[(ch >> 8) & 15]);
-        sb.append(HEX_DIGITS[(ch >> 4) & 15]);
-        sb.append(HEX_DIGITS[(ch) & 15]);
-        return sb.toString();
+        return "\\u" +
+            HEX_DIGITS[(ch >> 12) & 15] +
+            HEX_DIGITS[(ch >> 8) & 15] +
+            HEX_DIGITS[(ch >> 4) & 15] +
+            HEX_DIGITS[(ch) & 15];
     }
 
     /**

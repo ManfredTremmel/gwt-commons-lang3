@@ -174,7 +174,7 @@ public class ExceptionUtils {
      * <p>Introspects the <code>Throwable</code> to obtain the root cause.</p>
      *
      * <p>This method walks through the exception chain to the last element,
-     * "root" of the tree, using {@link Throwable#getCause()}, and
+     * "root" of the tree, using {@link #getCause(Throwable)}, and
      * returns that exception.</p>
      *
      * <p>From version 2.2, this method handles recursive cause structures
@@ -289,9 +289,9 @@ public class ExceptionUtils {
     @GwtIncompatible("incompatible method")
     public static List<Throwable> getThrowableList(Throwable throwable) {
         final List<Throwable> list = new ArrayList<>();
-        while (throwable != null && !list.contains(throwable)) {
+        while (throwable != null && list.contains(throwable) == false) {
             list.add(throwable);
-            throwable = throwable.getCause();
+            throwable = ExceptionUtils.getCause(throwable);
         }
         return list;
     }
@@ -547,7 +547,9 @@ public class ExceptionUtils {
             } else {
                 frames.add(WRAPPED_MARKER + throwables[i].toString());
             }
-            frames.addAll(trace);
+            for (int j = 0; j < trace.size(); j++) {
+                frames.add(trace.get(j));
+            }
         }
         return frames.toArray(new String[frames.size()]);
     }
@@ -625,7 +627,7 @@ public class ExceptionUtils {
     /**
      * <p>Returns an array where each element is a line from the argument.</p>
      *
-     * <p>The end of line is determined by the value of {@link System#lineSeparator()}.</p>
+     * <p>The end of line is determined by the value of {@link SystemUtils#LINE_SEPARATOR}.</p>
      *
      * @param stackTrace  a stack trace String
      * @return an array where each element is a line from the argument

@@ -341,7 +341,7 @@ public class StringUtils {
             return true;
         }
         for (int i = 0; i < strLen; i++) {
-            if (CharUtils.isWhitespace(cs.charAt(i)) == false) {
+            if (!CharUtils.isWhitespace(cs.charAt(i))) {
                 return false;
             }
         }
@@ -4618,8 +4618,7 @@ public class StringUtils {
         }
         final Object first = iterator.next();
         if (!iterator.hasNext()) {
-            final String result = Objects.toString(first, "");
-            return result;
+            return Objects.toString(first, "");
         }
 
         // two or more elements
@@ -4663,8 +4662,7 @@ public class StringUtils {
         }
         final Object first = iterator.next();
         if (!iterator.hasNext()) {
-            final String result = Objects.toString(first, "");
-            return result;
+            return Objects.toString(first, "");
         }
 
         // two or more elements
@@ -5061,7 +5059,7 @@ public class StringUtils {
      * <p>Unlike in the {@link #removePattern(String, String)} method, the {@link Pattern#DOTALL} option
      * is NOT automatically added.
      * To use the DOTALL option prepend <code>"(?s)"</code> to the regex.
-     * DOTALL is also know as single-line mode in Perl.</p>
+     * DOTALL is also known as single-line mode in Perl.</p>
      *
      * <pre>
      * StringUtils.removeAll(null, *)      = null
@@ -5107,7 +5105,7 @@ public class StringUtils {
      *
      * <p>The {@link Pattern#DOTALL} option is NOT automatically added.
      * To use the DOTALL option prepend <code>"(?s)"</code> to the regex.
-     * DOTALL is also know as single-line mode in Perl.</p>
+     * DOTALL is also known as single-line mode in Perl.</p>
      *
      * <pre>
      * StringUtils.removeFirst(null, *)      = null
@@ -5200,7 +5198,7 @@ public class StringUtils {
 
     /**
      * <p>Replaces each substring of the source String that matches the given regular expression with the given
-     * replacement using the {@link Pattern#DOTALL} option. DOTALL is also know as single-line mode in Perl.</p>
+     * replacement using the {@link Pattern#DOTALL} option. DOTALL is also known as single-line mode in Perl.</p>
      *
      * This call is a {@code null} safe equivalent to:
      * <ul>
@@ -5296,7 +5294,7 @@ public class StringUtils {
      * <p>Unlike in the {@link #replacePattern(String, String, String)} method, the {@link Pattern#DOTALL} option
      * is NOT automatically added.
      * To use the DOTALL option prepend <code>"(?s)"</code> to the regex.
-     * DOTALL is also know as single-line mode in Perl.</p>
+     * DOTALL is also known as single-line mode in Perl.</p>
      *
      * <pre>
      * StringUtils.replaceAll(null, *, *)       = null
@@ -5350,7 +5348,7 @@ public class StringUtils {
      *
      * <p>The {@link Pattern#DOTALL} option is NOT automatically added.
      * To use the DOTALL option prepend <code>"(?s)"</code> to the regex.
-     * DOTALL is also know as single-line mode in Perl.</p>
+     * DOTALL is also known as single-line mode in Perl.</p>
      *
      * <pre>
      * StringUtils.replaceFirst(null, *, *)       = null
@@ -5527,14 +5525,14 @@ public class StringUtils {
          increase *= max < 0 ? 16 : max > 64 ? 64 : max;
          final StringBuilder buf = new StringBuilder(text.length() + increase);
          while (end != INDEX_NOT_FOUND) {
-             buf.append(text.substring(start, end)).append(replacement);
+             buf.append(text, start, end).append(replacement);
              start = end + replLength;
              if (--max == 0) {
                  break;
              }
              end = searchText.indexOf(searchString, start);
          }
-         buf.append(text.substring(start));
+         buf.append(text, start, text.length());
          return buf.toString();
      }
 
@@ -5991,11 +5989,9 @@ public class StringUtils {
             start = end;
             end = temp;
         }
-        return new StringBuilder(len + start - end + overlay.length() + 1)
-            .append(str.substring(0, start))
-            .append(overlay)
-            .append(str.substring(end))
-            .toString();
+        return str.substring(0, start) +
+            overlay +
+            str.substring(end);
     }
 
     // Chomping
@@ -6226,7 +6222,7 @@ public class StringUtils {
      * StringUtils.repeat('e', -2) = ""
      * </pre>
      *
-     * <p>Note: this method doesn't not support padding with
+     * <p>Note: this method does not support padding with
      * <a href="http://www.unicode.org/glossary/#supplementary_character">Unicode Supplementary Characters</a>
      * as they require a pair of {@code char}s to be represented.
      * If you are needing to support full I18N of your applications
@@ -6939,7 +6935,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isLetter(cs.charAt(i)) == false) {
+            if (!Character.isLetter(cs.charAt(i))) {
                 return false;
             }
         }
@@ -6974,7 +6970,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isLetter(cs.charAt(i)) == false && cs.charAt(i) != ' ') {
+            if (!Character.isLetter(cs.charAt(i)) && cs.charAt(i) != ' ') {
                 return false;
             }
         }
@@ -7009,7 +7005,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isLetterOrDigit(cs.charAt(i)) == false) {
+            if (!Character.isLetterOrDigit(cs.charAt(i))) {
                 return false;
             }
         }
@@ -7044,7 +7040,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isLetterOrDigit(cs.charAt(i)) == false && cs.charAt(i) != ' ') {
+            if (!Character.isLetterOrDigit(cs.charAt(i)) && cs.charAt(i) != ' ') {
                 return false;
             }
         }
@@ -7083,7 +7079,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (CharUtils.isAsciiPrintable(cs.charAt(i)) == false) {
+            if (!CharUtils.isAsciiPrintable(cs.charAt(i))) {
                 return false;
             }
         }
@@ -7166,7 +7162,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isDigit(cs.charAt(i)) == false && cs.charAt(i) != ' ') {
+            if (!Character.isDigit(cs.charAt(i)) && cs.charAt(i) != ' ') {
                 return false;
             }
         }
@@ -7238,7 +7234,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (CharUtils.isWhitespace(cs.charAt(i)) == false) {
+            if (!CharUtils.isWhitespace(cs.charAt(i))) {
                 return false;
             }
         }
@@ -7273,7 +7269,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isLowerCase(cs.charAt(i)) == false) {
+            if (!Character.isLowerCase(cs.charAt(i))) {
                 return false;
             }
         }
@@ -7308,7 +7304,7 @@ public class StringUtils {
         }
         final int sz = cs.length();
         for (int i = 0; i < sz; i++) {
-            if (Character.isUpperCase(cs.charAt(i)) == false) {
+            if (!Character.isUpperCase(cs.charAt(i))) {
                 return false;
             }
         }
@@ -7773,12 +7769,9 @@ public class StringUtils {
         final int startOffset = targetSting/2+targetSting%2;
         final int endOffset = str.length()-targetSting/2;
 
-        final StringBuilder builder = new StringBuilder(length);
-        builder.append(str.substring(0,startOffset));
-        builder.append(middle);
-        builder.append(str.substring(endOffset));
-
-        return builder.toString();
+        return str.substring(0, startOffset) +
+            middle +
+            str.substring(endOffset);
     }
 
     // Difference
@@ -7914,7 +7907,7 @@ public class StringUtils {
         // find the min and max string lengths; this avoids checking to make
         // sure we are not exceeding the length of the string each time through
         // the bottom loop.
-        for (CharSequence cs : css) {
+        for (final CharSequence cs : css) {
             if (cs == null) {
                 anyStringNull = true;
                 shortestStrLen = 0;
@@ -9226,7 +9219,7 @@ public class StringUtils {
         if (str.charAt(0) == wrapChar && str.charAt(str.length() - 1) == wrapChar) {
             final int startIndex = 0;
             final int endIndex = str.length() - 1;
-            if (startIndex != -1 && endIndex != -1) {
+            if (endIndex != -1) {
                 return str.substring(startIndex + 1, endIndex);
             }
         }
@@ -9239,7 +9232,7 @@ public class StringUtils {
      *
      * <p>Valid pairs of surrogate code units will be converted into a single supplementary
      * code point. Isolated surrogate code units (i.e. a high surrogate not followed by a low surrogate or
-     * a low surrogate not preceeded by a high surrogate) will be returned as-is.</p>
+     * a low surrogate not preceded by a high surrogate) will be returned as-is.</p>
      *
      * <pre>
      * StringUtils.toCodePoints(null)   =  null
@@ -9250,7 +9243,7 @@ public class StringUtils {
      * @return an array of code points
      * @since 3.6
      */
-    public static int[] toCodePoints(CharSequence str) {
+    public static int[] toCodePoints(final CharSequence str) {
         if (str == null) {
             return null;
         }
@@ -9258,8 +9251,8 @@ public class StringUtils {
             return ArrayUtils.EMPTY_INT_ARRAY;
         }
 
-        String s = str.toString();
-        int[] result = new int[s.codePointCount(0, s.length())];
+        final String s = str.toString();
+        final int[] result = new int[s.codePointCount(0, s.length())];
         int index = 0;
         for (int i = 0; i < result.length; i++) {
             result[i] = s.codePointAt(index);
