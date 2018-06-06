@@ -1,3 +1,5 @@
+# This project is read only and was moved to gitlab: [https://gitlab.com/ManfredTremmel/gwt-commons-lang3](https://gitlab.com/ManfredTremmel/gwt-commons-lang3)
+
 gwt-commons-lang3
 =================
 
